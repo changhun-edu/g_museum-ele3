@@ -1,0 +1,2042 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#16283C">
+<title>동이의 사라진 생활 기억</title>
+<style>
+:root{
+  --ink:#16283C;        /* 쪽빛 남색 */
+  --ink-deep:#0E1B2A;
+  --paper:#F5EFE1;      /* 한지 */
+  --paper-dim:#E4DBC7;
+  --line:#C9BCA0;
+  --text:#243247;
+  --muted:#6B7688;
+  --gold:#D9A441;
+  --ok:#3E7C59;
+  --no:#B8442C;
+  /* 역할 색 = 실물 배지 색과 맞춤 */
+  --r-evidence:#2F6FA8;
+  --r-photo:#3E7C59;
+  --r-record:#7A5AA8;
+  --r-present:#D9873A;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{
+  background:var(--ink);
+  color:var(--paper);
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic","맑은 고딕",sans-serif;
+  font-size:17px;line-height:1.6;
+  -webkit-text-size-adjust:100%;
+  overscroll-behavior:none;
+}
+#app{display:flex;flex-direction:column;min-height:100%;max-width:560px;margin:0 auto}
+
+/* ── 상단 바 ───────────────────────── */
+#bar{
+  position:sticky;top:0;z-index:20;
+  background:var(--ink-deep);
+  padding:calc(env(safe-area-inset-top) + 10px) 16px 10px;
+  border-bottom:1px solid rgba(245,239,225,.12);
+}
+#bar.hidden{display:none}
+.barrow{display:flex;align-items:center;gap:10px}
+.group{font-weight:800;font-size:15px;letter-spacing:-.02em}
+.slots{display:flex;gap:6px;margin-left:auto}
+.slot{
+  width:30px;height:30px;border-radius:50%;
+  display:grid;place-items:center;font-size:15px;
+  background:rgba(245,239,225,.07);
+  border:1px solid rgba(245,239,225,.18);
+  filter:grayscale(1);opacity:.45;
+}
+.slot.on{filter:none;opacity:1;border-color:var(--gold);background:rgba(217,164,65,.16)}
+.turn{
+  margin-top:9px;display:flex;align-items:center;gap:8px;
+  padding:7px 12px;border-radius:999px;font-size:14px;font-weight:700;
+  background:var(--role,#2F6FA8);color:#fff;
+}
+.turn.none{display:none}
+
+/* ── 본문 ─────────────────────────── */
+main{flex:1;padding:20px 16px 8px}
+.eyebrow{font-size:14px;color:var(--gold);font-weight:700;margin:0 0 6px}
+h1{font-size:30px;line-height:1.25;letter-spacing:-.035em;font-weight:900;margin:0 0 14px}
+h2{font-size:21px;line-height:1.35;letter-spacing:-.03em;font-weight:800;margin:0 0 12px}
+p{margin:0 0 12px}
+.lede{font-size:18px;color:rgba(245,239,225,.86)}
+
+/* 동이 말풍선 */
+.dongi{
+  display:flex;gap:12px;align-items:flex-start;
+  background:rgba(245,239,225,.06);
+  border:1px solid rgba(245,239,225,.14);
+  border-left:4px solid var(--gold);
+  border-radius:4px 14px 14px 4px;
+  padding:14px 15px;margin:0 0 18px;
+}
+.dongi .face{font-size:30px;line-height:1}
+.dongi p{margin:0;font-size:17px}
+
+/* 한지 카드 */
+.card{
+  background:var(--paper);color:var(--text);
+  border-radius:12px;padding:18px 16px;margin:0 0 16px;
+  box-shadow:0 6px 0 rgba(0,0,0,.18);
+}
+.card h3{margin:0 0 12px;font-size:19px;font-weight:800;letter-spacing:-.02em}
+.card .sub{color:var(--muted);font-size:15px;margin:-6px 0 14px}
+
+/* 미션 목표 */
+ol.goals{margin:0;padding:0;list-style:none;counter-reset:g}
+ol.goals li{
+  counter-increment:g;position:relative;padding:9px 0 9px 34px;
+  border-bottom:1px dashed var(--line);font-size:16px;
+}
+ol.goals li:last-child{border-bottom:0}
+ol.goals li::before{
+  content:counter(g);position:absolute;left:0;top:9px;
+  width:23px;height:23px;border-radius:50%;background:var(--ink);color:var(--paper);
+  display:grid;place-items:center;font-size:13px;font-weight:800;
+}
+
+/* 선택지 */
+.opts{display:flex;flex-wrap:wrap;gap:9px}
+.opt{
+  display:inline-flex;align-items:center;gap:8px;
+  min-height:50px;padding:10px 15px;
+  border:2px solid var(--line);border-radius:10px;
+  background:#fff;color:var(--text);
+  font:inherit;font-weight:600;font-size:16px;cursor:pointer;
+}
+.opt.wide{width:100%;justify-content:flex-start}
+.opt .box{
+  width:22px;height:22px;border:2px solid var(--line);border-radius:6px;
+  flex:none;display:grid;place-items:center;font-size:14px;color:#fff;
+}
+.opt[aria-pressed="true"]{border-color:var(--ink);background:#EDE4CE}
+.opt[aria-pressed="true"] .box{background:var(--ink);border-color:var(--ink)}
+.opt[aria-pressed="true"] .box::after{content:"✓"}
+
+/* 입력 */
+input[type=text],textarea,select{
+  width:100%;font:inherit;font-size:17px;color:var(--text);
+  background:#fff;border:2px solid var(--line);border-radius:10px;
+  padding:12px 13px;min-height:50px;
+}
+textarea{min-height:110px;resize:vertical;line-height:1.55}
+input:focus,textarea:focus,select:focus,.opt:focus-visible,button:focus-visible{
+  outline:3px solid var(--gold);outline-offset:2px
+}
+label.field{display:block;font-weight:700;font-size:15px;margin:0 0 7px}
+
+/* 짝 맞추기 */
+.pair{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.pair:last-child{border-bottom:0}
+.pair .k{flex:none;width:96px;font-weight:800;font-size:16px}
+.pair select{margin:0}
+
+/* 빈칸 문장 */
+.fill{font-size:17px;line-height:2.5}
+.fill input{
+  display:inline-block;width:auto;min-width:120px;max-width:100%;
+  min-height:44px;padding:6px 10px;margin:0 3px;text-align:center;
+}
+
+/* 요약(자동 표시) */
+.auto{background:var(--paper-dim);border-radius:10px;padding:13px 14px;margin:0 0 14px}
+.auto dt{font-size:13px;color:var(--muted);font-weight:700}
+.auto dd{margin:2px 0 10px;font-size:16px;font-weight:700;color:var(--text)}
+.auto dd:last-child{margin-bottom:0}
+.tagline{display:flex;flex-wrap:wrap;gap:6px}
+.tag{background:var(--ink);color:var(--paper);border-radius:999px;padding:4px 11px;font-size:14px;font-weight:700}
+
+/* 피드백 */
+.fb{border-radius:10px;padding:13px 14px;margin:14px 0 0;font-size:16px;font-weight:600}
+.fb.ok{background:#E2EFE6;color:#255C3E;border:2px solid var(--ok)}
+.fb.no{background:#F6E3DE;color:#8C2F1C;border:2px solid var(--no)}
+.fb.tip{background:#FBF0D8;color:#7A5A16;border:2px solid var(--gold)}
+
+/* 버튼 */
+footer{
+  position:sticky;bottom:0;z-index:20;
+  background:linear-gradient(to top,var(--ink) 72%,rgba(22,40,60,0));
+  padding:12px 16px calc(env(safe-area-inset-bottom) + 14px);
+}
+button.go{
+  width:100%;min-height:60px;border:0;border-radius:14px;
+  font:inherit;font-size:19px;font-weight:800;letter-spacing:-.02em;
+  background:var(--gold);color:#2A1D05;cursor:pointer;
+  box-shadow:0 5px 0 #A87D2C;
+}
+button.go:active{transform:translateY(3px);box-shadow:0 2px 0 #A87D2C}
+button.go[disabled]{background:#5D6B7E;color:rgba(255,255,255,.6);box-shadow:0 5px 0 #45505F}
+button.ghost{
+  width:100%;min-height:48px;margin-top:10px;border:2px solid rgba(245,239,225,.35);
+  border-radius:12px;background:none;color:var(--paper);font:inherit;font-weight:700;cursor:pointer;
+}
+.linkbtn{background:none;border:0;color:var(--muted);font:inherit;font-size:15px;font-weight:700;text-decoration:underline;padding:6px 0;cursor:pointer}
+
+/* 역할 전환 화면 */
+#handoff{
+  position:fixed;inset:0;z-index:60;display:none;
+  flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;padding:28px;background:var(--role);color:#fff;
+}
+#handoff.show{display:flex;animation:slidein .28s ease-out}
+@keyframes slidein{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
+#handoff .icon{font-size:66px;line-height:1}
+#handoff .role{font-size:23px;font-weight:800;margin:10px 0 2px;opacity:.9}
+#handoff .who{font-size:44px;font-weight:900;letter-spacing:-.04em;margin:0 0 6px}
+#handoff .hint{font-size:18px;opacity:.9;margin:0 0 30px}
+#handoff button{
+  min-width:250px;min-height:62px;border:0;border-radius:14px;
+  font:inherit;font-size:19px;font-weight:800;background:#fff;color:var(--role);cursor:pointer;
+}
+
+/* 완료 연출 */
+.trophy{text-align:center;padding:14px 0 4px}
+.trophy .em{font-size:70px;line-height:1}
+.trophy .mood{font-size:22px;font-weight:800;margin:8px 0 0}
+.reward{display:flex;gap:10px;margin:16px 0 0}
+.reward div{
+  flex:1;background:rgba(217,164,65,.14);border:1px solid rgba(217,164,65,.5);
+  border-radius:10px;padding:11px;text-align:center;font-size:15px;font-weight:700;
+}
+.reward span{display:block;font-size:12px;color:var(--gold);font-weight:700;margin-bottom:3px}
+
+/* 시작 화면 */
+.hero{padding:20px 0 6px}
+.hero .kicker{font-size:15px;color:var(--gold);font-weight:700;letter-spacing:.02em}
+.hero h1{font-size:36px;margin:8px 0 10px}
+.numgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.numgrid .opt{justify-content:center;min-height:56px;font-size:18px;font-weight:800}
+
+/* 교사 패널 */
+#teacher{position:fixed;inset:0;z-index:80;background:rgba(14,27,42,.94);display:none;overflow:auto;padding:24px 16px}
+#teacher.show{display:block}
+#teacher .card{max-width:520px;margin:0 auto 14px}
+.row{display:flex;gap:10px}
+.row>*{flex:1}
+.note{font-size:14px;color:var(--muted)}
+.status{
+  position:fixed;right:10px;bottom:calc(env(safe-area-inset-bottom) + 84px);z-index:30;
+  font-size:12px;font-weight:700;color:rgba(245,239,225,.55);
+  background:rgba(14,27,42,.85);border-radius:999px;padding:4px 10px;
+}
+
+/* 사진 촬영 */
+.shot{
+  width:100%;min-height:120px;border:2px dashed var(--line);border-radius:12px;
+  background:#fff;color:var(--text);font:inherit;font-weight:700;font-size:17px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  padding:20px;cursor:pointer;
+}
+.shot .big{font-size:40px;line-height:1}
+.shot small{color:var(--muted);font-weight:600;font-size:14px}
+.preview{position:relative;border-radius:12px;overflow:hidden;background:#000;line-height:0}
+.preview img{width:100%;display:block}
+.preview .meta{
+  position:absolute;left:8px;bottom:8px;background:rgba(14,27,42,.82);color:var(--paper);
+  border-radius:999px;padding:4px 11px;font-size:12px;font-weight:700;line-height:1.4;
+}
+.auto .shotthumb{width:84px;border-radius:8px;display:block;margin-top:4px}
+.gal{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.gal figure{margin:0}
+.gal img{width:100%;border-radius:8px;display:block}
+.gal figcaption{font-size:12px;color:var(--muted);text-align:center;margin-top:4px;font-weight:700}
+.busy{opacity:.55;pointer-events:none}
+
+/* 기억 카드 뒤집기 — 미션 완료 때 한 번만 */
+.flip{perspective:1000px;margin:0 0 18px}
+.flip .inner{
+  position:relative;width:100%;aspect-ratio:5/3;
+  transform-style:preserve-3d;transform:rotateY(180deg);
+  transition:transform .85s cubic-bezier(.3,.9,.3,1);
+}
+.flip.open .inner{transform:rotateY(0)}
+.flip .face{
+  position:absolute;inset:0;backface-visibility:hidden;
+  border-radius:14px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;padding:18px;
+}
+.flip .back{
+  transform:rotateY(180deg);
+  background:repeating-linear-gradient(45deg,#1E3550,#1E3550 9px,#223C5B 9px,#223C5B 18px);
+  border:2px solid rgba(217,164,65,.55);color:rgba(217,164,65,.85);
+  font-size:15px;font-weight:800;gap:8px;
+}
+.flip .back .q{font-size:44px;line-height:1}
+.flip .front{
+  background:var(--paper);color:var(--text);
+  border:2px solid var(--gold);box-shadow:0 8px 0 rgba(0,0,0,.2);
+}
+.flip .front .ic{font-size:44px;line-height:1;margin-bottom:8px}
+.flip .front b{font-size:19px;font-weight:900;letter-spacing:-.02em}
+.flip .front span{font-size:15px;color:var(--muted);font-weight:600;margin-top:5px}
+.tapme{text-align:center;font-size:15px;color:var(--gold);font-weight:700;margin:-8px 0 16px}
+
+.badgein{animation:pop .45s cubic-bezier(.2,1.3,.4,1) both}
+@keyframes pop{from{transform:scale(.8);opacity:0}to{transform:none;opacity:1}}
+
+/* 사진 고르기 */
+.pickgal{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.pickgal button{
+  position:relative;padding:0;border:3px solid var(--line);border-radius:10px;
+  overflow:hidden;background:#000;line-height:0;cursor:pointer;
+}
+.pickgal button[aria-pressed="true"]{border-color:var(--ink);box-shadow:0 0 0 3px rgba(217,164,65,.6)}
+.pickgal img{width:100%;display:block;aspect-ratio:4/3;object-fit:cover}
+.pickgal .cap{
+  position:absolute;left:0;right:0;bottom:0;background:rgba(14,27,42,.8);
+  color:var(--paper);font-size:13px;font-weight:700;padding:4px;line-height:1.3;
+}
+
+/* 승인 체크 */
+.appr{display:flex;flex-direction:column;gap:9px}
+
+/* 결과 이미지 */
+#poster{width:100%;border-radius:12px;display:block;margin:0 0 14px;background:#fff}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <header id="bar" class="hidden">
+    <div class="barrow">
+      <span class="group" id="gLabel"></span>
+      <div class="slots" id="slots"></div>
+    </div>
+    <div class="turn none" id="turn"></div>
+  </header>
+  <main id="view"></main>
+  <footer id="act"></footer>
+</div>
+
+<div id="handoff">
+  <div class="icon" id="hoIcon"></div>
+  <div class="role" id="hoRole"></div>
+  <div class="who" id="hoWho"></div>
+  <p class="hint">태블릿을 넘겨주세요</p>
+  <button id="hoBtn"></button>
+</div>
+
+<div id="teacher">
+  <div class="card">
+    <h3>교사 설정</h3>
+    <p class="sub">학생에게는 보이지 않는 화면입니다.</p>
+    <label class="field">탐정 회의(중간 점검)</label>
+    <div class="opts" id="tConf"></div>
+    <label class="field" style="margin-top:16px">통과 암호</label>
+    <input type="text" id="tPw">
+    <p class="note" style="margin-top:8px">세 번째 미션이 끝나면 교사에게 30초 발표를 하고 이 암호를 받습니다.</p>
+  </div>
+  <div class="card">
+    <h3>기록 관리</h3>
+    <div class="row">
+      <button class="opt" onclick="backup()">기록 내려받기</button>
+      <button class="opt" onclick="wipe()">처음부터 다시</button>
+    </div>
+    <p class="note" style="margin-top:10px">이 태블릿에 저장된 우리 모둠 기록만 해당됩니다.</p>
+  </div>
+  <div class="card">
+    <h3>실시간 전송</h3>
+    <p class="sub" id="syncState">확인 중</p>
+    <label class="field">데이터베이스 주소</label>
+    <input type="text" id="tDb" placeholder="https://○○○-default-rtdb.firebasedatabase.app">
+    <label class="field" style="margin-top:14px">웹 API 키</label>
+    <input type="text" id="tKey" placeholder="AIza…">
+    <p class="note" style="margin-top:10px">비워 두면 이 태블릿에만 저장됩니다. 활동은 그대로 진행됩니다.</p>
+    <button class="opt wide" style="margin-top:12px" onclick="flushNow(true)">지금 전송하기</button>
+  </div>
+  <div class="card">
+    <h3>1차 버전에서 빠진 것</h3>
+    <p class="sub" style="margin:0">미션 5(동이의 하루), 보너스 미션, 교사 대시보드 화면은 다음 버전에서 붙입니다.</p>
+  </div>
+  <button class="go" onclick="closeTeacher()">닫기</button>
+</div>
+
+<div class="status" id="status"></div>
+
+<script>
+/* ══════════════════════════════════════════════════
+   1. 데이터 — 미션 내용은 전부 여기에만 있습니다.
+      문항을 고칠 때 아래 TOPICS만 수정하면 됩니다.
+   ══════════════════════════════════════════════════ */
+
+const ROLES = {
+  evidence:{name:'증거 탐정', icon:'🔍', color:'var(--r-evidence)', raw:'#2F6FA8', job:'설명판에서 단서를 찾아야 기억이 살아나요'},
+  photo   :{name:'사진 탐정', icon:'📷', color:'var(--r-photo)',    raw:'#3E7C59', job:'증거 사진이 있어야 기억을 저장할 수 있어요'},
+  record  :{name:'기록 탐정', icon:'✏️', color:'var(--r-record)',   raw:'#7A5AA8', job:'기록을 잘 해야 기억의 조각이 남아요'},
+  present :{name:'발표 탐정', icon:'🎤', color:'var(--r-present)',  raw:'#D9873A', job:'발표를 해야 동이에게 기억을 설명할 수 있어요'}
+};
+
+// 역할 자동 교대표 (스토리보드 2쪽)
+const ROT = {
+  early:{A:'evidence', B:'photo',    C:'record', D:'present'},  // 1~3번째 미션
+  late :{A:'present',  B:'evidence', C:'photo',  D:'record'}     // 4번째 미션부터
+};
+
+const ORDER = ['nature','farm','house','market'];
+
+const LEVELS = ['🐣 견습 탐정','🔍 단서 탐정','🌾 생활 탐정','🧩 기억 탐정','🛒 장터 탐정'];
+
+const TOPICS = {
+
+nature:{
+  title:'남도의 자연', emoji:'🌿',
+  dongi:'내가 살던 남도는 따뜻했던 것 같아. 왜 그랬는지 자연 전시에서 단서를 찾아줘.',
+  goals:['남도의 자연 설명판 읽기','남도가 따뜻한 이유 찾기','자연이 사람들의 생활에 준 영향 찾기'],
+  evidence:[{
+    id:'w', type:'multi',
+    prompt:'설명판에서 남도가 따뜻한 이유와 관련 있는 단어를 모두 찾으세요.',
+    options:['바다','해류','봄','여름','마룻방'], other:true,
+    answer:['바다','해류'],
+    ok:'정답입니다! 남도는 바다와 맞닿아 있고, 따뜻한 해류의 영향을 받아 일 년 내내 포근합니다.',
+    no:'다시 생각해 봅시다. 따뜻한 남도에서 나타난 생활 모습과, 남도가 따뜻한 까닭을 구분해 보세요.'
+  }],
+  record:[{
+    id:'effect', type:'single',
+    prompt:'따뜻한 자연은 사람들의 집에 어떤 영향을 주었나요?',
+    options:['마루가 발달했다','성벽이 높아졌다','배가 작아졌다','시장이 사라졌다'],
+    answer:'마루가 발달했다',
+    ok:'정답입니다! 남도는 따뜻하고 여름이 길어서, 시원하게 지낼 수 있는 마루가 발달했습니다.',
+    no:'다시 생각해 봅시다. 자연환경이 집에 준 영향을 묻고 있습니다.'
+  }],
+  photo:{prompt:'남도의 자연을 설명하는 전시물이나 설명판을 한 장 찍으세요.',
+         examples:['남도의 자연 설명판','전라도 지도','전라도명 분청사기 항아리','대나무숲·동백꽃 전시']},
+  prep:{checks:['남도는 왜 따뜻했을까?','새롭게 알게 된 점'],
+        label:'30초 동안 말할 내용을 적어 보세요',
+        ph:'예) 남도는 바다와 따뜻한 해류 때문에 포근합니다. 그래서…',
+        sample:'남도가 단순히 남쪽에 있어서 따뜻한 것이 아니라, 바다와 해류가 날씨에 영향을 주었다는 것입니다. 또 따뜻한 자연환경 때문에 시원하게 지낼 수 있는 마루가 발달했다는 것도 알게 되었습니다.'},
+  submit:{title:'남도의 자연', type:'prepText'},
+  done:{mood:'🙂 자연이 떠올랐어', badge:'자연 배지',
+        cardTitle:'자연의 기억 카드가 열렸습니다.',
+        cardText:'동이는 남도의 따뜻한 자연을 기억해 냈습니다.',
+        dongi:'맞아! 남도는 따뜻한 해류 덕분에 포근해서 봄이 빨리 오고, 여름이 길었어.'}
+},
+
+farm:{
+  title:'남도의 농업', emoji:'🌾',
+  dongi:'밥을 먹었던 기억은 나는데, 쌀이 어떻게 밥상에 오게 되었는지는 기억나지 않아. 농사도구 전시에서 쌀의 여행을 찾아줘.',
+  goals:['농사도구 2개 이상 관찰하기','도구가 쓰인 순서 추리하기','쌀이 밥이 되기 전 과정 정리하기'],
+  evidence:[{
+    id:'tools', type:'multi',
+    prompt:'설명판을 읽고 농사 도구를 모두 찾으세요.',
+    options:['따비','매통','가리','낫','홀태','호미','디딜방아','반두'],
+    answer:['따비','매통','낫','홀태','호미','디딜방아'],
+    ok:'정답입니다! 땅을 일구고, 벼를 거두고, 곡식을 찧거나 가는 일에 쓰인 도구들입니다.',
+    no:'다시 생각해 봅시다. 농사 도구가 아니라 물고기를 잡는 데 쓴 어업 도구가 섞여 있습니다.'
+  }],
+  record:[{
+    id:'use', type:'match',
+    prompt:'도구와 쓰임새를 연결해 보세요.',
+    left:['따비','호미','낫','홀태','디딜방아','매통'],
+    right:['땅을 갈 때','김을 맬 때','벼를 거둘 때','벼에서 낟알을 뗄 때','곡식을 찧거나 갈 때','저장할 때'],
+    answer:{'따비':'땅을 갈 때','호미':'김을 맬 때','낫':'벼를 거둘 때','홀태':'벼에서 낟알을 뗄 때','디딜방아':'곡식을 찧거나 갈 때','매통':'저장할 때'},
+    ok:'정답입니다! 도구마다 쓰이는 때가 달랐습니다.',
+    no:'다시 생각해 봅시다. 땅을 갈 때 → 기를 때 → 거둘 때 → 찧을 때 순서로 생각해 보세요.'
+  }],
+  photo:{prompt:'남도의 농업을 설명하는 전시물이나 설명판을 한 장 찍으세요.',
+         examples:['남도의 농업 설명판','농사 도구','농사 짓는 모습']},
+  prep:{question:{
+    id:'seq', type:'single',
+    prompt:'쌀 한 톨의 순서를 찾으세요.',
+    options:['씨앗 → 농사도구 → 수확 → 도정 → 저장','도정 → 씨앗 → 수확 → 저장 → 농사도구','시장 → 저장 → 씨앗 → 도정 → 수확'],
+    answer:'씨앗 → 농사도구 → 수확 → 도정 → 저장',
+    ok:'정답입니다! 쌀은 씨앗에서 시작해 농사도구로 가꾸고, 수확한 뒤 도정하고 저장하는 과정을 거칩니다.',
+    no:'다시 생각해 봅시다. 쌀은 먼저 씨앗을 심어야 자랍니다. 수확한 뒤에야 도정하고 저장할 수 있습니다.'
+  }},
+  submit:{title:'쌀 한 톨의 여행', type:'fill',
+    parts:['','(으)로 땅을 갈아 → 씨앗을 뿌리고 → 호미로 ','을 매고 → ','(으)로 수확하여 → ','(으)로 벼에서 낟알을 떼고 → 디딜방아로 ','하여 → ','에 저장한다.'],
+    ph:['따비','김','낫','홀태','도정','매통'],
+    sample:'따비로 땅을 갈아 → 씨앗을 뿌리고 → 호미로 김을 매고 → 낫으로 수확하여 → 홀태로 벼에서 낟알을 떼고 → 디딜방아로 도정하여 → 매통에 저장한다.'},
+  done:{mood:'😊 농사의 기억이 돌아왔어', badge:'농업 배지',
+        cardTitle:'쌀 한 톨의 여행 카드가 열렸습니다.',
+        cardText:'동이는 밥상에 오르기까지의 농사 과정을 기억해 냈습니다.',
+        dongi:'맞아! 남도 사람들에게 농사는 생명을 지키는 일과 같았어. 씨를 뿌려 거둘 때까지 사계절 쉴 새 없이 이어졌지.'}
+},
+
+house:{
+  title:'남도의 집', emoji:'🏠',
+  dongi:'우리 집에는 시원한 곳도 있고 따뜻한 곳도 있었던 것 같아. 남도의 집 전시에서 내가 어디에서 생활했는지 찾아줘.',
+  goals:['대청, 온돌, 부엌 등 관찰하기','그 공간의 쓰임 찾기','계절과 연결하기'],
+  evidence:[{
+    id:'space', type:'match',
+    prompt:'전시에서 찾은 공간과 쓰임새를 연결해 보세요.',
+    left:['대청','온돌방','부엌','사랑방','안방'],
+    right:['여름을 시원하게 보내기 위해','겨울을 따뜻하게 보내기 위해','음식을 만들고 난방하기 위해','책을 읽거나 글을 쓰기 위해','살림살이를 보관하기 위해'],
+    answer:{'대청':'여름을 시원하게 보내기 위해','온돌방':'겨울을 따뜻하게 보내기 위해','부엌':'음식을 만들고 난방하기 위해','사랑방':'책을 읽거나 글을 쓰기 위해','안방':'살림살이를 보관하기 위해'},
+    ok:'정답입니다! 남도의 집은 공간마다 쓰임이 나뉘어 있었습니다.',
+    no:'다시 생각해 봅시다. 여름에 쓰는 곳과 겨울에 쓰는 곳을 먼저 나눠 보세요.'
+  }],
+  record:[{
+    id:'guess', type:'fill',
+    prompt:'동이가 집에서 어떻게 지냈을지 추리해 보세요.',
+    parts:['동이는 집에서 ','했을 것 같습니다. 그렇게 생각한 증거는 ','입니다.'],
+    ph:['한 일','전시에서 본 것'],
+    sample:'동이는 집에서 마루에 앉아 시원하게 지냈을 것 같습니다. 그렇게 생각한 증거는 남도의 집에는 더운 여름을 보내기 위해 마루가 있었다는 설명입니다.'
+  }],
+  photo:{prompt:'공간의 쓰임이 드러나는 부분을 찍으세요.',
+         examples:['대청 또는 마루','온돌 구조 그림','부뚜막·아궁이','부엌 살림살이','사랑방 가구']},
+  prep:{checks:['더위와 추위를 어떻게 피했을까?','새롭게 알게 된 점'],
+        label:'30초 동안 말할 내용을 적어 보세요',
+        ph:'예) 더울 때는 마루에서, 추울 때는 온돌방에서…',
+        sample:'더울 때는 마루에서 시원하게 지내고, 추울 때는 온돌방에서 따뜻하게 지냈다는 것을 알게 되었습니다. 집도 날씨와 계절에 맞게 만들어졌다는 점이 새로웠습니다.'},
+  submit:{title:'여름과 겨울을 이기는 집', type:'prepText'},
+  done:{mood:'😄 집이 생각났어', badge:'집 배지',
+        cardTitle:'마루와 온돌 카드가 열렸습니다.',
+        cardText:'동이는 집에서 어떻게 생활했는지 기억해 냈습니다.',
+        dongi:'맞아! 여름에는 대청에서, 겨울에는 온돌방에서 주로 지냈어.'}
+},
+
+market:{
+  title:'남도의 시장', emoji:'🛒',
+  dongi:'시장에 가면 물건만 산 게 아니었어. 사람들도 만나고 소식도 나눴던 것 같아. 장터의 기억을 찾아줘.',
+  goals:['시장 전시 관찰하기','물건 또는 화폐 찾기','시장이 사람들에게 어떤 곳이었는지 설명하기'],
+  evidence:[
+    {id:'word', type:'multi', limit:2,
+     prompt:'설명판에서 찾은 단어를 2개만 고르세요.',
+     options:['교환','곡식','생필품','상평통보','주판','목화','무명','명태','소식','놀이'], other:true},
+    {id:'mean', type:'depend', dependsOn:'word',
+     prompt:'이 단어들은 시장의 어떤 모습을 알려 주나요?',
+     options:['물건을 사고 팔았다','물건을 서로 바꾸었다','돈을 사용했다','값을 계산했다','먼 지역의 물건이 오갔다','사람들이 모여 소식을 나눴다','놀이와 구경이 있었다'],
+     map:{
+       '교환':['물건을 서로 바꾸었다','먼 지역의 물건이 오갔다'],
+       '무명':['물건을 서로 바꾸었다','먼 지역의 물건이 오갔다'],
+       '명태':['물건을 서로 바꾸었다','먼 지역의 물건이 오갔다'],
+       '곡식':['물건을 사고 팔았다','물건을 서로 바꾸었다'],
+       '생필품':['물건을 사고 팔았다','물건을 서로 바꾸었다'],
+       '상평통보':['돈을 사용했다'],
+       '주판':['값을 계산했다'],
+       '목화':['물건을 사고 팔았다','물건을 서로 바꾸었다','먼 지역의 물건이 오갔다'],
+       '소식':['사람들이 모여 소식을 나눴다'],
+       '놀이':['놀이와 구경이 있었다']
+     },
+     ok:'정답입니다! 시장은 물건을 사고파는 곳이면서, 돈을 쓰고 값을 계산하고, 먼 지역의 물건과 소식이 오가는 곳이었습니다.',
+     no:'다시 생각해 봅시다. 고른 단어가 무엇을 뜻하는지 먼저 살펴보세요.'}
+  ],
+  record:[{
+    id:'guess', type:'fill',
+    prompt:'동이가 시장에서 무엇을 했을지 추리해 보세요.',
+    parts:['동이는 시장에서 ','했을 것 같습니다. 그렇게 생각한 증거는 ','입니다.'],
+    ph:['한 일','전시에서 본 것'],
+    sample:'동이는 시장에서 상평통보로 물건값을 냈을 것 같습니다. 그렇게 생각한 증거는 상평통보가 조선시대에 쓰인 돈으로 전시되어 있기 때문입니다.'
+  }],
+  photo:{prompt:'시장이 어떤 곳이었는지 알 수 있는 전시물을 한 장 찍으세요.',
+         examples:['상평통보','주판','목화','엿가위와 골패','장터 그림 또는 설명판']},
+  prep:{checks:['시장은 어떤 곳인가?','그렇게 생각한 이유는?'],
+        label:'30초 동안 말할 내용을 적어 보세요',
+        ph:'예) 시장은 물건을 사고팔고 소식도 나누는 곳이었습니다…',
+        sample:'시장은 물건을 사고팔고 소식을 나누는 곳이었습니다. 우리가 찾은 증거는 상평통보와 주판입니다.'},
+  submit:{title:'남도의 시장', type:'fill',
+    parts:['시장은 ','하는 곳이었습니다. 우리가 찾은 증거는 ','입니다. 이 증거를 보고 ','라고 생각했습니다.'],
+    ph:['시장에서 한 일','찾은 증거','우리 모둠의 생각'],
+    sample:'시장은 물건을 사고팔고 소식을 나누는 곳이었습니다. 우리가 찾은 증거는 상평통보와 주판입니다. 이 증거를 보고 시장에서는 돈을 쓰고 물건값을 계산하며 거래했다고 생각했습니다.'},
+  done:{mood:'🤗 시장의 소리가 들려', badge:'시장 배지',
+        cardTitle:'장터의 기억 카드가 열렸습니다.',
+        cardText:'동이는 시장에서 사람들과 물건, 소식이 오가던 기억을 찾았습니다.',
+        dongi:'맞아! 시장은 물건도 사고, 사람들을 만나 소식도 전하는 곳이었어.'}
+}
+};
+
+/* ══════════════════════════════════════════════════
+   2. 상태 저장 · 복구
+   ══════════════════════════════════════════════════ */
+
+const KEY = 'gjhfm-v1';
+let S = null;
+
+function blankTopic(){
+  return {evidence:{}, record:{}, photo:null, prep:{}, submit:{}, agree:{}, tries:{}, done:false};
+}
+function blankFinal(){
+  return {evidence:['','','',''], pick:[], photoText:['',''], story:['','','',''],
+          speech:['','','','','',''], compare:[], agree:{}, done:false};
+}
+function blankBonus(){
+  return {roles:{evidence:'',photo:'',record:'',present:''}, photo:null,
+          name:'', word:'', why:'', meaning:'', ad:'',
+          appr:{observe:[],why:[],meaning:[],ad:[],final:[]}, done:false};
+}
+/* 활동 중에 파일을 새 버전으로 바꿔도 하던 자리를 잃지 않도록 */
+function migrate(){
+  if(!S.final) S.final=blankFinal();
+  if(!S.bonus) S.bonus=blankBonus();
+  if(S.phase==='run'){
+    const here=S.steps && S.steps[S.stepIdx];
+    if(!S.steps || !S.steps.some(s=>s.v==='fintro')){
+      buildSteps();
+      if(here){
+        const i=S.steps.findIndex(s=>s.v===here.v && s.t===here.t);
+        S.stepIdx = i>=0 ? i : 0;
+      }
+    }
+  }
+}
+function newState(){
+  return {
+    v:1, session:'', groupNo:0,
+    members:{A:'',B:'',C:'',D:''},
+    order:[], prior:{choice:'',reason:''},
+    topics:{nature:blankTopic(),farm:blankTopic(),house:blankTopic(),market:blankTopic()},
+    conference:{text:'',passed:false},
+    final:blankFinal(), bonus:blankBonus(),
+    settings:{useConference:true, password:'마루', dbUrl:'', apiKey:''},
+    phase:'start', stepIdx:0, steps:[], seenHandoff:{},
+    startedAt:Date.now(), updatedAt:Date.now()
+  };
+}
+function save(opts){
+  if(!S) return;
+  S.updatedAt = Date.now();
+  try{
+    localStorage.setItem(KEY, JSON.stringify(S));
+    if(!(opts && opts.quiet)) flash('저장됨');
+  }
+  catch(e){ flash('저장 공간이 부족합니다'); }
+  markDirty(opts && opts.photo);
+}
+function load(){
+  try{ const raw = localStorage.getItem(KEY); return raw ? JSON.parse(raw) : null; }
+  catch(e){ return null; }
+}
+let flashT;
+function flash(t){
+  const el = document.getElementById('status');
+  el.textContent = t; clearTimeout(flashT);
+  flashT = setTimeout(showStatus,1400);
+}
+
+/* ══════════════════════════════════════════════════
+   3. 진행 순서 만들기 (모둠별 회전)
+   ══════════════════════════════════════════════════ */
+
+function rotate(arr,n){ n = ((n % arr.length)+arr.length)%arr.length; return arr.slice(n).concat(arr.slice(0,n)); }
+
+function buildSteps(){
+  S.order = rotate(ORDER, S.groupNo - 1);
+  const steps = [{v:'map'}];
+  S.order.forEach((t,i)=>{
+    steps.push({v:'intro',    t, m:i+1});
+    steps.push({v:'evidence', t, m:i+1, role:'evidence'});
+    steps.push({v:'record',   t, m:i+1, role:'record'});
+    steps.push({v:'photo',    t, m:i+1, role:'photo'});
+    steps.push({v:'prep',     t, m:i+1, role:'present'});
+    steps.push({v:'submit',   t, m:i+1, role:'present'});
+    steps.push({v:'complete', t, m:i+1});
+    if(i===2 && S.settings.useConference) steps.push({v:'conference'});
+  });
+  // 미션 5 — 동이의 하루
+  steps.push({v:'fintro',    m:5});
+  steps.push({v:'fevidence', m:5, role:'evidence'});
+  steps.push({v:'fphoto',    m:5, role:'photo'});
+  steps.push({v:'frecord',   m:5, role:'record'});
+  steps.push({v:'fpresent',  m:5, role:'present'});
+  steps.push({v:'fcompare',  m:5, role:'present'});
+  steps.push({v:'fsubmit',   m:5, role:'present'});
+  steps.push({v:'fcomplete', m:5});
+  // 보너스 — 최고의 큐레이터
+  steps.push({v:'bintro'});
+  steps.push({v:'bobserve'});
+  steps.push({v:'bwhy'});
+  steps.push({v:'bmeaning'});
+  steps.push({v:'bad'});
+  steps.push({v:'bfinal'});
+  steps.push({v:'bcomplete'});
+  steps.push({v:'end'});
+  S.steps = steps;
+}
+function levelName(){
+  if(S.bonus && S.bonus.done) return '🎨 어린이 큐레이터';
+  if(S.final && S.final.done) return '👑 남도 생활 마스터';
+  return LEVELS[doneCount()];
+}
+
+// 미션 번호(1~4)에 따라 누가 어떤 역할인지
+function whoIs(role, missionNo){
+  const table = missionNo <= 3 ? ROT.early : ROT.late;
+  const slot = Object.keys(table).find(k => table[k] === role);
+  return {slot, name: S.members[slot] || slot};
+}
+function doneCount(){ return S.order.filter(t=>S.topics[t].done).length; }
+
+/* ══════════════════════════════════════════════════
+   4. 화면 그리기
+   ══════════════════════════════════════════════════ */
+
+const view = document.getElementById('view');
+const act  = document.getElementById('act');
+const bar  = document.getElementById('bar');
+
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function render(){
+  if(S.phase==='start')  return screenStart();
+  if(S.phase==='roles')  return screenRoles();
+  if(S.phase==='prior')  return screenPrior();
+  const step = S.steps[S.stepIdx];
+  if(!step) return screenEnd();
+  drawBar(step);
+  ({map:screenMap, intro:screenIntro, evidence:screenTask, record:screenTask,
+    photo:screenPhoto, prep:screenPrep, submit:screenSubmit,
+    complete:screenComplete, conference:screenConference,
+    fintro:finIntro, fevidence:finEvidence, fphoto:finPhoto, frecord:finRecord,
+    fpresent:finPresent, fcompare:finCompare, fsubmit:finSubmit, fcomplete:finComplete,
+    bintro:bonIntro, bobserve:bonObserve, bwhy:bonWhy, bmeaning:bonMeaning,
+    bad:bonAd, bfinal:bonFinal, bcomplete:bonComplete,
+    end:screenEnd}[step.v])(step);
+  window.scrollTo(0,0);
+  maybeHandoff(step);
+}
+
+function drawBar(step){
+  bar.classList.remove('hidden');
+  document.getElementById('gLabel').textContent = `${S.groupNo}모둠 · 기억 ${doneCount()}/4`;
+  document.getElementById('slots').innerHTML = S.order.map(t=>
+    `<div class="slot ${S.topics[t].done?'on':''}">${TOPICS[t].emoji}</div>`).join('')
+    + `<div class="slot ${S.final.done?'on':''}">⏰</div>`;
+  const turn = document.getElementById('turn');
+  if(step.role){
+    const r = ROLES[step.role], w = whoIs(step.role, step.m);
+    turn.className = 'turn';
+    turn.style.setProperty('--role', r.raw);
+    turn.innerHTML = `${r.icon} 지금은 <b>${esc(w.name)}</b> 차례 · ${r.name}`;
+  } else turn.className = 'turn none';
+}
+
+function btn(label, fn, opts={}){
+  act.innerHTML = `<button class="go" id="mainBtn" ${opts.disabled?'disabled':''}>${label}</button>`
+    + (opts.ghost ? `<button class="ghost" id="ghostBtn">${opts.ghost}</button>` : '');
+  document.getElementById('mainBtn').onclick = fn;
+  if(opts.ghost) document.getElementById('ghostBtn').onclick = opts.onGhost;
+}
+
+/* ── 시작 ─────────────────────────── */
+function screenStart(){
+  bar.classList.add('hidden');
+  const prev = load();
+  const resumable = prev && prev.phase==='run' && prev.groupNo;
+  view.innerHTML = `
+    <div class="hero">
+      <div class="kicker">광주역사민속박물관 · 3학년 탐험</div>
+      <h1>동이의<br>사라진 생활 기억</h1>
+      <p class="lede">전시물을 자세히 보고 동이의 생활 기억을 찾아 주세요. 기억을 모두 찾지 못하면 동이는 집으로 돌아갈 수 없습니다.</p>
+    </div>
+    ${resumable ? `<div class="card"><h3>하던 활동이 있습니다</h3>
+        <p class="sub">${esc(prev.session||'세션 없음')} · ${prev.groupNo}모둠 · 기억 ${
+          ORDER.filter(t=>prev.topics[t] && prev.topics[t].done).length}/4</p>
+        <button class="opt wide" onclick="resume()">이어서 하기</button></div>` : ''}
+    <div class="card">
+      <h3>탐험 준비</h3>
+      <label class="field" for="sess">세션 코드</label>
+      <input type="text" id="sess" placeholder="예) 운남3-1128" value="${esc(S.session)}">
+      <p class="sub" style="margin:8px 0 14px">선생님이 알려 주신 코드를 적으세요.</p>
+      <label class="field">우리 모둠</label>
+      <div class="numgrid" id="gpick">
+        ${[1,2,3,4,5,6,7,8].map(n=>`<button class="opt" data-n="${n}" aria-pressed="${S.groupNo===n}">${n}</button>`).join('')}
+      </div>
+      <p class="sub" style="margin:12px 0 0">모둠마다 시작하는 전시실이 다릅니다.</p>
+    </div>`;
+  view.querySelectorAll('#gpick .opt').forEach(b=>b.onclick=()=>{
+    view.querySelectorAll('#gpick .opt').forEach(x=>x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true');
+    S.groupNo = +b.dataset.n;
+    document.getElementById('mainBtn').disabled = false;
+  });
+  btn('탐험 시작', ()=>{
+    S.session = document.getElementById('sess').value.trim();
+    if(!S.groupNo) return;
+    S.phase='roles'; save(); render();
+  }, {disabled: !S.groupNo});
+  longPressTeacher();
+}
+function resume(){ S = load(); render(); }
+
+/* ── 역할 배정 ─────────────────────── */
+function screenRoles(){
+  bar.classList.add('hidden');
+  const slots = ['A','B','C','D'];
+  const early = ROT.early;
+  view.innerHTML = `
+    <p class="eyebrow">탐정 역할 배정</p>
+    <h1>기억을 찾으려면<br>모두의 도움이 필요해</h1>
+    <div class="card">
+      <h3>오늘의 역할</h3>
+      <p class="sub">이름을 적으면 미션마다 역할이 저절로 바뀝니다.</p>
+      ${slots.map(s=>{
+        const r = ROLES[early[s]];
+        return `<div style="margin-bottom:14px">
+          <label class="field" for="m${s}">${r.icon} ${r.name} <span style="color:var(--muted);font-weight:600">— ${r.job}</span></label>
+          <input type="text" id="m${s}" placeholder="이름" value="${esc(S.members[s])}">
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="card">
+      <h3>역할은 자동으로 바뀝니다</h3>
+      <p class="sub" style="margin:0">네 번째 미션부터 한 칸씩 옮겨 갑니다. 실물 역할 배지도 함께 넘겨주세요.</p>
+    </div>`;
+  btn('역할 정하기', ()=>{
+    slots.forEach(s=>S.members[s] = document.getElementById('m'+s).value.trim());
+    if(slots.some(s=>!S.members[s])) return flash('네 명 모두 이름을 적어 주세요');
+    S.phase='prior'; save(); render();
+  });
+}
+
+/* ── 첫 추리 ───────────────────────── */
+function screenPrior(){
+  bar.classList.add('hidden');
+  const opts = ['자연','농사','집','시장'];
+  view.innerHTML = `
+    <p class="eyebrow">먼저 생각해 보기</p>
+    <h1>우리 모둠의 생각</h1>
+    <div class="card">
+      <h3>옛날 남도 사람들은 무엇에 가장 의지하며 살았을까요?</h3>
+      <div class="opts" id="pchoice">
+        ${opts.map(o=>`<button class="opt" data-v="${o}" aria-pressed="${S.prior.choice===o}"><span class="box"></span>${o}</button>`).join('')}
+      </div>
+      <label class="field" style="margin-top:18px" for="preason">그렇게 생각한 이유를 한 문장으로 쓰세요.</label>
+      <p class="fill">우리는 <input type="text" id="preason" value="${esc(S.prior.reason)}" placeholder="이유"> 때문에 그렇게 생각합니다.</p>
+    </div>
+    <p class="lede">이 생각은 마지막에 다시 꺼내 봅니다.</p>`;
+  view.querySelectorAll('#pchoice .opt').forEach(b=>b.onclick=()=>{
+    view.querySelectorAll('#pchoice .opt').forEach(x=>x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true'); S.prior.choice = b.dataset.v;
+  });
+  btn('첫 추리 저장', ()=>{
+    S.prior.reason = document.getElementById('preason').value.trim();
+    if(!S.prior.choice) return flash('하나를 골라 주세요');
+    buildSteps(); S.phase='run'; S.stepIdx=0; save(); render();
+  });
+}
+
+/* ── 탐험 지도 ─────────────────────── */
+function screenMap(){
+  const lv = levelName();
+  view.innerHTML = `
+    <p class="eyebrow">탐험 지도</p>
+    <h1>동이의 기억 복원도</h1>
+    <div class="card">
+      <h3>우리 모둠이 도는 순서</h3>
+      <ol class="goals">${S.order.map(t=>`<li>${TOPICS[t].emoji} ${TOPICS[t].title}${S.topics[t].done?' — 기억 복원 완료':''}</li>`).join('')}</ol>
+    </div>
+    <div class="reward">
+      <div><span>남은 미션</span>${4-doneCount()}개</div>
+      <div><span>현재 레벨</span>${lv}</div>
+      <div><span>획득 배지</span>${doneCount()||'없음'}</div>
+    </div>`;
+  btn(doneCount()? '이어서 탐험하기' : '미션 1 시작', next);
+}
+
+/* ── 미션 도입 ─────────────────────── */
+function screenIntro(step){
+  const T = TOPICS[step.t];
+  view.innerHTML = `
+    <p class="eyebrow">미션 ${step.m}</p>
+    <h1>${T.emoji} ${T.title}</h1>
+    <div class="dongi"><div class="face">👦</div><p>${esc(T.dongi)}</p></div>
+    <div class="card">
+      <h3>이번 미션</h3>
+      <ol class="goals">${T.goals.map(g=>`<li>${esc(g)}</li>`).join('')}</ol>
+    </div>
+    <div class="card">
+      <h3>이번 역할</h3>
+      ${['evidence','photo','record','present'].map(k=>{
+        const r=ROLES[k], w=whoIs(k, step.m);
+        return `<div class="pair"><span class="k">${r.icon} ${r.name}</span><b>${esc(w.name)}</b></div>`;
+      }).join('')}
+    </div>`;
+  btn('탐색 시작', next);
+}
+
+/* ── 문항 렌더러 ───────────────────── */
+function renderPart(p, saved){
+  if(p.type==='multi' || p.type==='depend' || p.type==='single'){
+    const chosen = saved && saved[p.id] ? [].concat(saved[p.id]) : [];
+    const wide = p.options.some(o=>o.length>8);
+    return `<h3>${esc(p.prompt)}</h3>
+      ${p.limit?`<p class="sub">${p.limit}개만 고르세요.</p>`:''}
+      <div class="opts" data-part="${p.id}" data-type="${p.type}" ${p.limit?`data-limit="${p.limit}"`:''}>
+        ${p.options.map(o=>`<button class="opt ${wide?'wide':''}" data-v="${esc(o)}" aria-pressed="${chosen.includes(o)}"><span class="box"></span>${esc(o)}</button>`).join('')}
+      </div>
+      ${p.other?`<label class="field" style="margin-top:14px">기타</label>
+        <input type="text" data-other="${p.id}" placeholder="찾은 낱말을 직접 적어도 좋아요" value="${esc(saved&&saved[p.id+'_other']||'')}">`:''}`;
+  }
+  if(p.type==='match'){
+    const sv = saved && saved[p.id] || {};
+    return `<h3>${esc(p.prompt)}</h3>
+      <div data-part="${p.id}" data-type="match">
+        ${p.left.map(l=>`<div class="pair">
+          <span class="k">${esc(l)}</span>
+          <select data-k="${esc(l)}">
+            <option value="">고르기</option>
+            ${p.right.map(r=>`<option ${sv[l]===r?'selected':''}>${esc(r)}</option>`).join('')}
+          </select></div>`).join('')}
+      </div>`;
+  }
+  if(p.type==='fill'){
+    const sv = saved && saved[p.id] || [];
+    let html = `<h3>${esc(p.prompt||'')}</h3><p class="fill" data-part="${p.id}" data-type="fill">`;
+    p.parts.forEach((txt,i)=>{
+      html += esc(txt);
+      if(i < p.parts.length-1) html += `<input type="text" data-i="${i}" placeholder="${esc(p.ph[i]||'')}" value="${esc(sv[i]||'')}">`;
+    });
+    return html + '</p>' + sampleBtn(p.sample);
+  }
+  return '';
+}
+function sampleBtn(sample){
+  return sample ? `<button class="linkbtn" onclick="this.nextElementSibling.hidden=!this.nextElementSibling.hidden">예시 보기</button>
+    <div class="fb tip" hidden>${esc(sample)}</div>` : '';
+}
+function readPart(p, root){
+  const box = root.querySelector(`[data-part="${p.id}"]`);
+  if(!box) return null;
+  if(p.type==='match'){
+    const out={}; box.querySelectorAll('select').forEach(s=>{ if(s.value) out[s.dataset.k]=s.value; });
+    return Object.keys(out).length===p.left.length ? out : null;
+  }
+  if(p.type==='fill'){
+    const vals=[...box.querySelectorAll('input')].map(i=>i.value.trim());
+    return vals.every(v=>v) ? vals : null;
+  }
+  const sel=[...box.querySelectorAll('[aria-pressed="true"]')].map(b=>b.dataset.v);
+  const other = root.querySelector(`[data-other="${p.id}"]`);
+  const otherVal = other ? other.value.trim() : '';
+  if(p.type==='single') return sel[0] || null;
+  if(!sel.length && !otherVal) return null;
+  if(p.limit && sel.length !== p.limit) return null;
+  return {list:sel, other:otherVal};
+}
+function gradePart(p, val, ctx){
+  if(!p.answer && p.type!=='depend') return {graded:false};
+  if(p.type==='single') return {graded:true, ok: val===p.answer};
+  if(p.type==='match')  return {graded:true, ok: p.left.every(l=>val[l]===p.answer[l])};
+  if(p.type==='multi'){
+    const got=new Set(val.list), want=new Set(p.answer);
+    const wrong=p.options.filter(o=>!want.has(o)&&got.has(o));
+    return {graded:true, ok: p.answer.every(a=>got.has(a)) && !wrong.length};
+  }
+  if(p.type==='depend'){
+    const words = (ctx[p.dependsOn]||{}).list || [];
+    const allow = new Set(); words.forEach(w=>(p.map[w]||[]).forEach(m=>allow.add(m)));
+    if(!allow.size) return {graded:false};
+    return {graded:true, ok: val.list.length>0 && val.list.every(m=>allow.has(m))};
+  }
+  return {graded:false};
+}
+
+function bindOpts(){
+  view.querySelectorAll('.opts[data-part]').forEach(box=>{
+    const type=box.dataset.type, limit=+box.dataset.limit||0;
+    box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+      if(type==='single'){
+        box.querySelectorAll('.opt').forEach(x=>x.setAttribute('aria-pressed','false'));
+        b.setAttribute('aria-pressed','true'); return;
+      }
+      const on = b.getAttribute('aria-pressed')==='true';
+      if(!on && limit && box.querySelectorAll('[aria-pressed="true"]').length>=limit)
+        return flash(`${limit}개까지 고를 수 있어요`);
+      b.setAttribute('aria-pressed', on?'false':'true');
+    });
+  });
+}
+
+/* ── 증거 / 기록 화면 ──────────────── */
+function screenTask(step){
+  const T=TOPICS[step.t], parts=T[step.v], r=ROLES[step.role], w=whoIs(step.role, step.m);
+  const saved=S.topics[step.t][step.v];
+  view.innerHTML = `
+    <p class="eyebrow">미션 ${step.m} · ${T.title}</p>
+    <h1>${r.icon} ${r.name}</h1>
+    <p class="lede">${esc(w.name)} 차례입니다.</p>
+    ${parts.map(p=>`<div class="card">${renderPart(p,saved)}<div class="fbslot"></div></div>`).join('')}`;
+  bindOpts();
+  btn(`${r.name} 완료`, ()=>{
+    const ctx={}; let missing=false, allOk=true, graded=false;
+    parts.forEach(p=>{
+      const v=readPart(p, view);
+      if(v===null){ missing=true; return; }
+      ctx[p.id]=v;
+    });
+    if(missing) return flash('빈 곳이 있어요');
+    const slots=view.querySelectorAll('.fbslot');
+    parts.forEach((p,i)=>{
+      const g=gradePart(p, ctx[p.id], ctx);
+      if(!g.graded){ slots[i].innerHTML=''; return; }
+      graded=true; if(!g.ok) allOk=false;
+      slots[i].innerHTML = `<div class="fb ${g.ok?'ok':'no'}">${esc(g.ok?p.ok:p.no)}</div>`;
+    });
+    const key=step.v;
+    const t=S.topics[step.t];
+    t.tries[key]=(t.tries[key]||0)+1;
+    parts.forEach(p=>{
+      if(p.type==='multi'||p.type==='depend'){ t[key][p.id]=ctx[p.id]; t[key][p.id+'_list']=ctx[p.id].list; }
+      else t[key][p.id]=ctx[p.id];
+      const o=view.querySelector(`[data-other="${p.id}"]`); if(o) t[key][p.id+'_other']=o.value.trim();
+    });
+    save();
+    if(!graded || allOk){ next(); return; }
+    if(t.tries[key]>=2){
+      view.querySelector('.fbslot').insertAdjacentHTML('beforeend',
+        `<div class="fb tip">한 번 더 확인하고 넘어가도 좋습니다. 버튼을 다시 누르면 다음으로 갑니다.</div>`);
+      document.getElementById('mainBtn').textContent='그래도 넘어가기';
+      document.getElementById('mainBtn').onclick=next;
+    }
+    window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
+  });
+}
+
+/* ── 사진 촬영 ─────────────────────── */
+/* 원본은 800px(발표·결과물용)으로 이 태블릿에만,
+   썸네일은 200px(교사 확인용)만 전송합니다.            */
+const PHOTO = {full:{max:800, q:0.6}, thumb:{max:200, q:0.5}};
+
+function readFile(file){
+  return new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onload=()=>res(r.result); r.onerror=()=>rej(new Error('읽기 실패'));
+    r.readAsDataURL(file);
+  });
+}
+function loadImage(src){
+  return new Promise((res,rej)=>{
+    const im=new Image();
+    im.onload=()=>res(im); im.onerror=()=>rej(new Error('이미지 오류'));
+    im.src=src;
+  });
+}
+function resize(img, max, q){
+  const s=Math.min(1, max/Math.max(img.width,img.height));
+  const c=document.createElement('canvas');
+  c.width=Math.round(img.width*s); c.height=Math.round(img.height*s);
+  const g=c.getContext('2d');
+  g.fillStyle='#fff'; g.fillRect(0,0,c.width,c.height);
+  g.drawImage(img,0,0,c.width,c.height);
+  return {data:c.toDataURL('image/jpeg',q), w:c.width, h:c.height};
+}
+async function makePhoto(file){
+  const img=await loadImage(await readFile(file));
+  const full=resize(img, PHOTO.full.max, PHOTO.full.q);
+  const thumb=resize(img, PHOTO.thumb.max, PHOTO.thumb.q);
+  return {full:full.data, thumb:thumb.data, w:full.w, h:full.h,
+          kb:Math.round(full.data.length*0.73/1024), at:Date.now()};
+}
+
+function screenPhoto(step){
+  const T=TOPICS[step.t], r=ROLES.photo, w=whoIs('photo', step.m);
+  const d=S.topics[step.t];
+  view.innerHTML = `
+    <p class="eyebrow">미션 ${step.m} · ${T.title}</p>
+    <h1>${r.icon} 사진 탐정</h1>
+    <p class="lede">${esc(w.name)} 차례입니다.</p>
+    <div class="card">
+      <h3>${esc(T.photo.prompt)}</h3>
+      <p class="sub">플래시는 꺼 주세요. 전시물이 화면에 꽉 차게 찍으면 좋습니다.</p>
+      <ol class="goals">${T.photo.examples.map(e=>`<li>${esc(e)}</li>`).join('')}</ol>
+    </div>
+    <div class="card">
+      <div id="shotBox"></div>
+      <input type="file" accept="image/*" capture="environment" id="camIn" hidden>
+    </div>`;
+  drawShot(step.t);
+  btn('사진 탐정 완료', ()=>{
+    if(!S.topics[step.t].photo) return flash('사진을 한 장 찍어 주세요');
+    next();
+  }, {disabled:!d.photo});
+}
+
+function drawShot(topic){
+  const box=document.getElementById('shotBox'), p=S.topics[topic].photo;
+  const inp=document.getElementById('camIn');
+  if(p){
+    box.innerHTML = `
+      <div class="preview"><img src="${p.full}" alt="증거 사진">
+        <span class="meta">${p.w}×${p.h} · ${p.kb}KB</span></div>
+      <button class="opt wide" style="margin-top:12px" id="retake">다시 찍기</button>`;
+    document.getElementById('retake').onclick=()=>inp.click();
+  } else {
+    box.innerHTML = `<button class="shot" id="take">
+        <span class="big">📷</span>증거 사진 찍기<small>카메라가 바로 열립니다</small></button>`;
+    document.getElementById('take').onclick=()=>inp.click();
+  }
+  inp.onchange=async e=>{
+    const f=e.target.files && e.target.files[0]; if(!f) return;
+    box.classList.add('busy'); flash('사진 정리 중');
+    try{
+      S.topics[topic].photo = await makePhoto(f);
+      save({photo:topic});
+      drawShot(topic);
+      const b=document.getElementById('mainBtn'); if(b) b.disabled=false;
+    }catch(err){ flash('사진을 저장하지 못했습니다'); }
+    box.classList.remove('busy');
+    inp.value='';
+  };
+}
+
+/* ── 발표 준비 (자동 요약) ─────────── */
+function autoSummary(topicKey){
+  const T=TOPICS[topicKey], d=S.topics[topicKey];
+  let html='<dl class="auto">';
+  T.evidence.forEach(p=>{
+    const v=d.evidence[p.id]; if(!v) return;
+    let txt;
+    if(p.type==='match') txt = Object.keys(v).map(k=>`${k} → ${v[k]}`).join(' / ');
+    else if(v.list) txt = `<span class="tagline">${v.list.concat(v.other?[v.other]:[]).map(x=>`<span class="tag">${esc(x)}</span>`).join('')}</span>`;
+    else txt = esc(v);
+    html += `<dt>증거 탐정이 찾은 것</dt><dd>${txt}</dd>`;
+  });
+  T.record.forEach(p=>{
+    const v=d.record[p.id]; if(!v) return;
+    let txt;
+    if(p.type==='match') txt = Object.keys(v).map(k=>`${k} → ${v[k]}`).join(' / ');
+    else if(Array.isArray(v)) txt = esc(joinFill(p, v));
+    else txt = esc(v);
+    html += `<dt>기록 탐정이 적은 것</dt><dd>${txt}</dd>`;
+  });
+  html += `<dt>사진 탐정이 찍은 사진</dt><dd>${
+    d.photo ? `<img class="shotthumb" src="${d.photo.thumb}" alt="증거 사진">` : '아직 없음'}</dd>`;
+  return html+'</dl>';
+}
+function joinFill(p, vals){
+  return p.parts.map((t,i)=> t + (i<p.parts.length-1 ? (vals[i]||'____') : '')).join('');
+}
+
+function screenPrep(step){
+  const T=TOPICS[step.t], w=whoIs('present', step.m), saved=S.topics[step.t].prep;
+  const P=T.prep;
+  view.innerHTML = `
+    <p class="eyebrow">미션 ${step.m} · ${T.title}</p>
+    <h1>🎤 발표 탐정</h1>
+    <p class="lede">${esc(w.name)} 차례입니다. 우리 모둠이 모은 것을 확인하세요.</p>
+    <div class="card">
+      <h3>지금까지 모은 증거</h3>
+      ${autoSummary(step.t)}
+    </div>
+    <div class="card">
+      ${P.question ? renderPart(P.question, saved) + '<div class="fbslot"></div>' : `
+        <h3>30초 발표 준비</h3>
+        <div class="opts" data-part="checks" data-type="multi">
+          ${P.checks.map(c=>`<button class="opt wide" data-v="${esc(c)}" aria-pressed="${(saved.checks&&saved.checks.list||[]).includes(c)}"><span class="box"></span>${esc(c)}</button>`).join('')}
+        </div>
+        <label class="field" style="margin-top:16px">${esc(P.label)}</label>
+        <textarea id="prepText" placeholder="${esc(P.ph)}">${esc(saved.text||'')}</textarea>
+        ${sampleBtn(P.sample)}`}
+    </div>`;
+  bindOpts();
+  btn('발표 탐정 완료', ()=>{
+    if(P.question){
+      const v=readPart(P.question, view);
+      if(v===null) return flash('하나를 골라 주세요');
+      const g=gradePart(P.question, v, {});
+      S.topics[step.t].prep[P.question.id]=v;
+      S.topics[step.t].tries.prep=(S.topics[step.t].tries.prep||0)+1;
+      save();
+      view.querySelector('.fbslot').innerHTML=`<div class="fb ${g.ok?'ok':'no'}">${esc(g.ok?P.question.ok:P.question.no)}</div>`;
+      if(g.ok) return next();
+      if(S.topics[step.t].tries.prep>=2){
+        document.getElementById('mainBtn').textContent='그래도 넘어가기';
+        document.getElementById('mainBtn').onclick=next;
+      }
+      return;
+    }
+    const txt=document.getElementById('prepText').value.trim();
+    if(!txt) return flash('발표할 내용을 적어 주세요');
+    const c=readPart({id:'checks',type:'multi',options:P.checks}, view);
+    S.topics[step.t].prep={checks:c||{list:[],other:''}, text:txt};
+    save(); next();
+  });
+}
+
+/* ── 발표 · 동의 체크 ──────────────── */
+function screenSubmit(step){
+  const T=TOPICS[step.t], SB=T.submit, d=S.topics[step.t];
+  const others=['evidence','photo','record'];
+  const body = SB.type==='fill'
+    ? renderPart({...SB, id:'final', type:'fill', prompt:''}, {final:d.submit.final})
+    : `<div class="auto"><dt>발표 탐정이 준비한 내용</dt><dd>${esc(d.prep.text||'')}</dd></div>`;
+  view.innerHTML = `
+    <p class="eyebrow">미션 ${step.m} · ${T.title}</p>
+    <h1>${esc(SB.title)}</h1>
+    <p class="lede">발표 탐정이 모둠 앞에서 설명합니다.</p>
+    <div class="card">${body}</div>
+    <div class="card">
+      <h3>발표 내용에 동의하나요?</h3>
+      <p class="sub">세 명이 모두 눌러야 제출됩니다.</p>
+      <div class="opts" data-part="agree" data-type="multi">
+        ${others.map(k=>{
+          const r=ROLES[k], w=whoIs(k, step.m);
+          return `<button class="opt wide" data-v="${k}" aria-pressed="${!!d.agree[k]}"><span class="box"></span>${r.icon} ${esc(w.name)}</button>`;
+        }).join('')}
+      </div>
+    </div>`;
+  bindOpts();
+  btn('제출', ()=>{
+    const a=[...view.querySelectorAll('.opts[data-part="agree"] [aria-pressed="true"]')].map(b=>b.dataset.v);
+    if(a.length<3) return flash('세 명 모두 동의해야 합니다');
+    if(SB.type==='fill'){
+      const v=readPart({...SB, id:'final', type:'fill'}, view);
+      if(v===null) return flash('빈칸을 모두 채워 주세요');
+      d.submit.final=v;
+    }
+    others.forEach(k=>d.agree[k]=true);
+    d.done=true; save(); next();
+  });
+}
+
+/* ── 기억 복원 ─────────────────────── */
+function screenComplete(step){
+  const T=TOPICS[step.t], D=T.done, n=doneCount();
+  view.innerHTML = `
+    <p class="eyebrow">미션 ${step.m} 완료</p>
+    <div class="flip" id="flip"><div class="inner">
+      <div class="face back"><span class="q">🧩</span>기억 카드를 눌러 보세요</div>
+      <div class="face front"><span class="ic">${T.emoji}</span>
+        <b>${esc(D.cardTitle)}</b><span>${esc(D.cardText)}</span></div>
+    </div></div>
+    <p class="tapme" id="tapme">카드를 누르면 열립니다</p>
+    <div id="afterFlip" hidden>
+      <div class="trophy"><div class="mood">${esc(D.mood)}</div></div>
+      <div class="dongi"><div class="face">👦</div><p>${esc(D.dongi)}</p></div>
+      <div class="reward badgein">
+        <div><span>획득</span>🏅 ${esc(D.badge)}</div>
+        <div><span>현재 레벨</span>${LEVELS[n]}</div>
+        <div><span>남은 미션</span>${4-n}개</div>
+      </div>
+    </div>`;
+  const nx=S.steps[S.stepIdx+1];
+  const label = nx && nx.v==='conference' ? '탐정 회의로'
+              : nx && nx.v==='fintro' ? '마지막 미션으로' : `미션 ${step.m+1} 시작`;
+  const open=()=>{
+    const f=document.getElementById('flip');
+    if(f.classList.contains('open')) return;
+    f.classList.add('open');
+    document.getElementById('tapme').hidden=true;
+    setTimeout(()=>{
+      document.getElementById('afterFlip').hidden=false;
+      btn(label, next);
+    }, 500);
+  };
+  document.getElementById('flip').onclick=open;
+  btn('기억 카드 열기', open);
+}
+
+/* ── 탐정 회의 ─────────────────────── */
+let apprT=null;
+async function checkApproval(){
+  if(!syncReady() || !navigator.onLine) return false;
+  try{
+    const t=await getToken();
+    const r=await fetch(`${base()}/approval.json?auth=${t}`);
+    if(!r.ok) return false;
+    const j=await r.json();
+    return !!(j && j.approved);
+  }catch(e){ return false; }
+}
+function stopApproval(){ if(apprT){ clearInterval(apprT); apprT=null; } }
+
+function screenConference(){
+  const found=S.order.filter(t=>S.topics[t].done);
+  view.innerHTML = `
+    <p class="eyebrow">중간 점검</p>
+    <h1>👩‍🏫 탐정 회의</h1>
+    <div class="card">
+      <h3>지금까지 찾은 생활 기억</h3>
+      <ol class="goals">${found.map(t=>`<li>${TOPICS[t].emoji} ${TOPICS[t].title} — ${esc(TOPICS[t].done.mood)}</li>`).join('')}</ol>
+    </div>
+    <div class="card">
+      <h3>남도 사람들의 생활에서 가장 중요한 것은 무엇이라고 생각하나요?</h3>
+      <p class="sub">선생님께 30초 동안 발표하세요.</p>
+      <textarea id="confText" placeholder="그렇게 생각한 증거는 …입니다.">${esc(S.conference.text)}</textarea>
+      <label class="field" style="margin-top:16px">선생님께 받은 암호</label>
+      <input type="text" id="confPw" placeholder="암호">
+      <p class="sub" style="margin:8px 0 0">선생님이 현황판에서 승인하면 암호 없이도 열립니다.</p>
+      <div class="fbslot"></div>
+    </div>`;
+  const pass=()=>{
+    stopApproval();
+    S.conference.text=(document.getElementById('confText')||{}).value ?
+      document.getElementById('confText').value.trim() : S.conference.text;
+    S.conference.passed=true; save(); next();
+  };
+  // 원격 승인은 8초마다 확인 — 신호가 없으면 암호로 통과합니다
+  stopApproval();
+  apprT=setInterval(async()=>{
+    if(!S.conference.text) return;
+    if(await checkApproval()){
+      flash('선생님이 승인했습니다');
+      pass();
+    }
+  }, 8000);
+  btn('암호 확인', ()=>{
+    S.conference.text=document.getElementById('confText').value.trim();
+    const pw=document.getElementById('confPw').value.trim();
+    if(!S.conference.text) return flash('먼저 생각을 적어 주세요');
+    if(pw !== S.settings.password){
+      view.querySelector('.fbslot').innerHTML='<div class="fb no">암호가 다릅니다. 선생님께 발표하고 다시 받으세요.</div>';
+      save(); return;
+    }
+    pass();
+  });
+}
+
+/* ══════════════════════════════════════════════════
+   9. 미션 5 — 동이의 하루
+   ══════════════════════════════════════════════════ */
+
+function evidenceLine(t){
+  const d=S.topics[t], out=[];
+  TOPICS[t].evidence.forEach(p=>{
+    const v=d.evidence[p.id]; if(!v) return;
+    if(p.type==='match') out.push(Object.keys(v).join(', '));
+    else if(v.list) out.push(v.list.concat(v.other?[v.other]:[]).join(', '));
+    else out.push(String(v));
+  });
+  return out.join(' · ') || '기록 없음';
+}
+function autoEvidence(){
+  return `<dl class="auto">${S.order.map(t=>
+    `<dt>${TOPICS[t].emoji} ${TOPICS[t].title}</dt><dd>${esc(evidenceLine(t))}</dd>`).join('')}</dl>`;
+}
+function fillRow(id, parts, ph, vals){
+  let h=`<p class="fill" data-fill="${id}">`;
+  parts.forEach((txt,i)=>{
+    h+=esc(txt);
+    if(i<parts.length-1) h+=`<input type="text" data-i="${i}" placeholder="${esc(ph[i]||'')}" value="${esc(vals[i]||'')}">`;
+  });
+  return h+'</p>';
+}
+function readFill(id){
+  const box=view.querySelector(`[data-fill="${id}"]`);
+  return [...box.querySelectorAll('input')].map(i=>i.value.trim());
+}
+
+function finIntro(){
+  view.innerHTML = `
+    <p class="eyebrow">미션 5</p>
+    <h1>⏰ 동이의 하루 완성</h1>
+    <div class="dongi"><div class="face">👦</div><p>고마워! 자연도, 농사와 집, 시장의 기억도 조금씩 돌아왔어. 하지만 아직 한 가지가 부족해. 지금까지 찾은 증거로 내가 어떤 하루를 보냈는지 알려줘!</p></div>
+    <div class="card">
+      <h3>이번에는 네 사람이 서로 다른 일을 합니다</h3>
+      <p class="sub">한 사람만 발표하면 동이의 기억은 완성되지 않습니다.</p>
+      ${[['evidence','핵심 증거 고르기'],['photo','대표 사진 고르기'],
+         ['record','글로 완성하기'],['present','최종 발표하기']].map(([k,job])=>{
+        const r=ROLES[k], w=whoIs(k,5);
+        return `<div class="pair"><span class="k">${r.icon} ${esc(w.name)}</span><b style="font-weight:700">${job}</b></div>`;
+      }).join('')}
+    </div>`;
+  btn('동이의 하루 복원 시작', next);
+}
+
+function finEvidence(){
+  const w=whoIs('evidence',5);
+  view.innerHTML = `
+    <p class="eyebrow">미션 5 · 핵심 증거 고르기</p>
+    <h1>🔍 증거 탐정</h1>
+    <p class="lede">${esc(w.name)} 차례입니다. 여러 증거 중 무엇이 더 중요한지 판단하세요.</p>
+    <div class="card"><h3>지금까지 찾은 증거</h3>${autoEvidence()}</div>
+    <div class="card">
+      <h3>동이의 생활을 설명하는 가장 중요한 증거</h3>
+      <p class="sub">전시마다 하나씩 골라 적으세요.</p>
+      ${S.order.map((t,i)=>`<div class="pair"><span class="k">${TOPICS[t].emoji} ${TOPICS[t].title.replace('남도의 ','')}</span>
+        <input type="text" data-key="${i}" placeholder="예) 바다와 해류" value="${esc(S.final.evidence[i]||'')}"></div>`).join('')}
+    </div>`;
+  btn('증거 판정 완료', ()=>{
+    const v=[...view.querySelectorAll('[data-key]')].map(i=>i.value.trim());
+    if(v.some(x=>!x)) return flash('네 칸을 모두 채워 주세요');
+    S.final.evidence=v; save(); next();
+  });
+}
+
+function finPhoto(){
+  const w=whoIs('photo',5);
+  const have=S.order.filter(t=>S.topics[t].photo);
+  view.innerHTML = `
+    <p class="eyebrow">미션 5 · 대표 사진 고르기</p>
+    <h1>📷 사진 탐정</h1>
+    <p class="lede">${esc(w.name)} 차례입니다. 사진 큐레이터처럼 발표에 쓸 사진 2장을 고르세요.</p>
+    <div class="card">
+      <h3>동이의 하루를 가장 잘 보여 주는 사진 2장</h3>
+      ${have.length ? `<div class="pickgal" id="pick">${have.map(t=>
+        `<button data-t="${t}" aria-pressed="${S.final.pick.includes(t)}">
+           <img src="${S.topics[t].photo.thumb}" alt="${esc(TOPICS[t].title)}">
+           <span class="cap">${TOPICS[t].emoji} ${esc(TOPICS[t].title)}</span></button>`).join('')}</div>`
+        : '<p class="sub">찍어 둔 사진이 없습니다. 그냥 넘어가도 됩니다.</p>'}
+    </div>
+    <div class="card">
+      <h3>고른 사진으로 설명하기</h3>
+      ${fillRow('p1',['이 사진은 동이가 ','하며 살았다는 것을 보여 줍니다.'],['한 일'],[S.final.photoText[0]])}
+      ${fillRow('p2',['이 사진은 남도 사람들이 ','했다는 증거입니다.'],['남도 사람들이 한 일'],[S.final.photoText[1]])}
+      ${sampleBtn('이 사진은 동이가 자연과 계절에 맞춰 생활하며 살았다는 것을 보여 줍니다. 이 사진은 남도 사람들이 자연환경에 맞게 집을 짓고 생활했다는 증거입니다.')}
+    </div>`;
+  if(have.length){
+    view.querySelectorAll('#pick button').forEach(b=>b.onclick=()=>{
+      const on=b.getAttribute('aria-pressed')==='true';
+      if(!on && view.querySelectorAll('#pick [aria-pressed="true"]').length>=2)
+        return flash('2장까지 고를 수 있어요');
+      b.setAttribute('aria-pressed', on?'false':'true');
+    });
+  }
+  btn('대표 사진 선정 완료', ()=>{
+    const pick=[...view.querySelectorAll('#pick [aria-pressed="true"]')].map(b=>b.dataset.t);
+    if(have.length && pick.length!==2) return flash('사진 2장을 골라 주세요');
+    const a=readFill('p1')[0], b2=readFill('p2')[0];
+    if(!a||!b2) return flash('빈칸을 채워 주세요');
+    S.final.pick=pick; S.final.photoText=[a,b2]; save(); next();
+  });
+}
+
+function finRecord(){
+  const w=whoIs('record',5);
+  view.innerHTML = `
+    <p class="eyebrow">미션 5 · 글로 완성하기</p>
+    <h1>✏️ 기록 탐정</h1>
+    <p class="lede">${esc(w.name)} 차례입니다. 흩어진 기억 조각을 하나의 이야기로 이으세요.</p>
+    <div class="card">
+      <h3>앞 탐정들이 고른 것</h3>
+      <dl class="auto">
+        <dt>증거 탐정이 고른 핵심 증거</dt>
+        <dd><span class="tagline">${S.final.evidence.map(x=>`<span class="tag">${esc(x)}</span>`).join('')}</span></dd>
+        <dt>사진 탐정이 고른 대표 사진</dt>
+        <dd>${S.final.pick.length
+          ? S.final.pick.map(t=>`<img class="shotthumb" style="display:inline-block;margin-right:6px" src="${S.topics[t].photo.thumb}" alt="">`).join('')
+          : '없음'}</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <h3>동이의 하루</h3>
+      ${fillRow('story',
+        ['동이는 ',' 자연환경 속에서 살았습니다. 동이의 가족은 ','을 통해 먹을 것을 얻었습니다. 동이는 집에서 ','을 이용해 생활했습니다. 시장에서는 ','을 얻거나 나눌 수 있었습니다.'],
+        ['따뜻한 남도','농사','마루와 온돌','물건과 소식'], S.final.story)}
+      ${sampleBtn('동이는 따뜻한 남도 자연환경 속에서 살았습니다. 동이의 가족은 농사를 통해 먹을 것을 얻었습니다. 동이는 집에서 마루와 온돌을 이용해 생활했습니다. 시장에서는 물건과 소식을 얻거나 나눌 수 있었습니다.')}
+    </div>`;
+  btn('생활 이야기 완성', ()=>{
+    const v=readFill('story');
+    if(v.some(x=>!x)) return flash('빈칸을 모두 채워 주세요');
+    S.final.story=v; save(); next();
+  });
+}
+
+function finPresent(){
+  const w=whoIs('present',5);
+  view.innerHTML = `
+    <p class="eyebrow">미션 5 · 최종 발표 준비</p>
+    <h1>🎤 발표 탐정</h1>
+    <p class="lede">${esc(w.name)} 차례입니다. 모둠이 모은 것을 30초 발표로 바꾸세요.</p>
+    <div class="card">
+      <h3>기록 탐정이 완성한 이야기</h3>
+      <div class="auto"><dd>${esc(S.final.story.join(' / '))}</dd></div>
+    </div>
+    <div class="card">
+      <h3>동이에게 하는 말</h3>
+      ${fillRow('speech',
+        ['동이야, 너는 ',' 자연환경 속에서 살았어. 가족은 ','을 통해 먹을 것을 얻었고, 집에서는 ','을 이용해 생활했어. 시장에서는 ','을 얻거나 소식을 나누었어. 우리가 찾은 가장 중요한 증거는 ','이야. 그래서 우리는 네가 ',' 어린이였다고 생각해.'],
+        ['따뜻한 남도','농사','마루와 온돌','물건','마루와 온돌','자연에 맞춰 살아간'],
+        S.final.speech.some(Boolean)?S.final.speech:[S.final.story[0],S.final.story[1],S.final.story[2],S.final.story[3],S.final.evidence[0],''])}
+      ${sampleBtn('동이야, 너는 따뜻한 남도 자연환경 속에서 살았어. 가족은 농사를 통해 먹을 것을 얻었고, 집에서는 마루와 온돌을 이용해 생활했어. 시장에서는 물건을 얻거나 소식을 나누었어. 우리가 찾은 가장 중요한 증거는 마루와 온돌이야. 그래서 우리는 네가 자연과 계절에 맞춰 가족, 이웃과 함께 살아간 어린이였다고 생각해.')}
+    </div>`;
+  btn('최종 발표 준비 완료', ()=>{
+    const v=readFill('speech');
+    if(v.some(x=>!x)) return flash('빈칸을 모두 채워 주세요');
+    S.final.speech=v; save(); next();
+  });
+}
+
+const CHANGES=['집에 대한 생각이 달라졌다','일과 먹을 것에 대한 생각이 달라졌다',
+  '시장의 역할에 대한 생각이 달라졌다','자연환경의 중요성을 알게 되었다',
+  '사람들이 함께 살아간다는 점을 알게 되었다'];
+
+function finCompare(){
+  view.innerHTML = `
+    <p class="eyebrow">미션 5 · 처음 생각과 비교</p>
+    <h1>📖 무엇이 달라졌나요</h1>
+    <div class="card">
+      <h3>처음 우리 모둠의 생각</h3>
+      <div class="auto"><dd>${esc(S.prior.choice)} — 우리는 ${esc(S.prior.reason)} 때문에 그렇게 생각합니다.</dd></div>
+    </div>
+    <div class="card">
+      <h3>처음 생각과 달라진 점은 무엇인가요?</h3>
+      <div class="opts" data-part="chg" data-type="multi">
+        ${CHANGES.map(c=>`<button class="opt wide" data-v="${esc(c)}" aria-pressed="${S.final.compare.includes(c)}"><span class="box"></span>${esc(c)}</button>`).join('')}
+      </div>
+    </div>`;
+  bindOpts();
+  btn('동이에게 전달', ()=>{
+    const v=[...view.querySelectorAll('[data-part="chg"] [aria-pressed="true"]')].map(b=>b.dataset.v);
+    if(!v.length) return flash('하나 이상 골라 주세요');
+    S.final.compare=v; save(); next();
+  });
+}
+
+function finSubmit(){
+  const others=['evidence','photo','record'];
+  view.innerHTML = `
+    <p class="eyebrow">미션 5 · 동이의 하루 발표</p>
+    <h1>발표 탐정 설명하기</h1>
+    <div class="card">
+      <div class="auto"><dd style="line-height:1.7">${esc(
+        ['동이야, 너는 ',' 자연환경 속에서 살았어. 가족은 ','을 통해 먹을 것을 얻었고, 집에서는 ','을 이용해 생활했어. 시장에서는 ','을 얻거나 소식을 나누었어. 우리가 찾은 가장 중요한 증거는 ','이야. 그래서 우리는 네가 ',' 어린이였다고 생각해.']
+        .map((t,i)=>t+(S.final.speech[i]||'')).join(''))}</dd></div>
+    </div>
+    <div class="card">
+      <h3>발표 내용에 동의하나요?</h3>
+      <p class="sub">세 명이 모두 눌러야 제출됩니다.</p>
+      <div class="opts" data-part="agree" data-type="multi">
+        ${others.map(k=>{
+          const r=ROLES[k], w=whoIs(k,5);
+          return `<button class="opt wide" data-v="${k}" aria-pressed="${!!S.final.agree[k]}"><span class="box"></span>${r.icon} ${esc(w.name)}</button>`;
+        }).join('')}
+      </div>
+    </div>`;
+  bindOpts();
+  btn('제출', ()=>{
+    const a=[...view.querySelectorAll('[data-part="agree"] [aria-pressed="true"]')].map(b=>b.dataset.v);
+    if(a.length<3) return flash('세 명 모두 동의해야 합니다');
+    others.forEach(k=>S.final.agree[k]=true);
+    S.final.done=true; save(); next();
+  });
+}
+
+function finComplete(){
+  view.innerHTML = `
+    <p class="eyebrow">미션 5 완료</p>
+    <div class="flip" id="flip"><div class="inner">
+      <div class="face back"><span class="q">🧩</span>마지막 기억 카드</div>
+      <div class="face front"><span class="ic">⏰</span>
+        <b>동이의 하루 카드가 완성되었습니다.</b>
+        <span>흩어져 있던 생활 기억이 하나의 이야기로 이어졌습니다.</span></div>
+    </div></div>
+    <p class="tapme" id="tapme">카드를 누르면 열립니다</p>
+    <div id="afterFlip" hidden>
+      <div class="dongi"><div class="face">👦</div><p>드디어 기억났어! 나는 따뜻한 남도의 자연 속에서 살았고, 사람들은 농사와 시장을 통해 먹을 것과 필요한 물건을 얻었어. 집에서는 마루와 온돌, 부엌을 이용해 계절에 맞게 생활했지. 시장에서는 물건만 오간 게 아니라 사람들의 소식과 마음도 오갔어. 고마워, 기억 탐정단!</p></div>
+      <div class="reward badgein">
+        <div><span>획득</span>👑 광주 역사 마스터</div>
+        <div><span>현재 레벨</span>👑 남도 생활 마스터</div>
+      </div>
+    </div>`;
+  const open=()=>{
+    const f=document.getElementById('flip');
+    if(f.classList.contains('open')) return;
+    f.classList.add('open');
+    document.getElementById('tapme').hidden=true;
+    setTimeout(()=>{ document.getElementById('afterFlip').hidden=false; btn('보너스 미션', next); },500);
+  };
+  document.getElementById('flip').onclick=open;
+  btn('마지막 기억 카드 열기', open);
+}
+
+/* ══════════════════════════════════════════════════
+   9-2. 보너스 미션 — 최고의 큐레이터
+   ══════════════════════════════════════════════════ */
+
+function bonIntro(){
+  view.innerHTML = `
+    <p class="eyebrow">보너스 미션</p>
+    <h1>🎖 특별 임무 도착</h1>
+    <div class="dongi"><div class="face">👦</div><p>내 기억을 모두 되찾아 줘서 고마워! 그런데 관장님께서 새 전시실을 만드신대. 전시물은 단 하나만 고를 수 있어. 너희가 관장이라면 어떤 전시물을 남길래?</p></div>
+    <div class="card">
+      <h3>이번에는 역할을 직접 정하세요</h3>
+      <p class="sub">지금까지와 다른 역할을 맡아도 좋습니다.</p>
+      ${Object.keys(ROLES).map(k=>{
+        const r=ROLES[k];
+        return `<label class="field" style="margin-top:12px">${r.icon} ${r.name}</label>
+          <input type="text" data-role="${k}" placeholder="이름" value="${esc(S.bonus.roles[k]||'')}">`;
+      }).join('')}
+      <button class="opt wide" style="margin-top:14px" id="keep">지금 역할 그대로 하기</button>
+    </div>`;
+  document.getElementById('keep').onclick=()=>{
+    view.querySelectorAll('[data-role]').forEach(i=>{ i.value=whoIs(i.dataset.role,5).name; });
+  };
+  btn('도전하기', ()=>{
+    const r={};
+    view.querySelectorAll('[data-role]').forEach(i=>r[i.dataset.role]=i.value.trim());
+    if(Object.values(r).some(v=>!v)) return flash('네 역할을 모두 정해 주세요');
+    S.bonus.roles=r; save(); next();
+  });
+}
+function bonName(k){ return S.bonus.roles[k] || whoIs(k,5).name; }
+function apprBox(id, roles){
+  const on=S.bonus.appr[id]||[];
+  return `<div class="opts appr" data-part="${id}" data-type="multi">
+    ${roles.map(k=>`<button class="opt wide" data-v="${k}" aria-pressed="${on.includes(k)}">
+      <span class="box"></span>${ROLES[k].icon} ${esc(bonName(k))} 승인</button>`).join('')}</div>`;
+}
+function readAppr(id, need){
+  const v=[...view.querySelectorAll(`[data-part="${id}"] [aria-pressed="true"]`)].map(b=>b.dataset.v);
+  if(v.length<need){ flash('탐정단 승인이 필요합니다'); return null; }
+  S.bonus.appr[id]=v; return v;
+}
+
+function bonObserve(){
+  view.innerHTML = `
+    <p class="eyebrow">보너스 · 관찰</p>
+    <h1>👀 최고의 전시물 찾기</h1>
+    <p class="lede">박물관을 다시 둘러보며 가장 중요하다고 생각하는 전시물을 고르세요.</p>
+    <div class="card">
+      <div id="shotBox"></div>
+      <input type="file" accept="image/*" capture="environment" id="camIn" hidden>
+    </div>
+    <div class="card">
+      <label class="field">전시물 이름</label>
+      <input type="text" id="bName" placeholder="예) 강진 김해김씨가 상여" value="${esc(S.bonus.name)}">
+      <label class="field" style="margin-top:16px">설명판에서 찾은 중요한 낱말</label>
+      <input type="text" id="bWord" placeholder="예) 상례 / 장식 / 예술 / 위로" value="${esc(S.bonus.word)}">
+    </div>
+    <div class="card">
+      <h3>탐정단 승인</h3>
+      ${apprBox('observe',['evidence','photo','record'])}
+    </div>`;
+  drawBonusShot();
+  bindOpts();
+  btn('제출', ()=>{
+    const n=document.getElementById('bName').value.trim();
+    const w=document.getElementById('bWord').value.trim();
+    if(!n||!w) return flash('전시물 이름과 낱말을 적어 주세요');
+    if(!readAppr('observe',3)) return;
+    S.bonus.name=n; S.bonus.word=w; save(); next();
+  });
+}
+function drawBonusShot(){
+  const box=document.getElementById('shotBox'), inp=document.getElementById('camIn');
+  const p=S.bonus.photo;
+  box.innerHTML = p
+    ? `<div class="preview"><img src="${p.full}" alt="전시물 사진">
+         <span class="meta">${p.w}×${p.h} · ${p.kb}KB</span></div>
+       <button class="opt wide" style="margin-top:12px" id="take2">다시 찍기</button>`
+    : `<button class="shot" id="take2"><span class="big">📷</span>전시물 사진 찍기<small>카메라가 바로 열립니다</small></button>`;
+  document.getElementById('take2').onclick=()=>inp.click();
+  inp.onchange=async e=>{
+    const f=e.target.files&&e.target.files[0]; if(!f) return;
+    box.classList.add('busy'); flash('사진 정리 중');
+    try{ S.bonus.photo=await makePhoto(f); save({photo:'bonus'}); drawBonusShot(); }
+    catch(err){ flash('사진을 저장하지 못했습니다'); }
+    box.classList.remove('busy'); inp.value='';
+  };
+}
+
+function bonStep(cfg){
+  view.innerHTML = `
+    <p class="eyebrow">보너스 · ${cfg.eyebrow}</p>
+    <h1>${cfg.title}</h1>
+    <div class="card">
+      <h3>${esc(cfg.q)}</h3>
+      ${S.bonus.name?`<p class="sub">고른 전시물: ${esc(S.bonus.name)}</p>`:''}
+      <textarea id="bText" placeholder="${esc(cfg.ph)}">${esc(S.bonus[cfg.key]||'')}</textarea>
+      ${sampleBtn(cfg.sample)}
+    </div>
+    <div class="card"><h3>탐정단 승인</h3>${apprBox(cfg.id,['evidence','photo','record','present'])}</div>`;
+  bindOpts();
+  btn('제출', ()=>{
+    const t=document.getElementById('bText').value.trim();
+    if(!t) return flash('내용을 적어 주세요');
+    if(!readAppr(cfg.id,4)) return;
+    S.bonus[cfg.key]=t; save(); next();
+  });
+}
+const bonWhy=()=>bonStep({eyebrow:'비교', title:'⚖ 왜 이 전시물일까?', id:'why', key:'why',
+  q:'다른 전시물과 비교했을 때 왜 더 중요할까요?', ph:'다른 전시물은 …지만, 이 전시물은 …',
+  sample:'이 상여는 죽은 사람을 보내고 남은 사람들을 위로하는 데 쓰였기 때문에 중요합니다. 다른 전시물은 생활 도구나 물건의 쓰임을 보여 주지만, 이 상여는 남도 사람들의 마음과 공동체 문화, 아름다운 장식까지 함께 보여 줍니다.'});
+const bonMeaning=()=>bonStep({eyebrow:'해석', title:'💡 이 전시물이 알려 주는 것', id:'meaning', key:'meaning',
+  q:'이 전시물은 옛날 광주 사람들의 어떤 생활을 알려 주나요?', ph:'옛날 사람들이 …하던 생활을 알려 줍니다.',
+  sample:'옛날 사람들이 죽은 사람의 마지막 길을 정성스럽게 보내고, 남은 사람들을 위로하던 생활을 알려 줍니다.'});
+const bonAd=()=>bonStep({eyebrow:'창조', title:'🎨 박물관 광고 만들기', id:'ad', key:'ad',
+  q:'친구들이 꼭 보고 싶어지도록 한 문장 광고를 만들어 보세요.', ph:'예) 장승은 옛날 광주 사람들의 마음을 알려 주는 타임머신!',
+  sample:'죽은 사람을 정성껏 보내고 남은 사람을 위로한 아름다운 상여, 놓치면 후회합니다!'});
+
+function bonFinal(){
+  view.innerHTML = `
+    <p class="eyebrow">보너스 · 최종 발표</p>
+    <h1>🎤 우리 모둠의 전시물</h1>
+    <div class="card">
+      <dl class="auto">
+        <dt>우리가 선택한 전시물</dt><dd>${esc(S.bonus.name)}</dd>
+        <dt>선택 이유</dt><dd>${esc(S.bonus.why)}</dd>
+        <dt>광고 문구</dt><dd>${esc(S.bonus.ad)}</dd>
+        ${S.bonus.photo?`<dt>사진</dt><dd><img class="shotthumb" src="${S.bonus.photo.thumb}" alt=""></dd>`:''}
+      </dl>
+    </div>
+    <div class="card">
+      <h3>발표 탐정이 발표합니다</h3>
+      ${apprBox('final',['present'])}
+    </div>`;
+  bindOpts();
+  btn('발표 완료', ()=>{
+    if(!readAppr('final',1)) return;
+    S.bonus.done=true; save(); next();
+  });
+}
+
+function bonComplete(){
+  view.innerHTML = `
+    <p class="eyebrow">보너스 미션 완료</p>
+    <div class="flip" id="flip"><div class="inner">
+      <div class="face back"><span class="q">🏛️</span>특별 카드</div>
+      <div class="face front"><span class="ic">🏆</span>
+        <b>최고의 큐레이터</b>
+        <span>전시물의 가치를 알려 주는 사람이 되었습니다.</span></div>
+    </div></div>
+    <p class="tapme" id="tapme">카드를 누르면 열립니다</p>
+    <div id="afterFlip" hidden>
+      <div class="dongi"><div class="face">👦</div><p>너희는 이제 내 기억을 찾는 탐정을 넘어, 전시물의 가치를 알려 주는 큐레이터가 되었어!</p></div>
+      <div class="reward badgein">
+        <div><span>획득</span>⭐ 최고의 큐레이터</div>
+        <div><span>칭호</span>🏛 광주 역사 큐레이터</div>
+      </div>
+    </div>`;
+  const open=()=>{
+    const f=document.getElementById('flip');
+    if(f.classList.contains('open')) return;
+    f.classList.add('open');
+    document.getElementById('tapme').hidden=true;
+    setTimeout(()=>{ document.getElementById('afterFlip').hidden=false; btn('결과 만들기', next); },500);
+  };
+  document.getElementById('flip').onclick=open;
+  btn('특별 카드 열기', open);
+}
+
+/* ══════════════════════════════════════════════════
+   10. 결과 이미지 — 캔버스로 한 장에 담기
+   ══════════════════════════════════════════════════ */
+
+function wrapText(g, text, x, y, maxW, lh, maxLines){
+  const words=String(text).split(/\s+/); let line='', n=0;
+  for(const w of words){
+    const test=line?line+' '+w:w;
+    if(g.measureText(test).width>maxW && line){
+      g.fillText(line, x, y+n*lh); n++; line=w;
+      if(maxLines && n>=maxLines){ g.fillText('…', x, y+n*lh); return y+(n+1)*lh; }
+    } else line=test;
+  }
+  if(line){ g.fillText(line, x, y+n*lh); n++; }
+  return y+n*lh;
+}
+async function buildPoster(){
+  const W=1080, H=1620, P=64;
+  const c=document.createElement('canvas'); c.width=W; c.height=H;
+  const g=c.getContext('2d');
+  const F=n=>`${n}px -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif`;
+
+  g.fillStyle='#16283C'; g.fillRect(0,0,W,H);
+  g.fillStyle='#D9A441'; g.font='700 '+F(30);
+  g.fillText('광주역사민속박물관 · 기억 탐정단', P, 96);
+  g.fillStyle='#F5EFE1'; g.font='900 '+F(74);
+  g.fillText('동이의 하루', P, 190);
+  g.font='700 '+F(32); g.fillStyle='rgba(245,239,225,.72)';
+  g.fillText(`${S.groupNo}모둠 · ${Object.values(S.members).join('  ')}`, P, 244);
+
+  // 사진 띠
+  const shots=S.order.filter(t=>S.topics[t].photo);
+  const cw=(W-P*2-24*3)/4, ch=Math.round(cw*0.75);
+  for(let i=0;i<4;i++){
+    const x=P+i*(cw+24), y=290;
+    g.fillStyle='#0E1B2A'; g.fillRect(x,y,cw,ch);
+    const t=shots[i];
+    if(t){
+      const im=await loadImage(S.topics[t].photo.full);
+      const s=Math.max(cw/im.width, ch/im.height);
+      g.save(); g.beginPath(); g.rect(x,y,cw,ch); g.clip();
+      g.drawImage(im, x+(cw-im.width*s)/2, y+(ch-im.height*s)/2, im.width*s, im.height*s);
+      g.restore();
+    }
+    g.fillStyle='#D9A441'; g.font='700 '+F(26);
+    g.fillText(TOPICS[S.order[i]].title.replace('남도의 ',''), x, y+ch+36);
+  }
+
+  // 이야기 카드
+  let y=290+ch+80;
+  const cardH=430;
+  g.fillStyle='#F5EFE1'; g.fillRect(P,y,W-P*2,cardH);
+  g.fillStyle='#243247'; g.font='900 '+F(38);
+  g.fillText('우리가 복원한 동이의 하루', P+40, y+72);
+  g.font='400 '+F(32); g.fillStyle='#243247';
+  const story=['동이는 ',' 자연환경 속에서 살았습니다. 동이의 가족은 ','을 통해 먹을 것을 얻었습니다. 동이는 집에서 ','을 이용해 생활했습니다. 시장에서는 ','을 얻거나 나눌 수 있었습니다.']
+    .map((t,i)=>t+(S.final.story[i]||'')).join('');
+  let ty=wrapText(g, story, P+40, y+128, W-P*2-80, 48, 5);
+  g.fillStyle='#6B7688'; g.font='700 '+F(26);
+  g.fillText('가장 중요한 증거', P+40, ty+34);
+  g.fillStyle='#243247'; g.font='700 '+F(30);
+  wrapText(g, S.final.evidence.filter(Boolean).join(' · '), P+40, ty+76, W-P*2-80, 42, 2);
+
+  // 보너스
+  y += cardH+44;
+  if(S.bonus.done){
+    g.fillStyle='rgba(217,164,65,.16)'; g.fillRect(P,y,W-P*2,250);
+    g.strokeStyle='#D9A441'; g.lineWidth=2; g.strokeRect(P,y,W-P*2,250);
+    g.fillStyle='#D9A441'; g.font='700 '+F(28);
+    g.fillText('우리가 남기고 싶은 전시물', P+40, y+58);
+    g.fillStyle='#F5EFE1'; g.font='900 '+F(40);
+    g.fillText(S.bonus.name, P+40, y+112);
+    g.font='400 '+F(30); g.fillStyle='rgba(245,239,225,.85)';
+    wrapText(g, '“'+S.bonus.ad+'”', P+40, y+164, W-P*2-80, 42, 2);
+    y+=250+44;
+  }
+
+  // 배지
+  g.fillStyle='#D9A441'; g.font='700 '+F(30);
+  g.fillText(levelName(), P, y+40);
+  g.fillStyle='rgba(245,239,225,.5)'; g.font='400 '+F(26);
+  g.fillText(new Date().toLocaleDateString('ko-KR')+' · '+(S.session||'기억 탐정단'), P, y+86);
+
+  return c.toDataURL('image/jpeg', 0.9);
+}
+
+async function savePoster(){
+  flash('결과를 그리는 중');
+  try{
+    const url=await buildPoster();
+    const img=document.getElementById('poster');
+    if(img) img.src=url;
+    const a=document.createElement('a');
+    a.href=url; a.download=`동이의하루_${S.groupNo}모둠.jpg`; a.click();
+    flash('저장했습니다');
+  }catch(e){ flash('결과를 만들지 못했습니다'); }
+}
+
+/* ── 탐험 마침 ─────────────────────── */
+function screenEnd(){
+  drawBar({});
+  view.innerHTML = `
+    <p class="eyebrow">탐험 마침</p>
+    <h1>기억 탐정단<br>활동 결과</h1>
+    <img id="poster" alt="우리 모둠의 결과">
+    <div class="card">
+      <h3>우리 모둠이 찾은 기억</h3>
+      <ol class="goals">
+        ${S.order.map(t=>`<li>${TOPICS[t].emoji} ${TOPICS[t].title} — ${S.topics[t].done?'복원 완료':'미완료'}</li>`).join('')}
+        <li>⏰ 동이의 하루 — ${S.final.done?'복원 완료':'미완료'}</li>
+        <li>🏛 최고의 큐레이터 — ${S.bonus.done?esc(S.bonus.name):'미완료'}</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>처음 생각과 달라진 점</h3>
+      <p class="sub" style="margin:0 0 8px">처음: ${esc(S.prior.choice)} — ${esc(S.prior.reason)}</p>
+      ${S.final.compare.length?`<ol class="goals">${S.final.compare.map(c=>`<li>${esc(c)}</li>`).join('')}</ol>`:'<p class="sub" style="margin:0">기록 없음</p>'}
+    </div>
+    <div class="card">
+      <h3>교실에서 이어가기</h3>
+      <p class="sub" style="margin:0">결과 이미지를 저장해 패들렛이나 클래스룸에 올리세요. 기록 파일은 선생님께 드리면 됩니다.</p>
+    </div>`;
+  buildPoster().then(u=>{ const i=document.getElementById('poster'); if(i) i.src=u; }).catch(()=>{});
+  btn('결과 이미지 저장', savePoster, {ghost:'기록 파일 내려받기', onGhost:backup});
+}
+
+/* ── 역할 전환 화면 ────────────────── */
+function maybeHandoff(step){
+  if(!step.role) return;
+  const key = (step.t||'final') + ':' + step.v;
+  if(S.seenHandoff[key]) return;
+  const r=ROLES[step.role], w=whoIs(step.role, step.m);
+  const ho=document.getElementById('handoff');
+  ho.style.setProperty('--role', r.raw);
+  document.getElementById('hoIcon').textContent=r.icon;
+  document.getElementById('hoRole').textContent=r.name+' 차례예요';
+  document.getElementById('hoWho').textContent=w.name;
+  const b=document.getElementById('hoBtn');
+  b.textContent=`제가 ${w.name}입니다`;
+  b.onclick=()=>{ S.seenHandoff[key]=Date.now(); save(); ho.classList.remove('show'); };
+  ho.classList.add('show');
+}
+
+/* ── 이동 ─────────────────────────── */
+function next(){ S.stepIdx=Math.min(S.stepIdx+1, S.steps.length-1); save(); render(); }
+
+/* ── 교사 패널 ─────────────────────── */
+function longPressTeacher(){
+  const h1=view.querySelector('h1'); if(!h1) return;
+  let t;
+  const down=()=>{ t=setTimeout(openTeacher,1500); };
+  const up=()=>clearTimeout(t);
+  h1.addEventListener('touchstart',down); h1.addEventListener('touchend',up);
+  h1.addEventListener('mousedown',down);  h1.addEventListener('mouseup',up);
+  h1.addEventListener('mouseleave',up);
+}
+function openTeacher(){
+  const p=document.getElementById('teacher');
+  document.getElementById('tPw').value=S.settings.password;
+  document.getElementById('tDb').value=S.settings.dbUrl||FB.dbUrl||'';
+  document.getElementById('tKey').value=S.settings.apiKey||FB.apiKey||'';
+  const n=(SY.mainDirty?1:0)+Object.keys(SY.photos).length;
+  document.getElementById('syncState').textContent = !syncReady()
+    ? '설정이 비어 있어 이 태블릿에만 저장됩니다.'
+    : (navigator.onLine ? (n?`연결됨 · 전송 대기 ${n}건`:'연결됨 · 모두 전송했습니다')
+                        : `오프라인 · 전송 대기 ${n}건`);
+  document.getElementById('tConf').innerHTML=['사용함','사용 안 함'].map((l,i)=>
+    `<button class="opt" data-v="${i===0}" aria-pressed="${S.settings.useConference===(i===0)}"><span class="box"></span>${l}</button>`).join('');
+  p.querySelectorAll('#tConf .opt').forEach(b=>b.onclick=()=>{
+    p.querySelectorAll('#tConf .opt').forEach(x=>x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true');
+    S.settings.useConference = b.dataset.v==='true';
+  });
+  p.classList.add('show');
+}
+function closeTeacher(){
+  S.settings.password=document.getElementById('tPw').value.trim()||'마루';
+  S.settings.dbUrl=document.getElementById('tDb').value.trim();
+  S.settings.apiKey=document.getElementById('tKey').value.trim();
+  save(); flushNow();
+  document.getElementById('teacher').classList.remove('show');
+}
+function backup(){
+  const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`동이기억_${S.session||'세션'}_${S.groupNo}모둠.json`;
+  a.click();
+}
+function wipe(){
+  if(!confirm('이 태블릿의 기록을 모두 지우고 처음부터 시작할까요?')) return;
+  localStorage.removeItem(KEY);
+  SY={mainDirty:false, photos:{}, metaDone:false, idToken:'', refreshToken:'', exp:0};
+  saveSync(); S=newState(); render(); showStatus();
+}
+
+/* ══════════════════════════════════════════════════
+   7. 실시간 전송 — 로컬이 원본, 파이어베이스는 사본
+      신호가 끊겨도 활동은 그대로 진행되고,
+      돌아오면 밀린 것이 한꺼번에 올라갑니다.
+   ══════════════════════════════════════════════════ */
+
+/* 배포 전에 여기를 채우면 모든 태블릿의 기본값이 됩니다.
+   비워 두면 교사 설정 화면에서 넣을 수 있습니다. */
+const FB = {
+  dbUrl : '',   // 예) https://gjhfm-default-rtdb.asia-southeast1.firebasedatabase.app
+  apiKey: ''    // 예) AIzaSy...
+};
+
+const SKEY='gjhfm-sync';
+let SY = (()=>{ try{ return JSON.parse(localStorage.getItem(SKEY)) || null; }catch(e){ return null; } })()
+      || {mainDirty:false, photos:{}, metaDone:false, idToken:'', refreshToken:'', exp:0};
+function saveSync(){ try{ localStorage.setItem(SKEY, JSON.stringify(SY)); }catch(e){} }
+
+function cfg(){
+  const s=(S && S.settings) || {};
+  return {dbUrl:(s.dbUrl||FB.dbUrl||'').replace(/\/+$/,''), apiKey:s.apiKey||FB.apiKey||''};
+}
+function syncReady(){ const c=cfg(); return !!(c.dbUrl && c.apiKey && S && S.session && S.groupNo); }
+
+let flushT, busy=false;
+function markDirty(photoTopic){
+  SY.mainDirty=true;
+  if(photoTopic) SY.photos[photoTopic]=true;
+  saveSync(); showStatus();
+  clearTimeout(flushT); flushT=setTimeout(()=>flushNow(), 3000);
+}
+function showStatus(){
+  const el=document.getElementById('status'); if(!el) return;
+  if(!syncReady()){ el.textContent='⚪ 이 태블릿에 저장'; return; }
+  if(!navigator.onLine){ el.textContent='🟡 오프라인 · 저장 대기'; return; }
+  const n=(SY.mainDirty?1:0)+Object.keys(SY.photos).length;
+  el.textContent = busy ? '🔵 전송 중' : (n ? `🟡 전송 대기 ${n}` : '🟢 전송 완료');
+}
+
+async function getToken(){
+  const c=cfg();
+  if(SY.idToken && SY.exp > Date.now()+300000) return SY.idToken;
+  const body = SY.refreshToken
+    ? {url:`https://securetoken.googleapis.com/v1/token?key=${c.apiKey}`,
+       payload:{grant_type:'refresh_token', refresh_token:SY.refreshToken}}
+    : {url:`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${c.apiKey}`,
+       payload:{returnSecureToken:true}};
+  const res=await fetch(body.url,{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(body.payload)});
+  if(!res.ok){ SY.refreshToken=''; throw new Error('auth'); }
+  const j=await res.json();
+  SY.idToken = j.idToken || j.id_token;
+  SY.refreshToken = j.refreshToken || j.refresh_token;
+  SY.exp = Date.now() + (+(j.expiresIn||j.expires_in||3600))*1000;
+  saveSync();
+  return SY.idToken;
+}
+
+function base(){
+  const c=cfg();
+  return `${c.dbUrl}/sessions/${encodeURIComponent(S.session)}/groups/g${S.groupNo}`;
+}
+function mainPayload(){
+  const step=S.steps[S.stepIdx]||{};
+  const topics={};
+  S.order.forEach(t=>{
+    const d=S.topics[t];
+    topics[t]={evidence:d.evidence, record:d.record, prep:d.prep, submit:d.submit,
+               agree:d.agree, tries:d.tries, done:d.done,
+               photoTaken:!!d.photo, photoAt:d.photo?d.photo.at:null};
+  });
+  return {
+    session:S.session, groupNo:S.groupNo, members:S.members, order:S.order, prior:S.prior,
+    conference:S.conference, useConference:S.settings.useConference,
+    final:S.final,
+    bonus:{roles:S.bonus.roles, name:S.bonus.name, word:S.bonus.word, why:S.bonus.why,
+           meaning:S.bonus.meaning, ad:S.bonus.ad, appr:S.bonus.appr, done:S.bonus.done,
+           photoTaken:!!S.bonus.photo},
+    progress:{
+      view:step.v||'', mission:step.m||0, topic:step.t||'',
+      role:step.role||'', roleName:step.role?whoIs(step.role, step.m).name:'',
+      missionsDone:doneCount(), level:levelName(),
+      finalDone:!!S.final.done, bonusDone:!!S.bonus.done
+    },
+    topics, startedAt:S.startedAt, updatedAt:S.updatedAt
+  };
+}
+async function put(path, data, token){
+  const res=await fetch(`${path}.json?auth=${token}`,{
+    method:'PATCH', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)});
+  if(!res.ok) throw new Error(await res.text());
+}
+
+async function flushNow(manual){
+  if(busy) return;
+  if(!syncReady()){ if(manual) flash('전송 설정이 비어 있습니다'); showStatus(); return; }
+  if(!navigator.onLine){ if(manual) flash('연결이 없습니다'); showStatus(); return; }
+  if(!SY.mainDirty && !Object.keys(SY.photos).length && !manual){ showStatus(); return; }
+  busy=true; showStatus();
+  try{
+    const token=await getToken();
+    const c=cfg();
+    if(!SY.metaDone){
+      await put(`${c.dbUrl}/sessions/${encodeURIComponent(S.session)}/meta`,
+        {createdAt:S.startedAt, lastSeen:Date.now()}, token);
+      SY.metaDone=true; saveSync();
+    }
+    if(SY.mainDirty || manual){
+      await put(base(), mainPayload(), token);
+      SY.mainDirty=false; saveSync();
+    }
+    for(const t of Object.keys(SY.photos)){
+      const p = t==='bonus' ? S.bonus.photo : (S.topics[t] && S.topics[t].photo);
+      if(!p){ delete SY.photos[t]; continue; }
+      await put(`${base()}/photos/${t}`, {thumb:p.thumb, at:p.at, w:p.w, h:p.h}, token);
+      delete SY.photos[t]; saveSync();
+    }
+    if(manual) flash('전송했습니다');
+  }catch(e){
+    if(manual) flash('전송 실패 · 나중에 다시 보냅니다');
+  }
+  busy=false; showStatus();
+}
+
+window.addEventListener('online', ()=>flushNow());
+window.addEventListener('offline', showStatus);
+setInterval(()=>flushNow(), 20000);
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') flushNow(); });
+
+/* ── 화면 꺼짐 방지 ────────────────── */
+let lock=null;
+async function keepAwake(){
+  try{ if('wakeLock' in navigator) lock=await navigator.wakeLock.request('screen'); }catch(e){}
+}
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') keepAwake(); });
+
+/* ── 시작 ─────────────────────────── */
+S = load() || newState();
+if(S.phase!=='start'){ migrate(); } else { S = newState(); }
+render();
+keepAwake();
+showStatus();
+flushNow();
+</script>
+</body>
+</html>

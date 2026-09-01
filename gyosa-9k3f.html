@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E1B2A">
+<title>탐정단 현황판 · 교사용</title>
+<style>
+:root{
+  --ink:#16283C; --ink-deep:#0E1B2A; --paper:#F5EFE1; --paper-dim:#E4DBC7;
+  --line:#C9BCA0; --text:#243247; --muted:#6B7688;
+  --gold:#D9A441; --ok:#3E7C59; --warn:#D9873A; --stop:#C2452D;
+  --r-evidence:#2F6FA8; --r-photo:#3E7C59; --r-record:#7A5AA8; --r-present:#D9873A;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{
+  background:var(--ink);color:var(--paper);
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+  font-size:16px;line-height:1.55;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:22px 18px 60px}
+
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px;margin-bottom:20px}
+h1{font-size:29px;font-weight:900;letter-spacing:-.035em;margin:0}
+.sub{color:rgba(245,239,225,.6);font-size:15px;margin:4px 0 0}
+.top .right{margin-left:auto;display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.pill{background:rgba(245,239,225,.09);border:1px solid rgba(245,239,225,.2);
+  border-radius:999px;padding:6px 13px;font-size:14px;font-weight:700}
+.pill.live{border-color:var(--ok);color:#A6D8BB}
+.pill.off{border-color:var(--stop);color:#F0B0A2}
+
+button{font:inherit;cursor:pointer}
+.b{background:var(--gold);color:#2A1D05;border:0;border-radius:10px;padding:11px 18px;font-weight:800}
+.b.g{background:none;color:var(--paper);border:1px solid rgba(245,239,225,.32)}
+.b:active{transform:translateY(1px)}
+
+/* 요약 띠 */
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px}
+.summary div{background:rgba(245,239,225,.06);border:1px solid rgba(245,239,225,.14);
+  border-radius:10px;padding:12px 14px}
+.summary span{display:block;font-size:13px;color:rgba(245,239,225,.55);font-weight:700}
+.summary b{font-size:24px;font-weight:900;letter-spacing:-.03em}
+
+/* 모둠 카드 */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.g{background:var(--paper);color:var(--text);border-radius:14px;padding:16px;
+   border-top:6px solid var(--ok);cursor:pointer;text-align:left;width:100%;border-left:0;border-right:0;border-bottom:0}
+.g.warn{border-top-color:var(--warn)}
+.g.stop{border-top-color:var(--stop)}
+.g .no{display:flex;align-items:baseline;gap:8px}
+.g .no b{font-size:21px;font-weight:900;letter-spacing:-.03em}
+.g .no small{color:var(--muted);font-weight:700;font-size:13px;margin-left:auto}
+.bar{height:9px;border-radius:99px;background:var(--paper-dim);margin:11px 0 4px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok)}
+.g .where{font-size:15px;font-weight:700;margin:8px 0 0}
+.g .turn{display:inline-flex;align-items:center;gap:7px;margin-top:9px;
+  border-radius:999px;padding:5px 12px;color:#fff;font-size:14px;font-weight:800}
+.g .last{font-size:14px;color:var(--muted);margin-top:10px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.g .thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:11px}
+.g .thumbs div{aspect-ratio:4/3;border-radius:6px;background:var(--paper-dim);
+  background-size:cover;background-position:center;display:grid;place-items:center;
+  font-size:15px;opacity:.5}
+.g .thumbs div.has{opacity:1}
+.g .stale{color:var(--stop);font-weight:800}
+
+.empty{background:rgba(245,239,225,.06);border:1px dashed rgba(245,239,225,.25);
+  border-radius:14px;padding:34px 20px;text-align:center;color:rgba(245,239,225,.7)}
+
+/* 설정 · 상세 */
+.sheet{position:fixed;inset:0;z-index:50;background:rgba(14,27,42,.93);
+  overflow:auto;padding:26px 18px 60px;display:none}
+.sheet.show{display:block}
+.panel{max-width:760px;margin:0 auto;background:var(--paper);color:var(--text);
+  border-radius:14px;padding:22px}
+.panel h2{margin:0 0 4px;font-size:23px;font-weight:900;letter-spacing:-.03em}
+.panel h3{margin:22px 0 8px;font-size:17px;font-weight:800}
+label{display:block;font-weight:700;font-size:14px;margin:14px 0 6px}
+input{width:100%;font:inherit;padding:11px 12px;border:2px solid var(--line);
+  border-radius:9px;background:#fff;color:var(--text)}
+.note{color:var(--muted);font-size:14px}
+dl.rec{margin:0}
+dl.rec dt{font-size:13px;color:var(--muted);font-weight:800;margin-top:12px}
+dl.rec dd{margin:2px 0 0;font-size:16px;font-weight:600}
+.block{border-top:1px dashed var(--line);padding-top:14px;margin-top:16px}
+.block:first-of-type{border-top:0}
+.shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:12px}
+.shots figure{margin:0}
+.shots img{width:100%;border-radius:8px;display:block;background:#000}
+.shots figcaption{font-size:13px;color:var(--muted);font-weight:700;text-align:center;margin-top:4px}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:22px}
+code{background:var(--paper-dim);border-radius:5px;padding:1px 6px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>탐정단 현황판</h1>
+      <p class="sub" id="sessLabel">세션을 설정하세요</p>
+    </div>
+    <div class="right">
+      <span class="pill" id="live">확인 중</span>
+      <button class="b g" onclick="pull(true)">새로 고침</button>
+      <button class="b g" onclick="openCfg()">설정</button>
+      <button class="b" onclick="exportAll()">기록 내려받기</button>
+    </div>
+  </header>
+
+  <div class="summary" id="summary"></div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<div class="sheet" id="cfg">
+  <div class="panel">
+    <h2>현황판 설정</h2>
+    <p class="note">학생 태블릿에 넣은 값과 똑같이 넣으세요.</p>
+    <label for="cSess">세션 코드</label>
+    <input id="cSess" placeholder="예) 운남3-1128">
+    <label for="cDb">데이터베이스 주소</label>
+    <input id="cDb" placeholder="https://○○○-default-rtdb.firebasedatabase.app">
+    <label for="cKey">웹 API 키</label>
+    <input id="cKey" placeholder="AIza…">
+    <label for="cPw">탐정 회의 통과 암호</label>
+    <input id="cPw" placeholder="마루">
+    <h3>멈춘 모둠 기준</h3>
+    <p class="note">마지막 입력 후 이 시간이 지나면 카드가 붉게 바뀝니다.</p>
+    <input id="cStale" type="number" min="1" max="30" value="5" style="max-width:120px">
+    <div class="actions">
+      <button class="b" onclick="saveCfg()">저장하고 보기</button>
+      <button class="b g" onclick="closeSheet('cfg')">닫기</button>
+    </div>
+  </div>
+</div>
+
+<div class="sheet" id="detail"><div class="panel" id="detailBody"></div></div>
+
+<script>
+/* ── 표시용 이름표 ─────────────────── */
+const TOPIC={nature:{t:'남도의 자연',e:'🌿'},farm:{t:'남도의 농업',e:'🌾'},
+             house:{t:'남도의 집',e:'🏠'},market:{t:'남도의 시장',e:'🛒'}};
+const ROLE={evidence:{n:'증거 탐정',i:'🔍',c:'#2F6FA8'},photo:{n:'사진 탐정',i:'📷',c:'#3E7C59'},
+            record:{n:'기록 탐정',i:'✏️',c:'#7A5AA8'},present:{n:'발표 탐정',i:'🎤',c:'#D9873A'}};
+const VIEW={map:'탐험 지도',intro:'미션 안내',evidence:'증거 수집',record:'기록',
+            photo:'사진 촬영',prep:'발표 준비',submit:'발표·동의',complete:'기억 복원',
+            conference:'탐정 회의',
+            fintro:'미션5 안내',fevidence:'미션5 핵심 증거',fphoto:'미션5 대표 사진',
+            frecord:'미션5 이야기 쓰기',fpresent:'미션5 발표 준비',fcompare:'처음 생각과 비교',
+            fsubmit:'미션5 발표·동의',fcomplete:'동이의 하루 완성',
+            bintro:'보너스 역할 정하기',bobserve:'보너스 관찰',bwhy:'보너스 비교',
+            bmeaning:'보너스 해석',bad:'보너스 광고',bfinal:'보너스 발표',
+            bcomplete:'최고의 큐레이터',end:'탐험 마침'};
+const FIELD={w:'찾은 낱말',tools:'농사 도구',space:'공간과 쓰임',word:'고른 낱말',
+             mean:'시장의 모습',effect:'집에 준 영향',use:'도구와 쓰임새',
+             guess:'추리 문장',seq:'쌀의 순서',final:'발표 문장',checks:'발표 항목',text:'발표 내용'};
+
+/* ── 설정 ─────────────────────────── */
+const CK='gjhfm-teacher';
+let C = (()=>{try{return JSON.parse(localStorage.getItem(CK))||null}catch(e){return null}})()
+     || {session:'', dbUrl:'', apiKey:'', password:'마루', stale:5};
+let AUTH={idToken:'',refreshToken:'',exp:0};
+let DATA={}, lastPull=0, timer=null;
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ready=()=>!!(C.dbUrl&&C.apiKey&&C.session);
+
+function openCfg(){
+  $('cSess').value=C.session; $('cDb').value=C.dbUrl; $('cKey').value=C.apiKey;
+  $('cPw').value=C.password; $('cStale').value=C.stale;
+  $('cfg').classList.add('show');
+}
+function closeSheet(id){ $(id).classList.remove('show'); }
+function saveCfg(){
+  C={session:$('cSess').value.trim(), dbUrl:$('cDb').value.trim().replace(/\/+$/,''),
+     apiKey:$('cKey').value.trim(), password:$('cPw').value.trim()||'마루',
+     stale:Math.max(1,+$('cStale').value||5)};
+  localStorage.setItem(CK, JSON.stringify(C));
+  AUTH={idToken:'',refreshToken:'',exp:0};
+  closeSheet('cfg'); pull(true);
+}
+
+/* ── 읽기 ─────────────────────────── */
+async function token(){
+  if(AUTH.idToken && AUTH.exp > Date.now()+300000) return AUTH.idToken;
+  const b = AUTH.refreshToken
+    ? {u:`https://securetoken.googleapis.com/v1/token?key=${C.apiKey}`,
+       p:{grant_type:'refresh_token', refresh_token:AUTH.refreshToken}}
+    : {u:`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${C.apiKey}`,
+       p:{returnSecureToken:true}};
+  const r=await fetch(b.u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b.p)});
+  if(!r.ok){ AUTH.refreshToken=''; throw new Error('로그인 실패'); }
+  const j=await r.json();
+  AUTH.idToken=j.idToken||j.id_token; AUTH.refreshToken=j.refreshToken||j.refresh_token;
+  AUTH.exp=Date.now()+(+(j.expiresIn||j.expires_in||3600))*1000;
+  return AUTH.idToken;
+}
+async function pull(manual){
+  if(!ready()){ $('live').className='pill off'; $('live').textContent='설정 필요'; renderEmpty(); return; }
+  try{
+    const t=await token();
+    const url=`${C.dbUrl}/sessions/${encodeURIComponent(C.session)}/groups.json?auth=${t}`;
+    const r=await fetch(url);
+    if(!r.ok) throw new Error('읽기 실패 ('+r.status+')');
+    DATA = (await r.json()) || {};
+    lastPull=Date.now();
+    $('live').className='pill live';
+    render();
+  }catch(e){
+    $('live').className='pill off';
+    $('live').textContent='연결 안 됨';
+    if(manual) alert('불러오지 못했습니다.\n' + e.message + '\n\n주소·API 키·보안 규칙을 확인하세요.');
+  }
+}
+
+/* ── 그리기 ───────────────────────── */
+function ago(ms){
+  const s=Math.round((Date.now()-ms)/1000);
+  if(s<60) return '방금';
+  if(s<3600) return Math.floor(s/60)+'분 전';
+  return Math.floor(s/3600)+'시간 전';
+}
+function plain(v){
+  if(v==null) return '';
+  if(typeof v==='string') return v;
+  if(Array.isArray(v)) return v.filter(Boolean).join(' / ');
+  if(typeof v!=='object') return String(v);
+  if('list' in v || 'other' in v){
+    const l=Array.isArray(v.list)?v.list:(v.list?Object.values(v.list):[]);
+    return l.concat(v.other?[v.other]:[]).join(', ');
+  }
+  return Object.keys(v).map(k=>`${k} → ${v[k]}`).join(' · ');
+}
+function lastInput(g){
+  const order=g.order||Object.keys(TOPIC);
+  for(let i=order.length-1;i>=0;i--){
+    const d=(g.topics||{})[order[i]]; if(!d) continue;
+    const p=d.prep||{}, s=d.submit||{}, r=d.record||{};
+    if(s.final) return plain(s.final);
+    if(p.text) return p.text;
+    for(const k of Object.keys(r)){
+      const t2=plain(r[k]); if(t2) return t2;
+    }
+  }
+  return g.prior && g.prior.reason ? '첫 추리: '+g.prior.reason : '';
+}
+function render(){
+  const keys=Object.keys(DATA).sort((a,b)=>(DATA[a].groupNo||0)-(DATA[b].groupNo||0));
+  if(!keys.length) return renderEmpty();
+  $('sessLabel').textContent = `${C.session} · ${keys.length}모둠 · ${ago(lastPull)} 확인`;
+  $('live').textContent='연결됨';
+
+  const staleMs=C.stale*60000;
+  let stopped=0, totalDone=0, ended=0, waiting=0;
+  const cards=keys.map(k=>{
+    const g=DATA[k], pr=g.progress||{}, done=pr.missionsDone||0;
+    const idle=Date.now()-(g.updatedAt||0);
+    const isStop=idle>staleMs, isWarn=idle>staleMs/2;
+    const needsOk = pr.view==='conference' && !(g.conference||{}).passed;
+    if(needsOk) waiting++;
+    if(isStop) stopped++;
+    totalDone+=done;
+    if(pr.view==='end') ended++;
+    const role=ROLE[pr.role];
+    const photos=g.photos||{};
+    const order=g.order||Object.keys(TOPIC);
+    return `<button class="g ${isStop?'stop':isWarn?'warn':''}" onclick="detail('${k}')">
+      <div class="no"><b>${g.groupNo||k}모둠</b>
+        <span class="${isStop?'stale':''}" style="font-size:13px;font-weight:700;color:${isStop?'':'var(--muted)'}">
+          ${g.updatedAt?ago(g.updatedAt):'기록 없음'}</span>
+        <small>${esc(pr.level||'')}</small></div>
+      <div class="bar"><i style="width:${done/4*100}%"></i></div>
+      <div class="where">${pr.topic?TOPIC[pr.topic].e+' '+TOPIC[pr.topic].t+' · ':''}${esc(VIEW[pr.view]||'시작 전')}</div>
+      ${needsOk?`<span class="turn" style="background:var(--gold);color:#2A1D05">👩‍🏫 회의 승인 기다리는 중</span>`:''}
+      ${role?`<span class="turn" style="background:${role.c}">${role.i} ${esc(pr.roleName||'')} 차례</span>`:''}
+      <div class="last">${esc(lastInput(g))}</div>
+      <div class="thumbs">${order.map(t=>{
+        const p=photos[t];
+        return `<div class="${p?'has':''}" ${p?`style="background-image:url(${p.thumb})"`:''}>${p?'':TOPIC[t].e}</div>`;
+      }).join('')}</div>
+    </button>`;
+  }).join('');
+
+  $('grid').innerHTML=cards;
+  $('summary').innerHTML=`
+    <div><span>참여 모둠</span><b>${keys.length}</b></div>
+    <div><span>평균 진행</span><b>${(totalDone/keys.length).toFixed(1)} / 4</b></div>
+    <div><span>탐험 마침</span><b>${ended}</b></div>
+    <div><span>승인 기다림</span><b style="color:${waiting?'#F0D79A':'inherit'}">${waiting}</b></div>
+    <div><span>${C.stale}분 넘게 멈춤</span><b style="color:${stopped?'#F0B0A2':'inherit'}">${stopped}</b></div>
+    <div><span>회의 암호</span><b>${esc(C.password)}</b></div>`;
+}
+function renderEmpty(){
+  $('grid').innerHTML=`<div class="empty" style="grid-column:1/-1">
+    ${ready()?'아직 올라온 모둠이 없습니다. 학생 태블릿에서 세션 코드를 확인해 주세요.'
+             :'설정에서 세션 코드와 데이터베이스 주소를 넣어 주세요.'}</div>`;
+  $('summary').innerHTML='';
+}
+
+/* ── 탐정 회의 승인 ─────────────────── */
+async function approve(key, on){
+  const g=DATA[key];
+  try{
+    const t=await token();
+    const url=`${C.dbUrl}/sessions/${encodeURIComponent(C.session)}/groups/${key}/approval.json?auth=${t}`;
+    const r=await fetch(url,{method:'PATCH',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({approved:!!on, at:Date.now()})});
+    if(!r.ok) throw new Error('쓰기 실패 ('+r.status+')');
+    g.approval={approved:!!on, at:Date.now()};
+    alert(on ? `${g.groupNo}모둠을 통과시켰습니다.\n학생 태블릿이 8초 안에 다음 미션으로 넘어갑니다.`
+             : `${g.groupNo}모둠 승인을 취소했습니다.`);
+    detail(key); render();
+  }catch(e){ alert('승인을 보내지 못했습니다.\n'+e.message+'\n\n암호를 알려 주셔도 통과됩니다.'); }
+}
+
+/* ── 모둠 상세 ─────────────────────── */
+function val(v){
+  if(v==null) return '';
+  if(typeof v==='string') return esc(v);
+  if(Array.isArray(v)) return esc(v.filter(Boolean).join(' / '));
+  if(typeof v!=='object') return esc(v);
+  if('list' in v || 'other' in v){
+    const l=Array.isArray(v.list)?v.list:(v.list?Object.values(v.list):[]);
+    return esc(l.concat(v.other?[v.other]:[]).join(', '));
+  }
+  return Object.keys(v).map(k=>`${esc(k)} → ${esc(v[k])}`).join(' · ');
+}
+function detail(key){
+  const g=DATA[key], order=g.order||Object.keys(TOPIC), photos=g.photos||{};
+  const members=g.members||{};
+  const blocks=order.map(t=>{
+    const d=(g.topics||{})[t]; if(!d) return '';
+    const rows=[];
+    ['evidence','record','prep','submit'].forEach(sec=>{
+      Object.keys(d[sec]||{}).forEach(k=>{
+        if(k.endsWith('_list')||k.endsWith('_other')) return;
+        const v=val(d[sec][k]); if(!v) return;
+        rows.push(`<dt>${esc(FIELD[k]||k)}</dt><dd>${v}</dd>`);
+      });
+    });
+    return `<div class="block">
+      <h3>${TOPIC[t].e} ${TOPIC[t].t} ${d.done?'· 기억 복원 완료':'· 진행 중'}</h3>
+      <dl class="rec">${rows.join('')||'<dd class="note">아직 기록이 없습니다.</dd>'}</dl></div>`;
+  }).join('');
+
+  $('detailBody').innerHTML=`
+    <h2>${g.groupNo}모둠</h2>
+    <p class="note">${Object.keys(members).map(s=>esc(members[s])).join(' · ')}
+      · 마지막 입력 ${g.updatedAt?ago(g.updatedAt):'없음'}</p>
+    <div class="block">
+      <h3>첫 추리</h3>
+      <dl class="rec"><dd>${esc((g.prior||{}).choice||'')} — 우리는 ${esc((g.prior||{}).reason||'')} 때문에 그렇게 생각합니다.</dd></dl>
+    </div>
+    ${blocks}
+    ${(g.conference&&g.conference.text)?`<div class="block"><h3>👩‍🏫 탐정 회의</h3>
+      <dl class="rec"><dd>${esc(g.conference.text)}</dd>
+      <dt>상태</dt><dd>${g.conference.passed?'통과함'
+        :((g.approval||{}).approved?'승인 보냄 · 학생 화면 대기 중':'대기 중')}</dd></dl>
+      ${g.conference.passed?'':`<div class="actions">
+        <button class="b" onclick="approve('${key}',true)">회의 통과 승인</button>
+        ${(g.approval||{}).approved?`<button class="b g" onclick="approve('${key}',false)">승인 취소</button>`:''}
+      </div>`}
+      <p class="note" style="margin-top:8px">암호 <code>${esc(C.password)}</code>를 알려 주셔도 통과됩니다.</p>
+      </div>`:''}
+    ${g.final?`<div class="block"><h3>⏰ 동이의 하루 ${g.final.done?'· 완성':'· 진행 중'}</h3>
+      <dl class="rec">
+        <dt>핵심 증거</dt><dd>${val(g.final.evidence)}</dd>
+        <dt>완성한 이야기</dt><dd>${val(g.final.story)}</dd>
+        <dt>최종 발표</dt><dd>${val(g.final.speech)}</dd>
+        <dt>달라진 점</dt><dd>${val(g.final.compare)}</dd>
+      </dl></div>`:''}
+    ${(g.bonus&&g.bonus.name)?`<div class="block"><h3>🏛 최고의 큐레이터 ${g.bonus.done?'· 발표 완료':''}</h3>
+      <dl class="rec">
+        <dt>고른 전시물</dt><dd>${esc(g.bonus.name)} <span class="note">(${esc(g.bonus.word||'')})</span></dd>
+        <dt>선택 이유</dt><dd>${esc(g.bonus.why||'')}</dd>
+        <dt>해석</dt><dd>${esc(g.bonus.meaning||'')}</dd>
+        <dt>광고 문구</dt><dd>${esc(g.bonus.ad||'')}</dd>
+      </dl></div>`:''}
+    <div class="block"><h3>증거 사진</h3>
+      <div class="shots">${order.map(t=>photos[t]
+        ? `<figure><img src="${photos[t].thumb}" alt="${esc(TOPIC[t].t)}">
+             <figcaption>${TOPIC[t].e} ${TOPIC[t].t}</figcaption></figure>`:'').join('')
+        || '<p class="note">아직 없습니다.</p>'}</div>
+      <p class="note" style="margin-top:8px">현황판에는 확인용 작은 사진만 옵니다. 원본은 모둠 태블릿에 있습니다.</p>
+    </div>
+    <div class="actions">
+      <button class="b g" onclick="closeSheet('detail')">닫기</button>
+    </div>`;
+  $('detail').classList.add('show');
+}
+
+/* ── 내려받기 ─────────────────────── */
+function exportAll(){
+  if(!Object.keys(DATA).length) return alert('내려받을 기록이 없습니다.');
+  const rows=[['모둠','구성원','진행','현재 화면','지금 차례','마지막 입력 시각','첫 추리','탐정 회의']];
+  Object.keys(DATA).sort((a,b)=>(DATA[a].groupNo||0)-(DATA[b].groupNo||0)).forEach(k=>{
+    const g=DATA[k], p=g.progress||{};
+    rows.push([g.groupNo, Object.values(g.members||{}).join(' '),
+      (p.missionsDone||0)+'/4', VIEW[p.view]||'', p.roleName||'',
+      g.updatedAt?new Date(g.updatedAt).toLocaleString('ko-KR'):'',
+      ((g.prior||{}).choice||'')+' / '+((g.prior||{}).reason||''),
+      (g.conference||{}).text||'']);
+  });
+  const csv='\uFEFF'+rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  dl(new Blob([csv],{type:'text/csv'}), `현황_${C.session}.csv`);
+  dl(new Blob([JSON.stringify(DATA,null,2)],{type:'application/json'}), `기록_${C.session}.json`);
+}
+function dl(blob,name){
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download=name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),3000);
+}
+
+/* ── 시작 ─────────────────────────── */
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){closeSheet('cfg');closeSheet('detail');} });
+$('cfg').addEventListener('click',e=>{ if(e.target.id==='cfg') closeSheet('cfg'); });
+$('detail').addEventListener('click',e=>{ if(e.target.id==='detail') closeSheet('detail'); });
+
+pull();
+timer=setInterval(()=>{ if(document.visibilityState==='visible') pull(); }, 15000);
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') pull(); });
+if(!ready()) openCfg();
+</script>
+</body>
+</html>
