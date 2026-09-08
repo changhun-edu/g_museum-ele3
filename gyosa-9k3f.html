@@ -115,13 +115,12 @@ code{background:var(--paper-dim);border-radius:5px;padding:1px 6px;font-size:14p
 <div class="sheet" id="cfg">
   <div class="panel">
     <h2>현황판 설정</h2>
-    <p class="note">학생 태블릿에 넣은 값과 똑같이 넣으세요.</p>
+    <p class="note" id="cConn"></p>
     <label for="cSess">세션 코드</label>
-    <input id="cSess" placeholder="예) 운남3-1128">
-    <label for="cDb">데이터베이스 주소</label>
-    <input id="cDb" placeholder="https://○○○-default-rtdb.firebasedatabase.app">
-    <label for="cKey">웹 API 키</label>
-    <input id="cKey" placeholder="AIza…">
+    <input id="cSess" placeholder="운남초-3학년2반-1128">
+    <p class="note" style="margin:6px 0 0"><b>학교-학년반-날짜</b> 순서로 정합니다.
+      예) 운남초-3학년2반-1128 · 운남초-3-2-1128<br>
+      반이나 날짜가 다르면 코드도 다르게 하세요. 같으면 앞 반 기록을 덮어씁니다.</p>
     <label for="cPw">탐정 회의 통과 암호</label>
     <input id="cPw" placeholder="마루">
     <h3>멈춘 모둠 기준</h3>
@@ -155,10 +154,19 @@ const FIELD={w:'찾은 낱말',tools:'농사 도구',space:'공간과 쓰임',wo
              mean:'시장의 모습',effect:'집에 준 영향',use:'도구와 쓰임새',
              guess:'추리 문장',seq:'쌀의 순서',final:'발표 문장',checks:'발표 항목',text:'발표 내용'};
 
+/* ── 연결 정보 ─────────────────────
+   학생 앱(index.html) 아래쪽의 FB 값과 똑같이 채워 넣으세요.
+   여기에 넣어 두면 선생님이 현황판에서 따로 입력할 필요가 없습니다. */
+const FB = {
+  dbUrl : '',   // 예) https://gjhfm-default-rtdb.asia-southeast1.firebasedatabase.app
+  apiKey: ''    // 예) AIzaSy...
+};
+
 /* ── 설정 ─────────────────────────── */
 const CK='gjhfm-teacher';
 let C = (()=>{try{return JSON.parse(localStorage.getItem(CK))||null}catch(e){return null}})()
-     || {session:'', dbUrl:'', apiKey:'', password:'마루', stale:5};
+     || {session:'', password:'마루', stale:5};
+C.dbUrl = FB.dbUrl; C.apiKey = FB.apiKey;
 let AUTH={idToken:'',refreshToken:'',exp:0};
 let DATA={}, lastPull=0, timer=null;
 
@@ -167,16 +175,19 @@ const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;',
 const ready=()=>!!(C.dbUrl&&C.apiKey&&C.session);
 
 function openCfg(){
-  $('cSess').value=C.session; $('cDb').value=C.dbUrl; $('cKey').value=C.apiKey;
+  $('cSess').value=C.session;
   $('cPw').value=C.password; $('cStale').value=C.stale;
+  $('cConn').textContent = (FB.dbUrl && FB.apiKey)
+    ? '연결 정보가 이 파일에 들어 있습니다. 세션 코드만 맞추면 됩니다.'
+    : '연결 정보가 비어 있습니다. gyosa 파일 위쪽의 FB 값을 채워 주세요.';
   $('cfg').classList.add('show');
 }
 function closeSheet(id){ $(id).classList.remove('show'); }
 function saveCfg(){
-  C={session:$('cSess').value.trim(), dbUrl:$('cDb').value.trim().replace(/\/+$/,''),
-     apiKey:$('cKey').value.trim(), password:$('cPw').value.trim()||'마루',
+  C={session:$('cSess').value.trim(), password:$('cPw').value.trim()||'마루',
      stale:Math.max(1,+$('cStale').value||5)};
   localStorage.setItem(CK, JSON.stringify(C));
+  C.dbUrl=FB.dbUrl; C.apiKey=FB.apiKey;
   AUTH={idToken:'',refreshToken:'',exp:0};
   closeSheet('cfg'); pull(true);
 }
