@@ -299,6 +299,63 @@ button.ghost{
 .checks li.on .mark{color:var(--gold)}
 .checks .got{margin-left:auto;font-weight:800;color:var(--gold)}
 
+/* 한 명씩 받는 동의 */
+.vote{margin:0}
+.dots{display:flex;gap:7px;margin:0 0 13px}
+.dots i{
+  flex:1;height:7px;border-radius:999px;background:rgba(245,239,225,.14);
+}
+.dots i.ok{background:var(--gold)}
+.dots i.fix{background:var(--no)}
+.vturn{
+  background:rgba(217,164,65,.14);border:1px solid rgba(217,164,65,.5);border-radius:12px;
+  padding:15px 14px;margin:0 0 12px;
+}
+.vturn .who{font-size:19px;font-weight:900;margin:0 0 3px}
+.vturn .ask{font-size:15px;font-weight:700;color:rgba(245,239,225,.75);margin:0 0 13px}
+.vbtns{display:flex;flex-direction:column;gap:8px}
+.vbtns button{
+  width:100%;min-height:52px;border-radius:12px;border:2px solid var(--line);
+  background:var(--paper);color:var(--text);font:inherit;font-size:17px;font-weight:800;cursor:pointer;
+  position:relative;overflow:hidden;
+}
+.vbtns .sub2{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-top:2px}
+.stampbtn{border-color:var(--gold)!important}
+.stampbtn .fill{
+  position:absolute;inset:0;width:0;background:rgba(217,164,65,.55);
+  pointer-events:none;
+}
+.stampbtn.pressing .fill{width:100%;transition:width 1.5s linear}
+.stampbtn .lab{position:relative}
+.vdone{list-style:none;margin:0;padding:0}
+.vdone li{
+  display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;
+  border:1px solid var(--line);margin:0 0 7px;font-size:15px;font-weight:700;
+}
+.vdone li.ok{border-color:var(--gold);background:rgba(217,164,65,.12)}
+.vdone li.fix{border-color:var(--no);background:rgba(184,68,44,.16)}
+.vdone .stamp{
+  flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+  border:2px solid var(--gold);color:var(--gold);font-size:15px;font-weight:900;
+  transform:rotate(-12deg);
+}
+.vdone li.fix .stamp{border-color:var(--no);color:#F0B0A2;transform:none}
+.vdone .note{margin-left:auto;font-weight:700;color:#F0B0A2;font-size:14px;text-align:right}
+.vfix{margin:0 0 12px}
+.vfix input{margin-bottom:8px}
+.vagain{
+  background:rgba(184,68,44,.16);border:1px solid rgba(184,68,44,.6);border-radius:10px;
+  padding:13px 14px;margin:0 0 12px;font-size:15px;font-weight:700;line-height:1.55;
+}
+.vagain button{
+  margin-top:10px;width:100%;min-height:46px;border:0;border-radius:10px;
+  background:var(--paper);color:var(--text);font:inherit;font-size:16px;font-weight:800;cursor:pointer;
+}
+.vok{
+  background:rgba(217,164,65,.16);border:1px solid rgba(217,164,65,.5);border-radius:10px;
+  padding:13px 14px;margin:0 0 12px;font-size:16px;font-weight:800;text-align:center;
+}
+
 /* 제출 미리보기 */
 #sendbox{position:fixed;inset:0;z-index:85;background:rgba(14,27,42,.96);display:none;overflow:auto;
   padding:calc(env(safe-area-inset-top) + 24px) 16px 24px}
@@ -876,6 +933,7 @@ function migrate(){
   if(!S.bonus) S.bonus=blankBonus();
   if(!S.help)  S.help={};
   if(!S.weak)  S.weak={};
+  if(!S.votes) S.votes={};
   if(S.phase==='run'){
     const here=S.steps && S.steps[S.stepIdx];
     if(!S.steps || !S.steps.some(s=>s.v==='fintro')){
@@ -894,7 +952,7 @@ function newState(){
     order:[], prior:{choice:'',reason:''},
     topics:{nature:blankTopic(),farm:blankTopic(),house:blankTopic(),market:blankTopic()},
     conference:{text:'',passed:false},
-    final:blankFinal(), bonus:blankBonus(), help:{}, weak:{},
+    final:blankFinal(), bonus:blankBonus(), help:{}, weak:{}, votes:{},
     settings:{useConference:true, password:'마루', dbUrl:'', apiKey:''},
     phase:'story', stepIdx:0, steps:[], seenHandoff:{},
     startedAt:Date.now(), updatedAt:Date.now()
@@ -1069,6 +1127,7 @@ function render(){
     end:screenEnd}[step.v])(step);
   refreshHelpLocks();
   view.querySelectorAll('[data-game]').forEach(paintGame);
+  view.querySelectorAll('[data-vote]').forEach(paintVote);
   paintTalk();
   window.scrollTo(0,0);
   maybeHandoff(step);
@@ -1726,6 +1785,129 @@ function checkCopy(){
   });
 }
 /* ══════════════════════════════════════════════════
+   5-1. 한 명씩 받는 동의
+   한 화면에 한 사람만 세우고, '좋아요'는 꾹 눌러야 도장이 찍힙니다.
+   '고칠 게 있어요'를 고르면 고칠 점을 적고 다시 받습니다.
+   ══════════════════════════════════════════════════ */
+const HOLD_MS = 1500;   // 도장을 찍는 데 걸리는 시간
+const RUSH_MS = 3000;   // 이 안에 다 눌리면 한 사람이 몰아서 눌렀을 수 있습니다
+
+function votesOf(id){ if(!S.votes) S.votes={}; return S.votes[id] || (S.votes[id]={}); }
+
+function voteBox(id, roles, nameOf){
+  const v=votesOf(id);
+  const names={}; roles.forEach(k=>{ names[k]= nameOf ? nameOf(k) : k; });
+  return `<div class="vote" data-vote="${id}"
+    data-roles="${esc(roles.join(','))}" data-names="${esc(roles.map(k=>names[k]).join('|'))}"></div>`;
+}
+
+function paintVote(box){
+  const id=box.dataset.vote, roles=box.dataset.roles.split(',');
+  const names=box.dataset.names.split('|');
+  const v=votesOf(id);
+  const nameOf=k=>names[roles.indexOf(k)]||k;
+  const turn = roles.find(k=>!v[k]);
+  const fixed = roles.filter(k=>v[k] && v[k].v==='fix');
+
+  const dots=`<div class="dots">${roles.map(k=>
+    `<i class="${v[k]?(v[k].v==='fix'?'fix':'ok'):''}"></i>`).join('')}</div>`;
+
+  const done=`<ul class="vdone">${roles.filter(k=>v[k]).map(k=>{
+    const st=v[k];
+    return `<li class="${st.v==='fix'?'fix':'ok'}">
+      <span class="stamp">${st.v==='fix'?'!':'인'}</span>
+      <span>${ROLES[k].icon} ${esc(nameOf(k))}</span>
+      <span class="note">${st.v==='fix'?esc(st.note||'고칠 점 있음'):'동의'}</span></li>`;
+  }).join('')}</ul>`;
+
+  let mid='';
+  if(box.dataset.fix){
+    const k=box.dataset.fix;
+    mid=`<div class="vturn"><p class="who">${ROLES[k].icon} ${esc(nameOf(k))}</p>
+      <p class="ask">어디를 고치면 좋을까요? 한 줄로 적어 주세요.</p>
+      <div class="vfix">
+        <input type="text" data-fixnote placeholder="예) 마루라는 낱말을 넣으면 좋겠어요">
+        <div class="vbtns">
+          <button data-act="fixsend">발표 탐정에게 전달</button>
+          <button data-act="fixcancel">다시 고르기</button>
+        </div>
+      </div></div>`;
+  } else if(turn){
+    mid=`<div class="vturn">
+      <p class="who">${ROLES[turn].icon} ${esc(nameOf(turn))}</p>
+      <p class="ask">발표를 듣고 어떻게 생각하나요?</p>
+      <div class="vbtns">
+        <button class="stampbtn" data-act="ok" data-role="${turn}">
+          <span class="fill"></span>
+          <span class="lab">좋아요<span class="sub2">1.5초 꾹 누르면 도장이 찍힙니다</span></span></button>
+        <button data-act="fix" data-role="${turn}">한 가지 고칠 게 있어요</button>
+        <button data-act="again" data-role="${turn}">잘 모르겠어요<span class="sub2">한 번 더 들려 달라고 하세요</span></button>
+      </div></div>`;
+  } else if(fixed.length){
+    mid=`<div class="vagain">고칠 점이 남아 있습니다. 발표 탐정이 문장을 고친 뒤 다시 동의를 받으세요.
+      <button data-act="reset">고쳤어요 · 처음부터 다시 받기</button></div>`;
+  } else {
+    mid=`<div class="vok">모두 동의했습니다 · 아래 버튼을 누르세요</div>`;
+  }
+  box.innerHTML = dots + mid + done;
+}
+
+function castVote(box, role, v, note){
+  const id=box.dataset.vote;
+  votesOf(id)[role]={v, note:note||'', at:Date.now()};
+  delete box.dataset.fix;
+  save({quiet:true});
+  paintVote(box);
+}
+
+/* 모두 '좋아요'여야 통과합니다 */
+function readVote(id){
+  const box=view.querySelector(`[data-vote="${id}"]`); if(!box) return null;
+  const roles=box.dataset.roles.split(','), v=votesOf(id);
+  if(roles.some(k=>!v[k])){ flash('아직 동의하지 않은 사람이 있어요'); return null; }
+  if(roles.some(k=>v[k].v==='fix')){ flash('고칠 점을 반영한 뒤 다시 받아 주세요'); return null; }
+  const ts=roles.map(k=>v[k].at||0);
+  if(roles.length>1 && Math.max(...ts)-Math.min(...ts) < RUSH_MS)
+    markWeak('vote-'+id, {rush:true});
+  return roles.slice();
+}
+
+/* 꾹 누르기 + 선택 */
+let holdT=null;
+function bindVotes(){
+  const stop=()=>{ clearTimeout(holdT); holdT=null;
+    view.querySelectorAll('.stampbtn.pressing').forEach(b=>b.classList.remove('pressing')); };
+
+  view.addEventListener('pointerdown', e=>{
+    const b=e.target.closest('.stampbtn'); if(!b) return;
+    const box=b.closest('[data-vote]'); if(!box) return;
+    b.classList.add('pressing');
+    holdT=setTimeout(()=>{ stop(); castVote(box, b.dataset.role, 'ok'); }, HOLD_MS);
+  });
+  ['pointerup','pointercancel','pointerleave'].forEach(ev=>
+    view.addEventListener(ev, e=>{ if(e.target.closest('.stampbtn')) stop(); }, true));
+
+  view.addEventListener('click', e=>{
+    const b=e.target.closest('[data-act]'); if(!b) return;
+    const box=b.closest('[data-vote]'); if(!box) return;
+    const act=b.dataset.act;
+    if(act==='ok') return flash('꾹 눌러야 도장이 찍힙니다');
+    if(act==='fix'){ box.dataset.fix=b.dataset.role; return paintVote(box); }
+    if(act==='again'){ delete box.dataset.fix; paintVote(box);
+      return flash('발표 탐정이 한 번 더 읽어 주세요'); }
+    if(act==='fixcancel'){ delete box.dataset.fix; return paintVote(box); }
+    if(act==='fixsend'){
+      const note=(box.querySelector('[data-fixnote]')||{}).value||'';
+      if(!note.trim()) return flash('고칠 점을 한 줄 적어 주세요');
+      return castVote(box, box.dataset.fix, 'fix', note.trim());
+    }
+    if(act==='reset'){
+      S.votes[box.dataset.vote]={}; save({quiet:true}); return paintVote(box);
+    }
+  });
+}
+
+/* ══════════════════════════════════════════════════
    5-2. 제출 전 확인 — 성의 검사 · 낱말 되묻기 · 미리보기
    ══════════════════════════════════════════════════ */
 
@@ -2138,18 +2320,13 @@ function screenSubmit(step){
     <div class="card">${body}</div>
     <div class="card">
       <h3>발표 내용에 동의하나요?</h3>
-      <p class="sub">세 명이 모두 눌러야 제출됩니다.</p>
-      <div class="opts" data-part="agree" data-type="multi">
-        ${others.map(k=>{
-          const r=ROLES[k], w=whoIs(k, step.m);
-          return `<button class="opt wide" data-v="${k}" aria-pressed="${!!d.agree[k]}"><span class="box"></span>${r.icon} ${esc(w.name)}</button>`;
-        }).join('')}
-      </div>
+      <p class="sub">한 사람씩 차례로 묻습니다. 이름이 뜬 사람이 직접 눌러 주세요.</p>
+      ${voteBox('submit-'+step.t, others, k=>whoIs(k, step.m).name)}
     </div>`;
   bindOpts();
   btn('제출', ()=>{
-    const a=[...view.querySelectorAll('.opts[data-part="agree"] [aria-pressed="true"]')].map(b=>b.dataset.v);
-    if(a.length<3) return flash('세 명 모두 동의해야 합니다');
+    const a=readVote('submit-'+step.t);
+    if(!a) return;
     const finish=(v)=>{
       if(v) d.submit.final=v;
       others.forEach(k=>d.agree[k]=true);
@@ -2481,18 +2658,13 @@ function finSubmit(){
     </div>
     <div class="card">
       <h3>발표 내용에 동의하나요?</h3>
-      <p class="sub">세 명이 모두 눌러야 제출됩니다.</p>
-      <div class="opts" data-part="agree" data-type="multi">
-        ${others.map(k=>{
-          const r=ROLES[k], w=whoIs(k,5);
-          return `<button class="opt wide" data-v="${k}" aria-pressed="${!!S.final.agree[k]}"><span class="box"></span>${r.icon} ${esc(w.name)}</button>`;
-        }).join('')}
-      </div>
+      <p class="sub">한 사람씩 차례로 묻습니다. 이름이 뜬 사람이 직접 눌러 주세요.</p>
+      ${voteBox('final', others, k=>whoIs(k,5).name)}
     </div>`;
   bindOpts();
   btn('제출', ()=>{
-    const a=[...view.querySelectorAll('[data-part="agree"] [aria-pressed="true"]')].map(b=>b.dataset.v);
-    if(a.length<3) return flash('세 명 모두 동의해야 합니다');
+    const a=readVote('final');
+    if(!a) return;
     others.forEach(k=>S.final.agree[k]=true);
     S.final.done=true; save(); next();
   });
@@ -2554,15 +2726,10 @@ function bonIntro(){
   });
 }
 function bonName(k){ return S.bonus.roles[k] || whoIs(k,5).name; }
-function apprBox(id, roles){
-  const on=S.bonus.appr[id]||[];
-  return `<div class="opts appr" data-part="${id}" data-type="multi">
-    ${roles.map(k=>`<button class="opt wide" data-v="${k}" aria-pressed="${on.includes(k)}">
-      <span class="box"></span>${ROLES[k].icon} ${esc(bonName(k))} 승인</button>`).join('')}</div>`;
-}
+function apprBox(id, roles){ return voteBox(id, roles, bonName); }
 function readAppr(id, need){
-  const v=[...view.querySelectorAll(`[data-part="${id}"] [aria-pressed="true"]`)].map(b=>b.dataset.v);
-  if(v.length<need){ flash('탐정단 승인이 필요합니다'); return null; }
+  const v = readVote(id);
+  if(!v) return null;
   S.bonus.appr[id]=v; return v;
 }
 
@@ -2666,11 +2833,11 @@ function bonFinal(){
     </div>
     <div class="card">
       <h3>발표 탐정이 발표합니다</h3>
-      ${apprBox('final',['present'])}
+      ${apprBox('bfinal',['present'])}
     </div>`;
   bindOpts();
   btn('발표 완료', ()=>{
-    if(!readAppr('final',1)) return;
+    if(!readAppr('bfinal',1)) return;
     S.bonus.done=true; save(); next();
   });
 }
@@ -2985,7 +3152,7 @@ function mainPayload(){
       missionsDone:doneCount(), level:levelName(),
       finalDone:!!S.final.done, bonusDone:!!S.bonus.done
     },
-    help:S.help||{}, weak:S.weak||{},
+    help:S.help||{}, weak:S.weak||{}, votes:S.votes||{},
     topics, startedAt:S.startedAt, updatedAt:S.updatedAt
   };
 }
@@ -3041,6 +3208,7 @@ document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==
 /* ── 시작 ─────────────────────────── */
 bindHelp();
 bindGames();
+bindVotes();
 S = load() || newState();
 
 /* 주소 뒤에 ?new 를 붙여 열면 이 태블릿의 기록을 지우고 첫 화면부터 시작합니다.
