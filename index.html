@@ -61,6 +61,18 @@ body{
 }
 .turn.none{display:none}
 
+/* 동이 감정 상태 (미션이 끝날 때마다 바뀜) */
+.dongimood{
+  margin-top:9px;display:flex;align-items:center;gap:7px;
+  padding:6px 11px;border-radius:999px;font-size:14px;font-weight:700;
+  background:rgba(217,164,65,.14);border:1px solid rgba(217,164,65,.45);
+  color:var(--paper);
+}
+.dongimood .who{color:var(--gold);font-weight:800}
+.dongimood .st{margin-left:auto;font-weight:800}
+@keyframes moodpop{0%{transform:scale(.9);opacity:.3}60%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
+.dongimood.pop{animation:moodpop .5s ease-out}
+
 /* ── 본문 ─────────────────────────── */
 main{flex:1;padding:20px 16px 8px}
 .eyebrow{font-size:14px;color:var(--gold);font-weight:700;margin:0 0 6px}
@@ -159,6 +171,16 @@ label.field{display:block;font-weight:700;font-size:15px;margin:0 0 7px}
 .fb.ok{background:#E2EFE6;color:#255C3E;border:2px solid var(--ok)}
 .fb.no{background:#F6E3DE;color:#8C2F1C;border:2px solid var(--no)}
 .fb.tip{background:#FBF0D8;color:#7A5A16;border:2px solid var(--gold)}
+.fb .mine{display:block;font-size:14px;font-weight:800;opacity:.8;margin:0 0 7px}
+.fb .mine em{font-style:normal;font-weight:800}
+.fb .pairs{margin:7px 0 0;font-size:15px;font-weight:700;line-height:1.6}
+.fb .pairs span{display:block}
+.readout{
+  display:flex;gap:10px;align-items:flex-start;margin:12px 0 0;
+  background:rgba(217,164,65,.14);border:1px solid rgba(217,164,65,.5);
+  border-radius:10px;padding:12px 13px;font-size:15px;font-weight:700;
+}
+.readout .ic{font-size:20px;line-height:1.2;flex:none}
 
 /* 버튼 */
 footer{
@@ -179,6 +201,50 @@ button.ghost{
   border-radius:12px;background:none;color:var(--paper);font:inherit;font-weight:700;cursor:pointer;
 }
 .linkbtn{background:none;border:0;color:var(--muted);font:inherit;font-size:15px;font-weight:700;text-decoration:underline;padding:6px 0;cursor:pointer}
+
+/* 제출 미리보기 */
+#sendbox{position:fixed;inset:0;z-index:85;background:rgba(14,27,42,.96);display:none;overflow:auto;
+  padding:calc(env(safe-area-inset-top) + 24px) 16px 24px}
+#sendbox.show{display:block}
+#sendbox .wrap{max-width:520px;margin:0 auto}
+#sendbox .eyebrow{text-align:center}
+.sendcard{
+  background:var(--paper);color:var(--text);border-radius:12px;
+  padding:20px 18px;margin:0 0 14px;box-shadow:0 6px 0 rgba(0,0,0,.18);
+}
+.sendcard .who{font-size:13px;font-weight:800;color:var(--muted);margin:0 0 10px}
+.sendcard .txt{font-size:19px;line-height:1.7;font-weight:700;margin:0}
+.sendcard .txt+.txt{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.sendto{
+  display:flex;gap:10px;align-items:flex-start;margin:0 0 14px;
+  background:rgba(217,164,65,.14);border:1px solid rgba(217,164,65,.5);
+  border-radius:10px;padding:13px 14px;font-size:15px;font-weight:700;
+}
+.sendto .ic{font-size:20px;line-height:1.2;flex:none}
+.sendwarn{
+  background:rgba(184,68,44,.18);border:1px solid rgba(184,68,44,.6);
+  border-radius:10px;padding:13px 14px;margin:0 0 14px;font-size:15px;font-weight:700;line-height:1.55;
+}
+#sendbox .btns{display:flex;gap:10px;margin-top:4px}
+#sendbox .btns button{
+  flex:1;min-height:58px;border:0;border-radius:14px;font:inherit;font-size:17px;font-weight:800;cursor:pointer;
+}
+#sendbox .fix{background:rgba(245,239,225,.14);color:var(--paper);border:1px solid rgba(245,239,225,.35)}
+#sendbox .go{background:var(--gold);color:#2A1D05}
+.sendnote{margin:10px 0 0;font-size:13px;font-weight:700;color:var(--muted)}
+
+/* 도움 사다리 */
+.help{margin:14px 0 0;border-top:1px dashed var(--line);padding-top:8px}
+.help .hbtn{display:inline-flex;align-items:center;gap:6px}
+.help .hbtn.lv1{color:var(--r-evidence)}
+.help .fb{margin:10px 0 0;font-weight:600}
+.help .fb b{display:block;font-size:14px;letter-spacing:-.01em;margin-bottom:5px;opacity:.85}
+.help .hstep{margin-top:2px}
+.hlock{display:block;font-size:14px;font-weight:700;color:var(--muted);margin:0 0 4px}
+.help .hbtn[data-locked="1"]{color:var(--line);text-decoration:none;cursor:default}
+.hnote{margin:8px 0 0;font-size:14px;font-weight:700;color:var(--muted)}
+.copywarn{background:#F6E3DE;color:#8C2F1C;border:2px solid var(--no);border-radius:10px;
+  padding:12px 13px;margin:12px 0 0;font-size:15px;font-weight:700}
 
 /* 역할 전환 화면 */
 #handoff{
@@ -201,12 +267,89 @@ button.ghost{
 .trophy{text-align:center;padding:14px 0 4px}
 .trophy .em{font-size:70px;line-height:1}
 .trophy .mood{font-size:22px;font-weight:800;margin:8px 0 0}
+/* 배지 진열장 + 계급 게이지 */
+.shelf{margin:16px 0 0;border:1px solid rgba(217,164,65,.45);border-radius:14px;padding:14px 13px;
+  background:rgba(217,164,65,.08)}
+.shead{margin:0 0 11px;font-size:13px;font-weight:800;color:var(--gold);letter-spacing:.02em}
+.shead b{font-size:16px}
+.badges{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
+.bslot{text-align:center}
+.bslot .pic{
+  height:50px;border-radius:10px;display:grid;place-items:center;font-size:24px;
+  background:rgba(245,239,225,.05);border:1px dashed rgba(245,239,225,.28);
+  color:rgba(245,239,225,.35);
+}
+.bslot.on .pic{background:rgba(217,164,65,.18);border:1px solid var(--gold);color:var(--paper)}
+.bslot.now .pic{background:rgba(217,164,65,.34);border:2px solid var(--gold)}
+.bslot .cap{display:block;margin-top:5px;font-size:11px;font-weight:700;color:rgba(245,239,225,.45)}
+.bslot.on .cap{color:var(--paper)}
+.bslot.now .cap{color:var(--gold)}
+@keyframes badgepop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+.bslot.now .pic{animation:badgepop .55s cubic-bezier(.2,1.3,.4,1) both}
+
+.rank{border-top:1px solid rgba(245,239,225,.14);margin-top:14px;padding-top:12px}
+.rankrow{display:flex;align-items:baseline;gap:8px;margin:0 0 8px}
+.rname{font-size:16px;font-weight:800}
+.stars{font-size:13px;letter-spacing:1px;color:rgba(245,239,225,.25)}
+.stars i{font-style:normal}
+.stars i.on{color:var(--gold)}
+@keyframes starpop{0%{transform:scale(.3);opacity:0}60%{transform:scale(1.6)}100%{transform:scale(1);opacity:1}}
+.stars i.new{display:inline-block;animation:starpop .6s .35s cubic-bezier(.2,1.3,.4,1) both}
+.rcount{margin-left:auto;font-size:12px;font-weight:700;color:rgba(245,239,225,.6)}
+.gauge{height:10px;border-radius:999px;background:rgba(245,239,225,.1);overflow:hidden}
+.gauge i{display:block;height:100%;border-radius:999px;background:var(--gold);
+  transition:width .9s cubic-bezier(.3,1,.4,1)}
+.rnext{margin:9px 0 0;font-size:13px;font-weight:700;color:rgba(245,239,225,.7)}
+.rnext b{color:var(--gold)}
+@keyframes lvup{0%{transform:translateY(8px) scale(.9);opacity:0}100%{transform:none;opacity:1}}
+.levelup{margin:12px 0 0;padding:11px;border-radius:10px;text-align:center;
+  background:var(--gold);color:#2A1D05;font-weight:900;font-size:17px;
+  animation:lvup .5s .9s both}
+
 .reward{display:flex;gap:10px;margin:16px 0 0}
 .reward div{
   flex:1;background:rgba(217,164,65,.14);border:1px solid rgba(217,164,65,.5);
   border-radius:10px;padding:11px;text-align:center;font-size:15px;font-weight:700;
 }
 .reward span{display:block;font-size:12px;color:var(--gold);font-weight:700;margin-bottom:3px}
+
+/* 첫 화면 — 동이의 부탁 */
+.namerow{
+  display:flex;align-items:center;gap:9px;flex-wrap:wrap;
+  font-size:17px;font-weight:800;margin:0 0 14px;
+}
+.namerow .who{display:inline-flex;align-items:center;gap:7px}
+.namerow .who .face{font-size:26px;line-height:1}
+.moodtag{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 12px;border-radius:999px;font-size:15px;font-weight:800;
+  background:rgba(217,164,65,.16);border:1px solid rgba(217,164,65,.5);color:var(--paper);
+}
+.speech{
+  background:var(--paper);color:var(--text);
+  border-radius:4px 16px 16px 16px;
+  padding:18px 17px;margin:0 0 16px;
+  box-shadow:0 6px 0 rgba(0,0,0,.18);
+  font-size:17px;line-height:1.7;
+}
+.speech p{margin:0 0 13px}
+.speech p:last-child{margin:0}
+.tense{
+  display:flex;gap:11px;align-items:flex-start;
+  background:rgba(184,68,44,.16);border:1px solid rgba(184,68,44,.55);
+  border-radius:12px;padding:14px 15px;margin:0 0 18px;
+  font-size:16px;font-weight:700;line-height:1.55;
+}
+.tense .ic{font-size:22px;line-height:1.2;flex:none}
+.moodlist{margin:0;padding:0;list-style:none}
+.moodlist li{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 0;border-bottom:1px dashed var(--line);font-size:15px;
+}
+.moodlist li:last-child{border-bottom:0}
+.moodlist .no{flex:none;width:76px;font-weight:800;color:var(--muted)}
+.moodlist li.on{color:var(--text)}
+.moodlist li.off{opacity:.5}
 
 /* 시작 화면 */
 .hero{padding:20px 0 6px}
@@ -311,6 +454,7 @@ button.ghost{
       <span class="group" id="gLabel"></span>
       <div class="slots" id="slots"></div>
     </div>
+    <div class="dongimood" id="dongiMood"></div>
     <div class="turn none" id="turn"></div>
   </header>
   <main id="view"></main>
@@ -323,6 +467,24 @@ button.ghost{
   <div class="who" id="hoWho"></div>
   <p class="hint">태블릿을 넘겨주세요</p>
   <button id="hoBtn"></button>
+</div>
+
+<div id="sendbox">
+  <div class="wrap">
+    <p class="eyebrow">보내기 전에 확인해요</p>
+    <h1 id="sendTitle" style="text-align:center;font-size:24px"></h1>
+    <div id="sendWarn"></div>
+    <div class="sendcard">
+      <p class="who" id="sendWho"></p>
+      <div id="sendText"></div>
+    </div>
+    <div class="sendto"><span class="ic">📨</span>
+      <span>이 글은 그대로 저장되어 <b>담임 선생님 화면</b>으로 전달됩니다. 보내면 다시 고칠 수 없습니다.</span></div>
+    <div class="btns">
+      <button class="fix" id="sendFix">고쳐 쓰기</button>
+      <button class="go" id="sendGo">이대로 보내기</button>
+    </div>
+  </div>
 </div>
 
 <div id="teacher">
@@ -383,7 +545,20 @@ const ROT = {
 
 const ORDER = ['nature','farm','house','market'];
 
-const LEVELS = ['🐣 견습 탐정','🔍 단서 탐정','🌾 생활 탐정','🧩 기억 탐정','🛒 장터 탐정'];
+/* 계급 사다리 — 기억 조각을 하나 찾을 때마다 한 계단 올라갑니다 */
+const RANKS = [
+  {ico:'🐣', name:'견습 탐정',       star:1},
+  {ico:'🔍', name:'단서 탐정',       star:2},
+  {ico:'🌾', name:'생활 탐정',       star:3},
+  {ico:'🧩', name:'기억 탐정',       star:4},
+  {ico:'🏅', name:'남도 탐정',       star:5},
+  {ico:'👑', name:'남도 생활 마스터', star:6},
+  {ico:'🎨', name:'어린이 큐레이터',  star:7}
+];
+
+/* 동이의 감정 상태 — 시작과 마지막(미션 5). 미션 1~4는 TOPICS[t].done.mood */
+const MOOD_START = '😟 기억이 흐릿해';
+const MOOD_END   = '🎉 기억 복원';
 
 const TOPICS = {
 
@@ -412,6 +587,8 @@ nature:{
   prep:{checks:['남도는 왜 따뜻했을까?','새롭게 알게 된 점'],
         label:'30초 동안 말할 내용을 적어 보세요',
         ph:'예) 남도는 바다와 따뜻한 해류 때문에 포근합니다. 그래서…',
+        hint:'앞에서 찾은 낱말 두 개를 그대로 넣어 말해 보세요. 그리고 따뜻한 날씨가 집을 어떻게 바꾸었는지 떠올려 보세요.',
+        frame:'남도는 ○○과 ○○ 때문에 따뜻합니다. 그래서 ○○○을(를) 새롭게 알게 되었습니다.',
         sample:'남도가 단순히 남쪽에 있어서 따뜻한 것이 아니라, 바다와 해류가 날씨에 영향을 주었다는 것입니다. 또 따뜻한 자연환경 때문에 시원하게 지낼 수 있는 마루가 발달했다는 것도 알게 되었습니다.'},
   submit:{title:'남도의 자연', type:'prepText'},
   done:{mood:'🙂 자연이 떠올랐어', badge:'자연 배지',
@@ -453,7 +630,9 @@ farm:{
   }},
   submit:{title:'쌀 한 톨의 여행', type:'fill',
     parts:['','(으)로 땅을 갈아 → 씨앗을 뿌리고 → 호미로 ','을 매고 → ','(으)로 수확하여 → ','(으)로 벼에서 낟알을 떼고 → 디딜방아로 ','하여 → ','에 저장한다.'],
-    ph:['따비','김','낫','홀태','도정','매통'],
+    ph:['땅 가는 도구','호미로 매는 것','거두는 도구','낟알 떼는 도구','방아로 하는 일','저장하는 도구'],
+    hint:'농사는 ① 땅을 갈고 ② 기르고 ③ 거두고 ④ 찧고 ⑤ 저장하는 순서로 이어집니다. 앞에서 도구와 쓰임을 연결한 화면을 떠올려 보세요.',
+    frame:'빈칸 순서는 이렇습니다. ① 땅을 가는 도구 ② 호미로 매는 일 ③ 벼를 거두는 도구 ④ 낟알을 떼는 도구 ⑤ 방아로 하는 일 ⑥ 저장하는 도구',
     sample:'따비로 땅을 갈아 → 씨앗을 뿌리고 → 호미로 김을 매고 → 낫으로 수확하여 → 홀태로 벼에서 낟알을 떼고 → 디딜방아로 도정하여 → 매통에 저장한다.'},
   done:{mood:'😊 농사의 기억이 돌아왔어', badge:'농업 배지',
         cardTitle:'쌀 한 톨의 여행 카드가 열렸습니다.',
@@ -479,6 +658,8 @@ house:{
     prompt:'동이가 집에서 어떻게 지냈을지 추리해 보세요.',
     parts:['동이는 집에서 ','했을 것 같습니다. 그렇게 생각한 증거는 ','입니다.'],
     ph:['한 일','전시에서 본 것'],
+    hint:'앞에서 연결한 공간(대청·온돌방·부엌·사랑방·안방) 중 하나를 고르고, 동이가 그곳에서 무엇을 했을지 상상해 보세요.',
+    frame:'첫 칸에는 동이가 한 일, 둘째 칸에는 전시에서 읽은 설명을 씁니다. 둘째 칸은 “○○에 ○○가 있었다는 설명”처럼 쓰면 됩니다.',
     sample:'동이는 집에서 마루에 앉아 시원하게 지냈을 것 같습니다. 그렇게 생각한 증거는 남도의 집에는 더운 여름을 보내기 위해 마루가 있었다는 설명입니다.'
   }],
   photo:{prompt:'공간의 쓰임이 드러나는 부분을 찍으세요.',
@@ -486,6 +667,8 @@ house:{
   prep:{checks:['더위와 추위를 어떻게 피했을까?','새롭게 알게 된 점'],
         label:'30초 동안 말할 내용을 적어 보세요',
         ph:'예) 더울 때는 마루에서, 추울 때는 온돌방에서…',
+        hint:'여름에 쓰던 곳과 겨울에 쓰던 곳을 하나씩만 말해 보세요.',
+        frame:'더울 때는 ○○에서, 추울 때는 ○○에서 지냈습니다. 새롭게 알게 된 점은 ○○○입니다.',
         sample:'더울 때는 마루에서 시원하게 지내고, 추울 때는 온돌방에서 따뜻하게 지냈다는 것을 알게 되었습니다. 집도 날씨와 계절에 맞게 만들어졌다는 점이 새로웠습니다.'},
   submit:{title:'여름과 겨울을 이기는 집', type:'prepText'},
   done:{mood:'😄 집이 생각났어', badge:'집 배지',
@@ -525,6 +708,8 @@ market:{
     prompt:'동이가 시장에서 무엇을 했을지 추리해 보세요.',
     parts:['동이는 시장에서 ','했을 것 같습니다. 그렇게 생각한 증거는 ','입니다.'],
     ph:['한 일','전시에서 본 것'],
+    hint:'우리 모둠이 고른 낱말 두 개를 다시 보세요. 그 물건이나 낱말로 동이가 시장에서 무엇을 했을지 생각해 보세요.',
+    frame:'첫 칸에는 동이가 시장에서 한 일, 둘째 칸에는 전시에서 본 물건이나 설명을 씁니다.',
     sample:'동이는 시장에서 상평통보로 물건값을 냈을 것 같습니다. 그렇게 생각한 증거는 상평통보가 조선시대에 쓰인 돈으로 전시되어 있기 때문입니다.'
   }],
   photo:{prompt:'시장이 어떤 곳이었는지 알 수 있는 전시물을 한 장 찍으세요.',
@@ -532,10 +717,14 @@ market:{
   prep:{checks:['시장은 어떤 곳인가?','그렇게 생각한 이유는?'],
         label:'30초 동안 말할 내용을 적어 보세요',
         ph:'예) 시장은 물건을 사고팔고 소식도 나누는 곳이었습니다…',
+        hint:'시장에서는 물건만 오갔을까요? 사람과 소식은 어땠는지도 생각해 보세요.',
+        frame:'시장은 ○○하는 곳이었습니다. 우리가 찾은 증거는 ○○○입니다.',
         sample:'시장은 물건을 사고팔고 소식을 나누는 곳이었습니다. 우리가 찾은 증거는 상평통보와 주판입니다.'},
   submit:{title:'남도의 시장', type:'fill',
     parts:['시장은 ','하는 곳이었습니다. 우리가 찾은 증거는 ','입니다. 이 증거를 보고 ','라고 생각했습니다.'],
     ph:['시장에서 한 일','찾은 증거','우리 모둠의 생각'],
+    hint:'앞에서 고른 낱말과 그 낱말이 알려 주는 시장의 모습을 그대로 이어 쓰면 됩니다.',
+    frame:'빈칸 순서는 ① 시장에서 한 일 ② 우리가 찾은 증거(전시물 이름) ③ 그 증거를 보고 우리 모둠이 한 생각입니다.',
     sample:'시장은 물건을 사고팔고 소식을 나누는 곳이었습니다. 우리가 찾은 증거는 상평통보와 주판입니다. 이 증거를 보고 시장에서는 돈을 쓰고 물건값을 계산하며 거래했다고 생각했습니다.'},
   done:{mood:'🤗 시장의 소리가 들려', badge:'시장 배지',
         cardTitle:'장터의 기억 카드가 열렸습니다.',
@@ -567,6 +756,8 @@ function blankBonus(){
 function migrate(){
   if(!S.final) S.final=blankFinal();
   if(!S.bonus) S.bonus=blankBonus();
+  if(!S.help)  S.help={};
+  if(!S.weak)  S.weak={};
   if(S.phase==='run'){
     const here=S.steps && S.steps[S.stepIdx];
     if(!S.steps || !S.steps.some(s=>s.v==='fintro')){
@@ -585,9 +776,9 @@ function newState(){
     order:[], prior:{choice:'',reason:''},
     topics:{nature:blankTopic(),farm:blankTopic(),house:blankTopic(),market:blankTopic()},
     conference:{text:'',passed:false},
-    final:blankFinal(), bonus:blankBonus(),
+    final:blankFinal(), bonus:blankBonus(), help:{}, weak:{},
     settings:{useConference:true, password:'마루', dbUrl:'', apiKey:''},
-    phase:'start', stepIdx:0, steps:[], seenHandoff:{},
+    phase:'story', stepIdx:0, steps:[], seenHandoff:{},
     startedAt:Date.now(), updatedAt:Date.now()
   };
 }
@@ -651,10 +842,67 @@ function buildSteps(){
   steps.push({v:'end'});
   S.steps = steps;
 }
-function levelName(){
-  if(S.bonus && S.bonus.done) return '🎨 어린이 큐레이터';
-  if(S.final && S.final.done) return '👑 남도 생활 마스터';
-  return LEVELS[doneCount()];
+/* 모은 기억 조각 수 = 계급 단계 (0~6) */
+function collected(){
+  return doneCount() + (S.final&&S.final.done?1:0) + (S.bonus&&S.bonus.done?1:0);
+}
+function rankIdx(){ return Math.min(collected(), RANKS.length-1); }
+function levelName(){ const r=RANKS[rankIdx()]; return r.ico+' '+r.name; }
+
+/* 조사 붙이기 — 받침이 있으면 '으로' */
+function ro(w){
+  const c=(w||'').charCodeAt(w.length-1)-0xAC00;
+  return (c>=0 && c<11172 && c%28) ? '으로' : '로';
+}
+function rankStars(i){
+  const on=Math.min(RANKS[i].star,5);
+  let h='';
+  for(let k=1;k<=5;k++) h+=`<i class="${k<=on?'on':''}" data-k="${k}">★</i>`;
+  if(RANKS[i].star>5) h+=`<i class="on">${RANKS[i].ico}</i>`;
+  return h;
+}
+/* 배지 진열장 6칸 — 자연·농업·집·시장 + 동이의 하루 + 큐레이터 */
+function shelfItems(){
+  const order = (S.order && S.order.length) ? S.order : ORDER;
+  return order.map(t=>({key:t, ico:TOPICS[t].emoji,
+      cap:TOPICS[t].title.replace('남도의 ',''), on:!!S.topics[t].done}))
+    .concat([{key:'final', ico:'⏰', cap:'하루',      on:!!(S.final&&S.final.done)},
+             {key:'bonus', ico:'🏛', cap:'큐레이터',  on:!!(S.bonus&&S.bonus.done)}]);
+}
+/* opt.now : 방금 받은 배지 key,  opt.up : 승급 연출을 보여 줄지 */
+function rewardBox(opt){
+  opt = opt || {};
+  const cur = collected(), now = rankIdx();
+  const before = opt.up ? Math.max(0, cur-1) : cur;
+  const nxt = RANKS[now+1];
+  return `<div class="shelf">
+    <p class="shead">기억 조각 <b>${cur}</b> / 6</p>
+    <div class="badges">${shelfItems().map(it=>
+      `<div class="bslot ${it.on?'on':''} ${opt.now===it.key?'now':''}">
+         <div class="pic">${it.on?it.ico:'🔒'}</div>
+         <span class="cap">${opt.now===it.key?'방금 획득':esc(it.cap)}</span>
+       </div>`).join('')}</div>
+    <div class="rank">
+      <div class="rankrow">
+        <span class="rname">${RANKS[now].ico} ${esc(RANKS[now].name)}</span>
+        <span class="stars">${rankStars(now)}</span>
+        <span class="rcount">${cur} / 6</span>
+      </div>
+      <div class="gauge"><i style="width:${Math.round(before/6*100)}%" data-w="${Math.round(cur/6*100)}"></i></div>
+      <p class="rnext">${nxt
+        ? `기억 조각 1개만 더 찾으면 <b>${esc(nxt.name)}</b>${ro(nxt.name)} 올라갑니다`
+        : '가장 높은 계급까지 올라왔습니다'}</p>
+    </div>
+    ${opt.up ? `<div class="levelup">승급! ${RANKS[now].ico} ${esc(RANKS[now].name)}</div>` : ''}
+  </div>`;
+}
+/* 게이지를 채우고 새로 켜진 별을 톡 띄웁니다 */
+function playReward(){
+  const g = view.querySelector('.gauge i'); if(!g) return;
+  const stars = view.querySelectorAll('.stars i.on');
+  const last = stars[stars.length-1];
+  requestAnimationFrame(()=>{ g.style.width = g.dataset.w + '%'; });
+  if(view.querySelector('.levelup') && last) last.classList.add('new');
 }
 
 // 미션 번호(1~4)에 따라 누가 어떤 역할인지
@@ -664,6 +912,14 @@ function whoIs(role, missionNo){
   return {slot, name: S.members[slot] || slot};
 }
 function doneCount(){ return S.order.filter(t=>S.topics[t].done).length; }
+
+/* 지금 동이의 감정 상태 — 마지막으로 되찾은 기억에 따라 바뀜 */
+function currentMood(){
+  if(S.final && S.final.done) return MOOD_END;
+  const found = S.order.filter(t=>S.topics[t].done);
+  if(!found.length) return MOOD_START;
+  return TOPICS[found[found.length-1]].done.mood;
+}
 
 /* ══════════════════════════════════════════════════
    4. 화면 그리기
@@ -676,6 +932,9 @@ const bar  = document.getElementById('bar');
 function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
 function render(){
+  const st0 = S.steps && S.steps[S.stepIdx];
+  HK = S.phase==='run' && st0 ? (st0.v + (st0.t ? '-'+st0.t : '')) : S.phase;
+  if(S.phase==='story')  return screenStory();
   if(S.phase==='start')  return screenStart();
   if(S.phase==='roles')  return screenRoles();
   if(S.phase==='prior')  return screenPrior();
@@ -690,6 +949,7 @@ function render(){
     bintro:bonIntro, bobserve:bonObserve, bwhy:bonWhy, bmeaning:bonMeaning,
     bad:bonAd, bfinal:bonFinal, bcomplete:bonComplete,
     end:screenEnd}[step.v])(step);
+  refreshHelpLocks();
   window.scrollTo(0,0);
   maybeHandoff(step);
 }
@@ -700,6 +960,13 @@ function drawBar(step){
   document.getElementById('slots').innerHTML = S.order.map(t=>
     `<div class="slot ${S.topics[t].done?'on':''}">${TOPICS[t].emoji}</div>`).join('')
     + `<div class="slot ${S.final.done?'on':''}">⏰</div>`;
+  const md = document.getElementById('dongiMood');
+  const mood = currentMood();
+  if(md.dataset.mood !== mood){
+    md.dataset.mood = mood;
+    md.innerHTML = `<span class="who">👦 동이</span><span class="st">${esc(mood)}</span>`;
+    md.classList.remove('pop'); void md.offsetWidth; md.classList.add('pop');
+  }
   const turn = document.getElementById('turn');
   if(step.role){
     const r = ROLES[step.role], w = whoIs(step.role, step.m);
@@ -716,8 +983,8 @@ function btn(label, fn, opts={}){
   if(opts.ghost) document.getElementById('ghostBtn').onclick = opts.onGhost;
 }
 
-/* ── 시작 ─────────────────────────── */
-function screenStart(){
+/* ── 첫 화면 — 동이의 부탁 ──────────── */
+function screenStory(){
   bar.classList.add('hidden');
   const prev = load();
   const resumable = prev && prev.phase==='run' && prev.groupNo;
@@ -725,8 +992,47 @@ function screenStart(){
     <div class="hero">
       <div class="kicker">광주역사민속박물관 · 3학년 탐험</div>
       <h1>동이의<br>사라진 생활 기억</h1>
-      <p class="lede">전시물을 자세히 보고 동이의 생활 기억을 찾아 주세요. 기억을 모두 찾지 못하면 동이는 집으로 돌아갈 수 없습니다.</p>
     </div>
+    <p class="namerow">
+      <span class="who"><span class="face">👦</span>동이</span>
+      <span class="moodtag">${esc(MOOD_START)}</span>
+    </p>
+    <div class="speech">
+      <p>“안녕? 나는 옛날 남도에 살던 동이야. 그런데 내가 어떻게 살았는지 기억이 흐릿해졌어.</p>
+      <p>내가 살던 곳의 자연, 농사와 집, 시장 속에 내 기억 조각이 숨어 있어.</p>
+      <p>전시물을 자세히 보고 내 생활 기억을 찾아 줘.”</p>
+    </div>
+    <div class="tense">
+      <span class="ic">⏳</span>
+      <span>기억을 모두 찾지 못하면<br>동이는 집으로 돌아갈 수 없어.</span>
+    </div>
+    <div class="sendto"><span class="ic">📨</span>
+      <span>우리 모둠이 쓴 글과 찍은 사진은 <b>선생님 화면으로 바로 전달</b>됩니다. 정성껏 써 주세요.</span></div>
+    ${resumable ? `<div class="card"><h3>하던 활동이 있습니다</h3>
+        <p class="sub">${esc(prev.session||'세션 없음')} · ${prev.groupNo}모둠 · 기억 ${
+          ORDER.filter(t=>prev.topics[t] && prev.topics[t].done).length}/4</p>
+        <button class="opt wide" onclick="resume()">이어서 하기</button></div>` : ''}
+    <div class="card">
+      <h3>기억을 찾을 때마다 동이의 표정이 바뀝니다</h3>
+      <ul class="moodlist">
+        <li class="on"><span class="no">지금</span>${esc(MOOD_START)}</li>
+        ${ORDER.map(t=>`<li class="off"><span class="no">${TOPICS[t].emoji} ${esc(TOPICS[t].title.replace('남도의 ',''))}</span>${esc(TOPICS[t].done.mood)}</li>`).join('')}
+        <li class="off"><span class="no">⏰ 하루</span>${esc(MOOD_END)}</li>
+      </ul>
+    </div>`;
+  btn('탐험 시작', ()=>{ S.phase='start'; render(); });
+  longPressTeacher();
+}
+
+/* ── 탐험 준비 ─────────────────────── */
+function screenStart(){
+  bar.classList.add('hidden');
+  const prev = load();
+  const resumable = prev && prev.phase==='run' && prev.groupNo;
+  view.innerHTML = `
+    <p class="eyebrow">탐험 준비</p>
+    <h1>기억 탐정단<br>준비하기</h1>
+    <div class="dongi"><div class="face">👦</div><p>내 기억을 찾아 줄 탐정단이구나! 먼저 너희가 몇 모둠인지 알려 줘.</p></div>
     ${resumable ? `<div class="card"><h3>하던 활동이 있습니다</h3>
         <p class="sub">${esc(prev.session||'세션 없음')} · ${prev.groupNo}모둠 · 기억 ${
           ORDER.filter(t=>prev.topics[t] && prev.topics[t].done).length}/4</p>
@@ -748,11 +1054,12 @@ function screenStart(){
     S.groupNo = +b.dataset.n;
     document.getElementById('mainBtn').disabled = false;
   });
-  btn('탐험 시작', ()=>{
+  btn('탐정단 만들기', ()=>{
     S.session = document.getElementById('sess').value.trim();
     if(!S.groupNo) return;
     S.phase='roles'; save(); render();
-  }, {disabled: !S.groupNo});
+  }, {disabled: !S.groupNo, ghost:'동이의 이야기 다시 보기',
+      onGhost:()=>{ S.phase='story'; render(); }});
   longPressTeacher();
 }
 function resume(){ S = load(); render(); }
@@ -816,7 +1123,6 @@ function screenPrior(){
 
 /* ── 탐험 지도 ─────────────────────── */
 function screenMap(){
-  const lv = levelName();
   view.innerHTML = `
     <p class="eyebrow">탐험 지도</p>
     <h1>동이의 기억 복원도</h1>
@@ -824,11 +1130,8 @@ function screenMap(){
       <h3>우리 모둠이 도는 순서</h3>
       <ol class="goals">${S.order.map(t=>`<li>${TOPICS[t].emoji} ${TOPICS[t].title}${S.topics[t].done?' — 기억 복원 완료':''}</li>`).join('')}</ol>
     </div>
-    <div class="reward">
-      <div><span>남은 미션</span>${4-doneCount()}개</div>
-      <div><span>현재 레벨</span>${lv}</div>
-      <div><span>획득 배지</span>${doneCount()||'없음'}</div>
-    </div>`;
+    ${rewardBox()}`;
+  playReward();
   btn(doneCount()? '이어서 탐험하기' : '미션 1 시작', next);
 }
 
@@ -854,6 +1157,22 @@ function screenIntro(step){
 }
 
 /* ── 문항 렌더러 ───────────────────── */
+/* 모둠·세션마다 다르게, 그러나 화면을 다시 그려도 같은 순서로 섞기 */
+function seedRand(str){
+  let h=2166136261;
+  for(let i=0;i<str.length;i++){ h^=str.charCodeAt(i); h=Math.imul(h,16777619); }
+  return ()=>{ h+=0x6D2B79F5; let t=h;
+    t=Math.imul(t^t>>>15, t|1); t^=t+Math.imul(t^t>>>7, t|61);
+    return ((t^t>>>14)>>>0)/4294967296; };
+}
+function shuffled(key, arr){
+  const rnd=seedRand(key+'|'+(S.groupNo||0)+'|'+(S.session||''));
+  const a=arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); const t=a[i]; a[i]=a[j]; a[j]=t; }
+  if(a.length>1 && a.every((x,i)=>x===arr[i])) a.push(a.shift());  // 그대로면 한 칸 밀기
+  return a;
+}
+
 function renderPart(p, saved){
   if(p.type==='multi' || p.type==='depend' || p.type==='single'){
     const chosen = saved && saved[p.id] ? [].concat(saved[p.id]) : [];
@@ -868,13 +1187,14 @@ function renderPart(p, saved){
   }
   if(p.type==='match'){
     const sv = saved && saved[p.id] || {};
+    const opts = shuffled('match-'+p.id, p.right);
     return `<h3>${esc(p.prompt)}</h3>
       <div data-part="${p.id}" data-type="match">
         ${p.left.map(l=>`<div class="pair">
           <span class="k">${esc(l)}</span>
           <select data-k="${esc(l)}">
             <option value="">고르기</option>
-            ${p.right.map(r=>`<option ${sv[l]===r?'selected':''}>${esc(r)}</option>`).join('')}
+            ${opts.map(r=>`<option ${sv[l]===r?'selected':''}>${esc(r)}</option>`).join('')}
           </select></div>`).join('')}
       </div>`;
   }
@@ -885,13 +1205,174 @@ function renderPart(p, saved){
       html += esc(txt);
       if(i < p.parts.length-1) html += `<input type="text" data-i="${i}" placeholder="${esc(p.ph[i]||'')}" value="${esc(sv[i]||'')}">`;
     });
-    return html + '</p>' + sampleBtn(p.sample);
+    return html + '</p>' + sendNote() + helpBox('fill-'+p.id, p);
   }
   return '';
 }
-function sampleBtn(sample){
-  return sample ? `<button class="linkbtn" onclick="this.nextElementSibling.hidden=!this.nextElementSibling.hidden">예시 보기</button>
-    <div class="fb tip" hidden>${esc(sample)}</div>` : '';
+/* ── 도움 사다리 ────────────────────
+   ① 생각 열기 → ② 문장 뼈대 → ③ 예시 문장
+   ③은 아이가 먼저 몇 글자라도 써야 열립니다.
+   어디까지 열었는지, 예시를 그대로 옮겼는지는 교사 화면으로 전달됩니다. */
+let HK = '';                 // 지금 화면 이름 (도움 기록 키)
+const HELP = {};             // key → {hint, frame, sample}
+const MIN_TYPED = 8;         // ③이 열리는 최소 글자 수
+
+function helpBox(sub, o){
+  if(!o || !o.sample) return '';
+  const key = HK + '/' + sub;
+  HELP[key] = o;
+  const st = (S.help && S.help[key]) || {};
+  const lv = st.lv || 0;
+  return `<div class="help" data-hkey="${esc(key)}">
+    <button class="linkbtn hbtn lv1" data-hlv="1" ${lv>=1?'hidden':''}>🪜 도움이 필요해요</button>
+    <div class="hstep" data-hbox="1" ${lv>=1?'':'hidden'}>
+      <div class="fb tip"><b>① 생각 열기</b>${esc(o.hint||'')}</div>
+      <button class="linkbtn hbtn" data-hlv="2" ${lv>=2?'hidden':''}>아직 어려워요 — 문장 뼈대 보기</button>
+    </div>
+    <div class="hstep" data-hbox="2" ${lv>=2?'':'hidden'}>
+      <div class="fb tip"><b>② 문장 뼈대</b>${esc(o.frame||'')}</div>
+      <span class="hlock" data-hlock ${lv>=3?'hidden':''}>먼저 한 문장 써 보면 예시가 열립니다</span>
+      <button class="linkbtn hbtn" data-hlv="3" ${lv>=3?'hidden':''}>예시 문장 보기</button>
+    </div>
+    <div class="hstep" data-hbox="3" ${lv>=3?'':'hidden'}>
+      <div class="fb tip"><b>③ 예시 문장</b>${esc(o.sample)}</div>
+      <p class="hnote">예시는 참고만 하고, 우리 모둠이 직접 본 것으로 바꿔 쓰세요.</p>
+    </div>
+    <div class="copywarn" data-hcopy hidden>예시와 많이 닮았어요. 우리 모둠이 <b>직접 본 것</b>을 한 가지만 넣어 볼까요?</div>
+  </div>`;
+}
+
+/* 화면에 아이가 직접 쳐 넣은 글자 수 */
+function typedChars(){
+  let n=0;
+  view.querySelectorAll('input[type=text], textarea').forEach(el=>{ n += el.value.trim().length; });
+  return n;
+}
+/* 두 글의 닮은 정도 (0~1) — 두 글자씩 잘라 겹치는 비율 */
+function similar(a,b){
+  const cut=t=>{ const s2=String(t).replace(/\s/g,''), out=new Set();
+    for(let i=0;i<s2.length-1;i++) out.add(s2.slice(i,i+2)); return out; };
+  const A=cut(a), B=cut(b);
+  if(!A.size || !B.size) return 0;
+  let hit=0; A.forEach(x=>{ if(B.has(x)) hit++; });
+  return hit / A.size;
+}
+function markHelp(key, patch){
+  if(!S.help) S.help={};
+  const st = S.help[key] || (S.help[key]={lv:0, copy:false});
+  Object.assign(st, patch);
+  save({quiet:true});
+}
+/* 열림 상태 갱신 — 화면 어디서든 글자를 치면 ③ 버튼이 열립니다 */
+function refreshHelpLocks(){
+  const ok = typedChars() >= MIN_TYPED;
+  view.querySelectorAll('.help [data-hlv="3"]').forEach(b=>{
+    b.dataset.locked = ok ? '0' : '1';
+    b.textContent = ok ? '예시 문장 보기' : '예시 문장 보기 (잠김)';
+  });
+  view.querySelectorAll('.help [data-hlock]').forEach(el=>{ el.hidden = ok; });
+}
+/* 베낌 확인 — 벌이 아니라 부드러운 되물음 */
+function checkCopy(){
+  view.querySelectorAll('.help').forEach(box=>{
+    const key=box.dataset.hkey, o=HELP[key];
+    if(!o || !((S.help&&S.help[key]&&S.help[key].lv)>=3)) return;
+    const mine=[...view.querySelectorAll('input[type=text], textarea')]
+      .map(el=>el.value.trim()).filter(Boolean).join(' ');
+    if(mine.length < 10) return;
+    const hot = similar(mine, o.sample) >= .8;
+    box.querySelector('[data-hcopy]').hidden = !hot;
+    if(hot && !(S.help[key]||{}).copy) markHelp(key,{copy:true});
+  });
+}
+/* ══════════════════════════════════════════════════
+   5-2. 제출 전 확인 — 성의 검사 · 낱말 되묻기 · 미리보기
+   ══════════════════════════════════════════════════ */
+
+/* 문항별로 전시에서 나온 낱말 — 하나도 없으면 한 번 되묻습니다 */
+const KEYWORDS = {
+  'record-house':  ['대청','마루','온돌','부엌','사랑방','안방','아궁이','부뚜막','여름','겨울'],
+  'record-market': ['상평통보','주판','목화','무명','명태','곡식','생필품','물건','소식','엿','사고','바꾸'],
+  'prep-nature':   ['바다','해류','따뜻','마루','봄','여름','남도','자연'],
+  'prep-house':    ['마루','대청','온돌','부엌','사랑방','안방','여름','겨울'],
+  'prep-market':   ['시장','물건','소식','상평통보','주판','목화','곡식','바꾸','사고'],
+  'submit-farm':   ['따비','호미','낫','홀태','디딜방아','매통','도정','김'],
+  'submit-market': ['물건','소식','상평통보','주판','목화','곡식','바꾸','사고'],
+  'fphoto':        ['자연','농사','집','시장','마루','온돌','부엌','상평통보','계절','물건','소식','바다','해류'],
+  'frecord':       ['남도','따뜻','농사','마루','온돌','부엌','물건','소식','바다','해류','상평통보'],
+  'fpresent':      ['남도','따뜻','농사','마루','온돌','부엌','물건','소식','바다','해류','상평통보']
+};
+
+/* 성의 없는 입력 걸러내기 */
+function weakText(t, min){
+  const v=String(t||'').trim();
+  if(!v) return '빈 곳이 있어요';
+  if(/^[ㄱ-ㅎㅏ-ㅣ]+$/.test(v)) return '한글 낱말로 써 주세요';
+  if(/^[0-9\s.,!?~\-]+$/.test(v)) return '숫자나 기호 말고 낱말로 써 주세요';
+  const bare=v.replace(/\s/g,'');
+  if(bare.length < (min||4)) return '조금 더 자세히 써 주세요';
+  if(new Set(bare).size <= 1) return '같은 글자만 적었어요. 다시 써 볼까요?';
+  if(/^(.{1,2})\1{2,}$/.test(bare)) return '같은 말이 반복됩니다. 다시 써 볼까요?';
+  return '';
+}
+function markWeak(key, patch){
+  if(!S.weak) S.weak={};
+  const w=S.weak[key] || (S.weak[key]={});
+  Object.assign(w, patch);
+}
+
+/* 입력창 아래에 붙는 안내 */
+function sendNote(){
+  return '<p class="sendnote">✎ 여기에 쓴 글은 저장되어 담임 선생님께 전달됩니다.</p>';
+}
+
+/* o = {title, who, texts:[], min, keywords, onSend} */
+function reviewSend(o){
+  const raw = o.raw || o.texts;                     // 아이가 직접 쓴 말만
+  const bad = raw.map(t=>weakText(t, 2)).find(Boolean);
+  if(bad) return flash(bad);
+  const joined = raw.join(' ');
+  const bad2 = weakText(joined, o.min || 8);
+  if(bad2) return flash(bad2);
+
+  const key = HK;
+  const kws = o.keywords || KEYWORDS[key] || [];
+  const noKw = kws.length>0 && !kws.some(k=>joined.includes(k));
+  const asked = (S.weak[key]||{}).asked;
+
+  const box=document.getElementById('sendbox');
+  document.getElementById('sendTitle').textContent = o.title || '우리 모둠이 쓴 글';
+  document.getElementById('sendWho').textContent = o.who || '';
+  document.getElementById('sendText').innerHTML =
+    o.texts.map(t=>`<p class="txt">${esc(t)}</p>`).join('');
+  document.getElementById('sendWarn').innerHTML = (noKw && !asked)
+    ? `<div class="sendwarn">전시에서 본 낱말이 하나도 들어 있지 않아요.
+        우리가 <b>직접 본 것</b>을 한 가지만 넣어 볼까요?</div>` : '';
+  if(noKw){ markWeak(key, {nokw:true, asked:true}); save({quiet:true}); }
+  else if(S.weak[key]) { delete S.weak[key].nokw; save({quiet:true}); }
+
+  box.classList.add('show');
+  document.getElementById('sendFix').onclick = ()=>{ box.classList.remove('show'); };
+  document.getElementById('sendGo').onclick  = ()=>{
+    box.classList.remove('show');
+    o.onSend();
+  };
+  window.scrollTo(0,0);
+}
+
+function bindHelp(){
+  view.addEventListener('click', e=>{
+    const b = e.target.closest('.help .hbtn'); if(!b) return;
+    const box = b.closest('.help'), key = box.dataset.hkey, lv = +b.dataset.hlv;
+    if(lv===3 && b.dataset.locked==='1')
+      return flash('먼저 한 문장 써 보고 눌러 주세요');
+    box.querySelector(`[data-hbox="${lv}"]`).hidden = false;
+    b.hidden = true;
+    if(lv===3) box.querySelector('[data-hlock]').hidden = true;
+    markHelp(key, {lv: Math.max(lv, (S.help[key]||{}).lv||0)});
+    refreshHelpLocks();
+  });
+  view.addEventListener('input', ()=>{ refreshHelpLocks(); checkCopy(); });
 }
 function readPart(p, root){
   const box = root.querySelector(`[data-part="${p.id}"]`);
@@ -912,6 +1393,29 @@ function readPart(p, root){
   if(p.limit && sel.length !== p.limit) return null;
   return {list:sel, other:otherVal};
 }
+/* 우리가 고른 답을 사람이 읽을 수 있게 정리 */
+function myAnswer(p, val){
+  if(val==null) return '';
+  if(p.type==='match'){
+    return `<span class="mine">우리가 연결한 답</span>
+      <span class="pairs">${p.left.map(l=>`<span>${esc(l)} → ${esc(val[l]||'')}</span>`).join('')}</span>`;
+  }
+  if(p.type==='fill') return `<span class="mine">우리가 쓴 답 — <em>${val.map(esc).join(' · ')}</em></span>`;
+  if(p.type==='single') return `<span class="mine">우리가 고른 답 — <em>${esc(val)}</em></span>`;
+  const list=(val.list||[]).slice();
+  if(val.other) list.push(val.other);
+  return list.length ? `<span class="mine">우리가 고른 답 — <em>${list.map(esc).join(' · ')}</em></span>` : '';
+}
+/* 지금 차례인 아이가 모둠에게 읽어 주도록 */
+function readAloud(step){
+  if(!step || !step.role) return '';
+  const w = whoIs(step.role, step.m);
+  const nm=w.name||'', c=nm.charCodeAt(nm.length-1)-0xAC00;
+  const josa=(c>=0 && c<11172) ? (c%28 ? '이가' : '가') : '이(가)';
+  return `<div class="readout"><span class="ic">📢</span>
+    <span><b>${esc(nm)}</b>${josa} 모둠 친구들에게 소리 내어 읽어 주세요.</span></div>`;
+}
+
 function gradePart(p, val, ctx){
   if(!p.answer && p.type!=='depend') return {graded:false};
   if(p.type==='single') return {graded:true, ok: val===p.answer};
@@ -969,7 +1473,7 @@ function screenTask(step){
       const g=gradePart(p, ctx[p.id], ctx);
       if(!g.graded){ slots[i].innerHTML=''; return; }
       graded=true; if(!g.ok) allOk=false;
-      slots[i].innerHTML = `<div class="fb ${g.ok?'ok':'no'}">${esc(g.ok?p.ok:p.no)}</div>`;
+      slots[i].innerHTML = `<div class="fb ${g.ok?'ok':'no'}">${myAnswer(p, ctx[p.id])}${esc(g.ok?p.ok:p.no)}</div>`;
     });
     const key=step.v;
     const t=S.topics[step.t];
@@ -980,7 +1484,22 @@ function screenTask(step){
       const o=view.querySelector(`[data-other="${p.id}"]`); if(o) t[key][p.id+'_other']=o.value.trim();
     });
     save();
-    if(!graded || allOk){ next(); return; }
+    if(!graded){
+      const show=[], raw=[];
+      parts.forEach(pp=>{ const v=ctx[pp.id];
+        if(pp.type==='fill'){ show.push(joinFill(pp, v)); raw.push(...v); }
+        else if(typeof v==='string'){ show.push(v); raw.push(v); } });
+      if(!show.length) return next();
+      return reviewSend({title:'우리 모둠의 추리', who:`${r.icon} ${r.name} · ${esc(w.name)}`,
+        texts:show, raw:raw, min:8, onSend:next});
+    }
+    if(allOk){
+      slots[slots.length-1].insertAdjacentHTML('beforeend', readAloud(step));
+      const b=document.getElementById('mainBtn');
+      b.textContent='읽어 줬어요 · 다음으로'; b.onclick=next;
+      window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
+      return;
+    }
     if(t.tries[key]>=2){
       view.querySelector('.fbslot').insertAdjacentHTML('beforeend',
         `<div class="fb tip">한 번 더 확인하고 넘어가도 좋습니다. 버튼을 다시 누르면 다음으로 갑니다.</div>`);
@@ -1125,7 +1644,8 @@ function screenPrep(step){
         </div>
         <label class="field" style="margin-top:16px">${esc(P.label)}</label>
         <textarea id="prepText" placeholder="${esc(P.ph)}">${esc(saved.text||'')}</textarea>
-        ${sampleBtn(P.sample)}`}
+        ${sendNote()}
+        ${helpBox('prep', P)}`}
     </div>`;
   bindOpts();
   btn('발표 탐정 완료', ()=>{
@@ -1136,8 +1656,15 @@ function screenPrep(step){
       S.topics[step.t].prep[P.question.id]=v;
       S.topics[step.t].tries.prep=(S.topics[step.t].tries.prep||0)+1;
       save();
-      view.querySelector('.fbslot').innerHTML=`<div class="fb ${g.ok?'ok':'no'}">${esc(g.ok?P.question.ok:P.question.no)}</div>`;
-      if(g.ok) return next();
+      view.querySelector('.fbslot').innerHTML=
+        `<div class="fb ${g.ok?'ok':'no'}">${myAnswer(P.question, v)}${esc(g.ok?P.question.ok:P.question.no)}</div>`;
+      if(g.ok){
+        view.querySelector('.fbslot').insertAdjacentHTML('beforeend', readAloud(step));
+        const b=document.getElementById('mainBtn');
+        b.textContent='읽어 줬어요 · 다음으로'; b.onclick=next;
+        window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
+        return;
+      }
       if(S.topics[step.t].tries.prep>=2){
         document.getElementById('mainBtn').textContent='그래도 넘어가기';
         document.getElementById('mainBtn').onclick=next;
@@ -1147,8 +1674,11 @@ function screenPrep(step){
     const txt=document.getElementById('prepText').value.trim();
     if(!txt) return flash('발표할 내용을 적어 주세요');
     const c=readPart({id:'checks',type:'multi',options:P.checks}, view);
-    S.topics[step.t].prep={checks:c||{list:[],other:''}, text:txt};
-    save(); next();
+    reviewSend({title:'30초 발표 내용', who:`🎤 발표 탐정 · ${esc(w.name)}`,
+      texts:[txt], min:10, onSend:()=>{
+        S.topics[step.t].prep={checks:c||{list:[],other:''}, text:txt};
+        save(); next();
+      }});
   });
 }
 
@@ -1178,19 +1708,25 @@ function screenSubmit(step){
   btn('제출', ()=>{
     const a=[...view.querySelectorAll('.opts[data-part="agree"] [aria-pressed="true"]')].map(b=>b.dataset.v);
     if(a.length<3) return flash('세 명 모두 동의해야 합니다');
+    const finish=(v)=>{
+      if(v) d.submit.final=v;
+      others.forEach(k=>d.agree[k]=true);
+      d.done=true; save(); next();
+    };
     if(SB.type==='fill'){
       const v=readPart({...SB, id:'final', type:'fill'}, view);
       if(v===null) return flash('빈칸을 모두 채워 주세요');
-      d.submit.final=v;
+      return reviewSend({title:esc(SB.title), who:'모둠 전체가 동의한 문장',
+        texts:[joinFill(SB, v)], raw:v, min:8, onSend:()=>finish(v)});
     }
-    others.forEach(k=>d.agree[k]=true);
-    d.done=true; save(); next();
+    return reviewSend({title:esc(SB.title), who:'모둠 전체가 동의한 문장',
+      texts:[d.prep.text||''], min:10, onSend:()=>finish(null)});
   });
 }
 
 /* ── 기억 복원 ─────────────────────── */
 function screenComplete(step){
-  const T=TOPICS[step.t], D=T.done, n=doneCount();
+  const T=TOPICS[step.t], D=T.done;
   view.innerHTML = `
     <p class="eyebrow">미션 ${step.m} 완료</p>
     <div class="flip" id="flip"><div class="inner">
@@ -1202,11 +1738,7 @@ function screenComplete(step){
     <div id="afterFlip" hidden>
       <div class="trophy"><div class="mood">${esc(D.mood)}</div></div>
       <div class="dongi"><div class="face">👦</div><p>${esc(D.dongi)}</p></div>
-      <div class="reward badgein">
-        <div><span>획득</span>🏅 ${esc(D.badge)}</div>
-        <div><span>현재 레벨</span>${LEVELS[n]}</div>
-        <div><span>남은 미션</span>${4-n}개</div>
-      </div>
+      ${rewardBox({now:step.t, up:true})}
     </div>`;
   const nx=S.steps[S.stepIdx+1];
   const label = nx && nx.v==='conference' ? '탐정 회의로'
@@ -1218,6 +1750,7 @@ function screenComplete(step){
     document.getElementById('tapme').hidden=true;
     setTimeout(()=>{
       document.getElementById('afterFlip').hidden=false;
+      playReward();
       btn(label, next);
     }, 500);
   };
@@ -1252,6 +1785,7 @@ function screenConference(){
       <h3>남도 사람들의 생활에서 가장 중요한 것은 무엇이라고 생각하나요?</h3>
       <p class="sub">선생님께 30초 동안 발표하세요.</p>
       <textarea id="confText" placeholder="그렇게 생각한 증거는 …입니다.">${esc(S.conference.text)}</textarea>
+      ${sendNote()}
       <label class="field" style="margin-top:16px">선생님께 받은 암호</label>
       <input type="text" id="confPw" placeholder="암호">
       <p class="sub" style="margin:8px 0 0">선생님이 현황판에서 승인하면 암호 없이도 열립니다.</p>
@@ -1276,6 +1810,8 @@ function screenConference(){
     S.conference.text=document.getElementById('confText').value.trim();
     const pw=document.getElementById('confPw').value.trim();
     if(!S.conference.text) return flash('먼저 생각을 적어 주세요');
+    const bad=weakText(S.conference.text, 10);
+    if(bad) return flash(bad);
     if(pw !== S.settings.password){
       view.querySelector('.fbslot').innerHTML='<div class="fb no">암호가 다릅니다. 선생님께 발표하고 다시 받으세요.</div>';
       save(); return;
@@ -1371,7 +1907,11 @@ function finPhoto(){
       <h3>고른 사진으로 설명하기</h3>
       ${fillRow('p1',['이 사진은 동이가 ','하며 살았다는 것을 보여 줍니다.'],['한 일'],[S.final.photoText[0]])}
       ${fillRow('p2',['이 사진은 남도 사람들이 ','했다는 증거입니다.'],['남도 사람들이 한 일'],[S.final.photoText[1]])}
-      ${sampleBtn('이 사진은 동이가 자연과 계절에 맞춰 생활하며 살았다는 것을 보여 줍니다. 이 사진은 남도 사람들이 자연환경에 맞게 집을 짓고 생활했다는 증거입니다.')}
+      ${sendNote()}
+      ${helpBox('photo', {
+        hint:'고른 사진 속 전시물이 언제, 무엇을 할 때 쓰였는지 먼저 말로 해 보세요.',
+        frame:'첫 칸은 동이가 한 일, 둘째 칸은 남도 사람들이 한 일입니다. 두 칸에 똑같은 말을 쓰지 않도록 해 보세요.',
+        sample:'이 사진은 동이가 자연과 계절에 맞춰 생활하며 살았다는 것을 보여 줍니다. 이 사진은 남도 사람들이 자연환경에 맞게 집을 짓고 생활했다는 증거입니다.'})}
     </div>`;
   if(have.length){
     view.querySelectorAll('#pick button').forEach(b=>b.onclick=()=>{
@@ -1386,7 +1926,10 @@ function finPhoto(){
     if(have.length && pick.length!==2) return flash('사진 2장을 골라 주세요');
     const a=readFill('p1')[0], b2=readFill('p2')[0];
     if(!a||!b2) return flash('빈칸을 채워 주세요');
-    S.final.pick=pick; S.final.photoText=[a,b2]; save(); next();
+    reviewSend({title:'고른 사진 설명', who:`📷 사진 탐정 · ${esc(w.name)}`,
+      texts:[`이 사진은 동이가 ${a}하며 살았다는 것을 보여 줍니다.`,
+             `이 사진은 남도 사람들이 ${b2}했다는 증거입니다.`], raw:[a,b2], min:6,
+      onSend:()=>{ S.final.pick=pick; S.final.photoText=[a,b2]; save(); next(); }});
   });
 }
 
@@ -1411,13 +1954,19 @@ function finRecord(){
       <h3>동이의 하루</h3>
       ${fillRow('story',
         ['동이는 ',' 자연환경 속에서 살았습니다. 동이의 가족은 ','을 통해 먹을 것을 얻었습니다. 동이는 집에서 ','을 이용해 생활했습니다. 시장에서는 ','을 얻거나 나눌 수 있었습니다.'],
-        ['따뜻한 남도','농사','마루와 온돌','물건과 소식'], S.final.story)}
-      ${sampleBtn('동이는 따뜻한 남도 자연환경 속에서 살았습니다. 동이의 가족은 농사를 통해 먹을 것을 얻었습니다. 동이는 집에서 마루와 온돌을 이용해 생활했습니다. 시장에서는 물건과 소식을 얻거나 나눌 수 있었습니다.')}
+        ['남도의 자연은?','먹을 것을 얻은 방법','집에서 이용한 것','시장에서 얻은 것'], S.final.story)}
+      ${sendNote()}
+      ${helpBox('story', {
+        hint:'미션 1~4에서 되찾은 기억 카드를 하나씩 떠올려 보세요. 자연 → 농사 → 집 → 시장 순서입니다.',
+        frame:'빈칸은 ① 남도의 자연은 어땠는지 ② 먹을 것은 무엇으로 얻었는지 ③ 집에서 무엇을 이용했는지 ④ 시장에서 무엇을 얻었는지입니다.',
+        sample:'동이는 따뜻한 남도 자연환경 속에서 살았습니다. 동이의 가족은 농사를 통해 먹을 것을 얻었습니다. 동이는 집에서 마루와 온돌을 이용해 생활했습니다. 시장에서는 물건과 소식을 얻거나 나눌 수 있었습니다.'})}
     </div>`;
   btn('생활 이야기 완성', ()=>{
     const v=readFill('story');
     if(v.some(x=>!x)) return flash('빈칸을 모두 채워 주세요');
-    S.final.story=v; save(); next();
+    reviewSend({title:'동이의 하루', who:'✏️ 기록 탐정이 완성한 이야기',
+      texts:[`동이는 ${v[0]} 자연환경 속에서 살았습니다. 동이의 가족은 ${v[1]}을 통해 먹을 것을 얻었습니다. 동이는 집에서 ${v[2]}을 이용해 생활했습니다. 시장에서는 ${v[3]}을 얻거나 나눌 수 있었습니다.`],
+      raw:v, min:8, onSend:()=>{ S.final.story=v; save(); next(); }});
   });
 }
 
@@ -1435,14 +1984,20 @@ function finPresent(){
       <h3>동이에게 하는 말</h3>
       ${fillRow('speech',
         ['동이야, 너는 ',' 자연환경 속에서 살았어. 가족은 ','을 통해 먹을 것을 얻었고, 집에서는 ','을 이용해 생활했어. 시장에서는 ','을 얻거나 소식을 나누었어. 우리가 찾은 가장 중요한 증거는 ','이야. 그래서 우리는 네가 ',' 어린이였다고 생각해.'],
-        ['따뜻한 남도','농사','마루와 온돌','물건','마루와 온돌','자연에 맞춰 살아간'],
+        ['남도의 자연은?','먹을 것을 얻은 방법','집에서 이용한 것','시장에서 얻은 것','가장 중요한 증거','어떤 어린이였는지'],
         S.final.speech.some(Boolean)?S.final.speech:[S.final.story[0],S.final.story[1],S.final.story[2],S.final.story[3],S.final.evidence[0],''])}
-      ${sampleBtn('동이야, 너는 따뜻한 남도 자연환경 속에서 살았어. 가족은 농사를 통해 먹을 것을 얻었고, 집에서는 마루와 온돌을 이용해 생활했어. 시장에서는 물건을 얻거나 소식을 나누었어. 우리가 찾은 가장 중요한 증거는 마루와 온돌이야. 그래서 우리는 네가 자연과 계절에 맞춰 가족, 이웃과 함께 살아간 어린이였다고 생각해.')}
+      ${sendNote()}
+      ${helpBox('speech', {
+        hint:'앞 화면에서 완성한 「동이의 하루」를 그대로 옮기고, 마지막 두 칸만 새로 생각하면 됩니다.',
+        frame:'다섯째 칸은 우리가 찾은 증거 중 가장 중요한 것 하나, 여섯째 칸은 동이가 어떤 어린이였는지입니다.',
+        sample:'동이야, 너는 따뜻한 남도 자연환경 속에서 살았어. 가족은 농사를 통해 먹을 것을 얻었고, 집에서는 마루와 온돌을 이용해 생활했어. 시장에서는 물건을 얻거나 소식을 나누었어. 우리가 찾은 가장 중요한 증거는 마루와 온돌이야. 그래서 우리는 네가 자연과 계절에 맞춰 가족, 이웃과 함께 살아간 어린이였다고 생각해.'})}
     </div>`;
   btn('최종 발표 준비 완료', ()=>{
     const v=readFill('speech');
     if(v.some(x=>!x)) return flash('빈칸을 모두 채워 주세요');
-    S.final.speech=v; save(); next();
+    reviewSend({title:'동이에게 하는 말', who:`🎤 발표 탐정 · ${esc(w.name)}`,
+      texts:[`동이야, 너는 ${v[0]} 자연환경 속에서 살았어. 가족은 ${v[1]}을 통해 먹을 것을 얻었고, 집에서는 ${v[2]}을 이용해 생활했어. 시장에서는 ${v[3]}을 얻거나 소식을 나누었어. 우리가 찾은 가장 중요한 증거는 ${v[4]}이야. 그래서 우리는 네가 ${v[5]} 어린이였다고 생각해.`],
+      raw:v, min:8, onSend:()=>{ S.final.speech=v; save(); next(); }});
   });
 }
 
@@ -1512,18 +2067,16 @@ function finComplete(){
     </div></div>
     <p class="tapme" id="tapme">카드를 누르면 열립니다</p>
     <div id="afterFlip" hidden>
+      <div class="trophy"><div class="mood">${esc(MOOD_END)}</div></div>
       <div class="dongi"><div class="face">👦</div><p>드디어 기억났어! 나는 따뜻한 남도의 자연 속에서 살았고, 사람들은 농사와 시장을 통해 먹을 것과 필요한 물건을 얻었어. 집에서는 마루와 온돌, 부엌을 이용해 계절에 맞게 생활했지. 시장에서는 물건만 오간 게 아니라 사람들의 소식과 마음도 오갔어. 고마워, 기억 탐정단!</p></div>
-      <div class="reward badgein">
-        <div><span>획득</span>👑 광주 역사 마스터</div>
-        <div><span>현재 레벨</span>👑 남도 생활 마스터</div>
-      </div>
+      ${rewardBox({now:'final', up:true})}
     </div>`;
   const open=()=>{
     const f=document.getElementById('flip');
     if(f.classList.contains('open')) return;
     f.classList.add('open');
     document.getElementById('tapme').hidden=true;
-    setTimeout(()=>{ document.getElementById('afterFlip').hidden=false; btn('보너스 미션', next); },500);
+    setTimeout(()=>{ document.getElementById('afterFlip').hidden=false; playReward(); btn('보너스 미션', next); },500);
   };
   document.getElementById('flip').onclick=open;
   btn('마지막 기억 카드 열기', open);
@@ -1626,7 +2179,8 @@ function bonStep(cfg){
       <h3>${esc(cfg.q)}</h3>
       ${S.bonus.name?`<p class="sub">고른 전시물: ${esc(S.bonus.name)}</p>`:''}
       <textarea id="bText" placeholder="${esc(cfg.ph)}">${esc(S.bonus[cfg.key]||'')}</textarea>
-      ${sampleBtn(cfg.sample)}
+      ${sendNote()}
+      ${helpBox('bonus-'+cfg.key, cfg)}
     </div>
     <div class="card"><h3>탐정단 승인</h3>${apprBox(cfg.id,['evidence','photo','record','present'])}</div>`;
   bindOpts();
@@ -1634,17 +2188,26 @@ function bonStep(cfg){
     const t=document.getElementById('bText').value.trim();
     if(!t) return flash('내용을 적어 주세요');
     if(!readAppr(cfg.id,4)) return;
-    S.bonus[cfg.key]=t; save(); next();
+    reviewSend({title:cfg.title.replace(/^[^ ]+ /,''), who:'🏛 탐정단이 모두 동의한 문장',
+      texts:[t], min:10,
+      keywords: S.bonus.name ? [S.bonus.name] : [],
+      onSend:()=>{ S.bonus[cfg.key]=t; save(); next(); }});
   });
 }
 const bonWhy=()=>bonStep({eyebrow:'비교', title:'⚖ 왜 이 전시물일까?', id:'why', key:'why',
   q:'다른 전시물과 비교했을 때 왜 더 중요할까요?', ph:'다른 전시물은 …지만, 이 전시물은 …',
+  hint:'다른 전시물과 다른 점을 딱 한 가지만 찾아보세요. 쓰임새인가요, 사람들의 마음인가요, 아름다움인가요?',
+  frame:'다른 전시물은 ○○을 보여 주지만, 이 전시물은 ○○까지 보여 줍니다. 그래서 더 중요합니다.',
   sample:'이 상여는 죽은 사람을 보내고 남은 사람들을 위로하는 데 쓰였기 때문에 중요합니다. 다른 전시물은 생활 도구나 물건의 쓰임을 보여 주지만, 이 상여는 남도 사람들의 마음과 공동체 문화, 아름다운 장식까지 함께 보여 줍니다.'});
 const bonMeaning=()=>bonStep({eyebrow:'해석', title:'💡 이 전시물이 알려 주는 것', id:'meaning', key:'meaning',
   q:'이 전시물은 옛날 광주 사람들의 어떤 생활을 알려 주나요?', ph:'옛날 사람들이 …하던 생활을 알려 줍니다.',
+  hint:'이 전시물을 쓰던 사람의 하루를 상상해 보세요. 언제, 왜, 누구와 함께 썼을까요?',
+  frame:'옛날 사람들이 ○○하던 생활을 알려 줍니다.',
   sample:'옛날 사람들이 죽은 사람의 마지막 길을 정성스럽게 보내고, 남은 사람들을 위로하던 생활을 알려 줍니다.'});
 const bonAd=()=>bonStep({eyebrow:'창조', title:'🎨 박물관 광고 만들기', id:'ad', key:'ad',
   q:'친구들이 꼭 보고 싶어지도록 한 문장 광고를 만들어 보세요.', ph:'예) 장승은 옛날 광주 사람들의 마음을 알려 주는 타임머신!',
+  hint:'친구가 “보러 가고 싶다”고 느끼려면 어떤 말이 좋을까요? 짧고 힘 있게 만들어 보세요.',
+  frame:'① 전시물 이름 + ② 가장 마음에 남는 점 + ③ 오라고 부르는 한마디, 세 부분으로 만들어 보세요.',
   sample:'죽은 사람을 정성껏 보내고 남은 사람을 위로한 아름다운 상여, 놓치면 후회합니다!'});
 
 function bonFinal(){
@@ -1682,17 +2245,14 @@ function bonComplete(){
     <p class="tapme" id="tapme">카드를 누르면 열립니다</p>
     <div id="afterFlip" hidden>
       <div class="dongi"><div class="face">👦</div><p>너희는 이제 내 기억을 찾는 탐정을 넘어, 전시물의 가치를 알려 주는 큐레이터가 되었어!</p></div>
-      <div class="reward badgein">
-        <div><span>획득</span>⭐ 최고의 큐레이터</div>
-        <div><span>칭호</span>🏛 광주 역사 큐레이터</div>
-      </div>
+      ${rewardBox({now:'bonus', up:true})}
     </div>`;
   const open=()=>{
     const f=document.getElementById('flip');
     if(f.classList.contains('open')) return;
     f.classList.add('open');
     document.getElementById('tapme').hidden=true;
-    setTimeout(()=>{ document.getElementById('afterFlip').hidden=false; btn('결과 만들기', next); },500);
+    setTimeout(()=>{ document.getElementById('afterFlip').hidden=false; playReward(); btn('결과 만들기', next); },500);
   };
   document.getElementById('flip').onclick=open;
   btn('특별 카드 열기', open);
@@ -1777,7 +2337,7 @@ async function buildPoster(){
 
   // 배지
   g.fillStyle='#D9A441'; g.font='700 '+F(30);
-  g.fillText(levelName(), P, y+40);
+  g.fillText(levelName()+'   '+'★'.repeat(Math.min(RANKS[rankIdx()].star,5)), P, y+40);
   g.fillStyle='rgba(245,239,225,.5)'; g.font='400 '+F(26);
   g.fillText(new Date().toLocaleDateString('ko-KR')+' · '+(S.session||'기억 탐정단'), P, y+86);
 
@@ -1978,6 +2538,7 @@ function mainPayload(){
       missionsDone:doneCount(), level:levelName(),
       finalDone:!!S.final.done, bonusDone:!!S.bonus.done
     },
+    help:S.help||{}, weak:S.weak||{},
     topics, startedAt:S.startedAt, updatedAt:S.updatedAt
   };
 }
@@ -2031,8 +2592,9 @@ async function keepAwake(){
 document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') keepAwake(); });
 
 /* ── 시작 ─────────────────────────── */
+bindHelp();
 S = load() || newState();
-if(S.phase!=='start'){ migrate(); } else { S = newState(); }
+if(S.phase!=='start' && S.phase!=='story'){ migrate(); } else { S = newState(); }
 render();
 keepAwake();
 showStatus();
