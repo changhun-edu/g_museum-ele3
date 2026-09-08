@@ -202,6 +202,103 @@ button.ghost{
 }
 .linkbtn{background:none;border:0;color:var(--muted);font:inherit;font-size:15px;font-weight:700;text-decoration:underline;padding:6px 0;cursor:pointer}
 
+/* 미션 2 — 쌀 한 톨의 여행 (카드 놓기) */
+.gsub{margin:0 0 12px;font-size:15px;font-weight:700;color:var(--muted)}
+.pool{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px;min-height:46px}
+.pool .tcard{
+  background:var(--paper);color:var(--text);border:2px solid var(--line);border-radius:10px;
+  padding:9px 15px;font:inherit;font-size:17px;font-weight:800;cursor:pointer;
+}
+.pool .tcard.sel{border-color:var(--gold);background:#FBF0D8;transform:translateY(-2px);
+  box-shadow:0 4px 0 rgba(217,164,65,.5)}
+.pool .tcard[hidden]{display:none}
+.pool .empty{color:var(--muted);font-size:15px;font-weight:700;align-self:center}
+.road{list-style:none;margin:0;padding:0}
+.road li{
+  display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;
+  border:2px dashed var(--line);margin:0 0 8px;background:rgba(245,239,225,.03);cursor:pointer;
+}
+.road li.filled{border-style:solid;border-color:var(--gold);background:rgba(217,164,65,.12)}
+.road li.aim{border-color:var(--gold);background:rgba(217,164,65,.2)}
+.road .step{
+  flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(245,239,225,.14);font-size:13px;font-weight:800;color:var(--paper);
+}
+.road li.filled .step{background:var(--gold);color:#2A1D05}
+.road .use{flex:1;font-size:16px;font-weight:700}
+.road .drop{
+  flex:none;min-width:96px;text-align:center;padding:7px 10px;border-radius:8px;
+  background:rgba(245,239,225,.08);color:rgba(245,239,225,.4);font-size:15px;font-weight:800;
+}
+.road li.filled .drop{background:var(--paper);color:var(--text)}
+
+/* 미션 1 — 설명판에 형광펜 */
+.board{
+  background:var(--paper);color:var(--text);border-radius:10px;
+  padding:18px 16px;font-size:17px;line-height:2.1;font-weight:600;
+  box-shadow:inset 0 0 0 1px var(--line);
+}
+.board .hl{
+  background:none;border:0;border-bottom:2px dotted #B49F78;border-radius:4px;
+  font:inherit;font-weight:800;color:var(--text);padding:1px 3px;cursor:pointer;
+}
+.board .hl[aria-pressed="true"]{
+  background:linear-gradient(transparent 42%, #F7D96B 42%);
+  border-bottom-color:transparent;box-shadow:0 0 0 1px rgba(217,164,65,.55);
+}
+
+/* 미션 2 증거 — 두 바구니로 가르기 */
+.bins{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.bin{border:2px dashed var(--line);border-radius:12px;padding:11px 10px;min-height:112px;cursor:pointer}
+.bin.aim{border-style:solid;border-color:var(--gold);background:rgba(217,164,65,.14)}
+.bin h4{margin:0 0 9px;font-size:15px;font-weight:800;color:var(--paper);text-align:center}
+.bin .in{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.bin .tcard{font-size:15px;padding:6px 11px}
+
+/* 미션 4 증거 — 장바구니 담기 */
+.stall{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.cart{
+  border:2px solid var(--gold);border-radius:12px;padding:12px 11px;background:rgba(217,164,65,.12);
+}
+.cart h4{margin:0 0 9px;font-size:15px;font-weight:800;color:var(--gold);text-align:center}
+.cart .in{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;min-height:40px;align-items:center}
+.cart .in:empty::after{content:'여기에 두 개를 담으세요';color:rgba(245,239,225,.45);font-size:15px;font-weight:700}
+.talk{margin:0 0 14px}
+.talk .bub{
+  position:relative;background:var(--paper);color:var(--text);border-radius:14px 14px 14px 4px;
+  padding:13px 15px;margin:0 0 9px;font-size:16px;font-weight:700;
+  box-shadow:0 4px 0 rgba(0,0,0,.16);
+}
+.talk .bub b{color:#7A5A16}
+
+/* 미션 3 — 한옥에서 찾기 */
+.qline{
+  background:rgba(217,164,65,.16);border:1px solid rgba(217,164,65,.5);border-radius:10px;
+  padding:12px 13px;margin:0 0 12px;font-size:16px;font-weight:700;
+}
+.qline b{color:var(--gold);display:block;font-size:18px;margin-top:3px}
+.qline .done{color:var(--gold)}
+.hanok{width:100%;height:auto;display:block;border-radius:12px;background:#F0E7D4;margin:0 0 12px}
+.hanok .bay{cursor:pointer}
+.hanok .hit{fill:transparent}
+.hanok .bay .glow{fill:#D9A441;opacity:0}
+.hanok .bay.on .glow{opacity:.32}
+.hanok .bay.aim .glow{opacity:.16}
+.hanok .nm{font:800 15px -apple-system,"Noto Sans KR",sans-serif;fill:#243247;text-anchor:middle}
+.hanok .bay.on .nm{fill:#7A5A16}
+.hanok .tick{font:800 17px sans-serif;fill:#3E7C59;text-anchor:middle;opacity:0}
+.hanok .bay.on .tick{opacity:1}
+.checks{list-style:none;margin:0;padding:0}
+.checks li{
+  display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;
+  border:1px solid var(--line);margin:0 0 7px;font-size:15px;font-weight:700;cursor:pointer;
+}
+.checks li.on{border-color:var(--gold);background:rgba(217,164,65,.12)}
+.checks li.aim{border-color:var(--gold);background:rgba(217,164,65,.22)}
+.checks .mark{flex:none;width:24px;text-align:center;font-size:15px;color:var(--muted)}
+.checks li.on .mark{color:var(--gold)}
+.checks .got{margin-left:auto;font-weight:800;color:var(--gold)}
+
 /* 제출 미리보기 */
 #sendbox{position:fixed;inset:0;z-index:85;background:rgba(14,27,42,.96);display:none;overflow:auto;
   padding:calc(env(safe-area-inset-top) + 24px) 16px 24px}
@@ -232,6 +329,18 @@ button.ghost{
 #sendbox .fix{background:rgba(245,239,225,.14);color:var(--paper);border:1px solid rgba(245,239,225,.35)}
 #sendbox .go{background:var(--gold);color:#2A1D05}
 .sendnote{margin:10px 0 0;font-size:13px;font-weight:700;color:var(--muted)}
+
+/* 세션 코드 만드는 법 */
+.codehow{
+  margin:9px 0 0;padding:11px 12px;border-radius:10px;
+  background:rgba(217,164,65,.12);border:1px solid rgba(217,164,65,.4);
+  font-size:14px;font-weight:700;line-height:1.7;
+}
+.codehow b{color:var(--gold)}
+.codehow .ex{
+  display:inline-block;background:rgba(14,27,42,.5);border-radius:6px;
+  padding:1px 7px;font-size:13px;letter-spacing:.01em;
+}
 
 /* 도움 사다리 */
 .help{margin:14px 0 0;border-top:1px dashed var(--line);padding-top:8px}
@@ -496,6 +605,8 @@ button.ghost{
     <label class="field" style="margin-top:16px">통과 암호</label>
     <input type="text" id="tPw">
     <p class="note" style="margin-top:8px">세 번째 미션이 끝나면 교사에게 30초 발표를 하고 이 암호를 받습니다.</p>
+    <p class="note" style="margin-top:14px">세션 코드는 <b>학교-학년반-날짜</b>로 정합니다. 예) 운남초-3학년2반-1128<br>
+      반이나 날짜가 다르면 코드도 달라야 기록이 섞이지 않습니다.</p>
   </div>
   <div class="card">
     <h3>기록 관리</h3>
@@ -566,8 +677,9 @@ nature:{
   dongi:'내가 살던 남도는 따뜻했던 것 같아. 왜 그랬는지 자연 전시에서 단서를 찾아줘.',
   goals:['남도의 자연 설명판 읽기','남도가 따뜻한 이유 찾기','자연이 사람들의 생활에 준 영향 찾기'],
   evidence:[{
-    id:'w', type:'multi',
-    prompt:'설명판에서 남도가 따뜻한 이유와 관련 있는 단어를 모두 찾으세요.',
+    id:'w', type:'multi', view:'highlight',
+    prompt:'설명판에서 남도가 따뜻한 이유와 관련 있는 낱말을 모두 찾으세요.',
+    passage:'남도는 우리나라의 남쪽 끝에 있다. 삼면이 [[바다]]와 맞닿아 있고, 따뜻한 [[해류]]가 흘러 겨울에도 몹시 춥지 않다. 그래서 [[봄]]이 일찍 찾아오고 [[여름]]이 길다. 사람들은 긴 더위를 시원하게 보내려고 집에 넓은 [[마룻방]]을 두었다.',
     options:['바다','해류','봄','여름','마룻방'], other:true,
     answer:['바다','해류'],
     ok:'정답입니다! 남도는 바다와 맞닿아 있고, 따뜻한 해류의 영향을 받아 일 년 내내 포근합니다.',
@@ -601,21 +713,25 @@ farm:{
   dongi:'밥을 먹었던 기억은 나는데, 쌀이 어떻게 밥상에 오게 되었는지는 기억나지 않아. 농사도구 전시에서 쌀의 여행을 찾아줘.',
   goals:['농사도구 2개 이상 관찰하기','도구가 쓰인 순서 추리하기','쌀이 밥이 되기 전 과정 정리하기'],
   evidence:[{
-    id:'tools', type:'multi',
-    prompt:'설명판을 읽고 농사 도구를 모두 찾으세요.',
+    id:'tools', type:'multi', view:'sort',
+    prompt:'도구를 두 바구니로 갈라 담으세요.',
+    bins:['🌾 농사에 쓰는 도구','🎣 고기잡이에 쓰는 도구'],
     options:['따비','매통','가리','낫','홀태','호미','디딜방아','반두'],
     answer:['따비','매통','낫','홀태','호미','디딜방아'],
     ok:'정답입니다! 땅을 일구고, 벼를 거두고, 곡식을 찧거나 가는 일에 쓰인 도구들입니다.',
     no:'다시 생각해 봅시다. 농사 도구가 아니라 물고기를 잡는 데 쓴 어업 도구가 섞여 있습니다.'
   }],
   record:[{
-    id:'use', type:'match',
-    prompt:'도구와 쓰임새를 연결해 보세요.',
+    id:'use', type:'match', view:'place',
+    prompt:'도구를 농사 순서대로 놓아 보세요.',
+    hint:'농사는 땅을 갈고 → 기르고 → 거두고 → 낟알을 떼고 → 찧고 → 저장하는 순서입니다. 자리마다 무엇을 하는 때인지 먼저 읽어 보세요.',
+    frame:'날이 넓적해 땅을 파는 도구, 작아서 손에 쥐는 도구, 날이 굽어 베는 도구, 빗처럼 생겨 낟알을 훑는 도구, 발로 밟는 방아, 곡식을 담는 통으로 나눠 보세요.',
+    sample:'따비 → 땅을 갈 때 / 호미 → 김을 맬 때 / 낫 → 벼를 거둘 때 / 홀태 → 벼에서 낟알을 뗄 때 / 디딜방아 → 곡식을 찧거나 갈 때 / 매통 → 저장할 때',
     left:['따비','호미','낫','홀태','디딜방아','매통'],
     right:['땅을 갈 때','김을 맬 때','벼를 거둘 때','벼에서 낟알을 뗄 때','곡식을 찧거나 갈 때','저장할 때'],
     answer:{'따비':'땅을 갈 때','호미':'김을 맬 때','낫':'벼를 거둘 때','홀태':'벼에서 낟알을 뗄 때','디딜방아':'곡식을 찧거나 갈 때','매통':'저장할 때'},
     ok:'정답입니다! 도구마다 쓰이는 때가 달랐습니다.',
-    no:'다시 생각해 봅시다. 땅을 갈 때 → 기를 때 → 거둘 때 → 찧을 때 순서로 생각해 보세요.'
+    no:'다시 생각해 봅시다. 자리를 눌러 카드를 도로 가져온 뒤, 땅을 갈 때 → 기를 때 → 거둘 때 → 찧을 때 순서로 다시 놓아 보세요.'
   }],
   photo:{prompt:'남도의 농업을 설명하는 전시물이나 설명판을 한 장 찍으세요.',
          examples:['남도의 농업 설명판','농사 도구','농사 짓는 모습']},
@@ -644,13 +760,16 @@ house:{
   dongi:'우리 집에는 시원한 곳도 있고 따뜻한 곳도 있었던 것 같아. 남도의 집 전시에서 내가 어디에서 생활했는지 찾아줘.',
   goals:['대청, 온돌, 부엌 등 관찰하기','그 공간의 쓰임 찾기','계절과 연결하기'],
   evidence:[{
-    id:'space', type:'match',
-    prompt:'전시에서 찾은 공간과 쓰임새를 연결해 보세요.',
+    id:'space', type:'match', view:'hotspot',
+    prompt:'한옥 그림에서 그 일을 하던 곳을 찾으세요.',
+    hint:'그림을 자세히 보세요. 불을 때는 곳, 문 없이 트인 마루, 방바닥 아래로 열이 지나가는 방, 책이 쌓인 방, 장롱이 있는 방이 보입니다.',
+    frame:'여름에 쓰는 곳과 겨울에 쓰는 곳을 먼저 나누고, 남은 세 곳은 그 안에 무엇이 있는지 보고 고르세요.',
+    sample:'대청 → 여름을 시원하게 보내기 위해 / 온돌방 → 겨울을 따뜻하게 보내기 위해 / 부엌 → 음식을 만들고 난방하기 위해 / 사랑방 → 책을 읽거나 글을 쓰기 위해 / 안방 → 살림살이를 보관하기 위해',
     left:['대청','온돌방','부엌','사랑방','안방'],
     right:['여름을 시원하게 보내기 위해','겨울을 따뜻하게 보내기 위해','음식을 만들고 난방하기 위해','책을 읽거나 글을 쓰기 위해','살림살이를 보관하기 위해'],
     answer:{'대청':'여름을 시원하게 보내기 위해','온돌방':'겨울을 따뜻하게 보내기 위해','부엌':'음식을 만들고 난방하기 위해','사랑방':'책을 읽거나 글을 쓰기 위해','안방':'살림살이를 보관하기 위해'},
     ok:'정답입니다! 남도의 집은 공간마다 쓰임이 나뉘어 있었습니다.',
-    no:'다시 생각해 봅시다. 여름에 쓰는 곳과 겨울에 쓰는 곳을 먼저 나눠 보세요.'
+    no:'다시 생각해 봅시다. 아래 목록에서 고칠 쓰임을 누른 뒤, 그림에서 다른 칸을 눌러 바꿔 보세요. 여름에 쓰는 곳과 겨울에 쓰는 곳을 먼저 나눠 보세요.'
   }],
   record:[{
     id:'guess', type:'fill',
@@ -681,11 +800,11 @@ market:{
   dongi:'시장에 가면 물건만 산 게 아니었어. 사람들도 만나고 소식도 나눴던 것 같아. 장터의 기억을 찾아줘.',
   goals:['시장 전시 관찰하기','물건 또는 화폐 찾기','시장이 사람들에게 어떤 곳이었는지 설명하기'],
   evidence:[
-    {id:'word', type:'multi', limit:2,
-     prompt:'설명판에서 찾은 단어를 2개만 고르세요.',
+    {id:'word', type:'multi', view:'basket', limit:2,
+     prompt:'전시에서 찾은 것을 두 개만 장바구니에 담으세요.',
      options:['교환','곡식','생필품','상평통보','주판','목화','무명','명태','소식','놀이'], other:true},
-    {id:'mean', type:'depend', dependsOn:'word',
-     prompt:'이 단어들은 시장의 어떤 모습을 알려 주나요?',
+    {id:'mean', type:'depend', view:'speak', dependsOn:'word',
+     prompt:'담은 것들은 시장의 어떤 모습을 알려 주나요?',
      options:['물건을 사고 팔았다','물건을 서로 바꾸었다','돈을 사용했다','값을 계산했다','먼 지역의 물건이 오갔다','사람들이 모여 소식을 나눴다','놀이와 구경이 있었다'],
      map:{
        '교환':['물건을 서로 바꾸었다','먼 지역의 물건이 오갔다'],
@@ -949,6 +1068,8 @@ function render(){
     bad:bonAd, bfinal:bonFinal, bcomplete:bonComplete,
     end:screenEnd}[step.v])(step);
   refreshHelpLocks();
+  view.querySelectorAll('[data-game]').forEach(paintGame);
+  paintTalk();
   window.scrollTo(0,0);
   maybeHandoff(step);
 }
@@ -1039,8 +1160,12 @@ function screenStart(){
     <div class="card">
       <h3>탐험 준비</h3>
       <label class="field" for="sess">세션 코드</label>
-      <input type="text" id="sess" placeholder="예) 운남3-1128" value="${esc(S.session)}">
-      <p class="sub" style="margin:8px 0 14px">선생님이 알려 주신 코드를 적으세요.</p>
+      <input type="text" id="sess" placeholder="운남초-3학년2반-1128" value="${esc(S.session)}">
+      <p class="codehow">
+        <b>학교 - 학년반 - 날짜</b> 순서로 적습니다.<br>
+        예) <span class="ex">운남초-3학년2반-1128</span> · <span class="ex">운남초-3-2-1128</span>
+      </p>
+      <p class="sub" style="margin:8px 0 14px">선생님이 알려 주신 코드를 그대로 적으세요. 한 글자만 달라도 선생님 화면에 연결되지 않습니다.</p>
       <label class="field">우리 모둠</label>
       <div class="numgrid" id="gpick">
         ${[1,2,3,4,5,6,7,8].map(n=>`<button class="opt" data-n="${n}" aria-pressed="${S.groupNo===n}">${n}</button>`).join('')}
@@ -1172,11 +1297,325 @@ function shuffled(key, arr){
   return a;
 }
 
+/* ══════════════════════════════════════════════════
+   놀이형 문항 — 데이터(left·right·answer)는 그대로 두고
+   화면에 그리는 방식만 바꿉니다. 채점·피드백은 기존 그대로.
+   ══════════════════════════════════════════════════ */
+
+/* 숨은 칸에 답을 담아 두면 readPart가 예전처럼 읽습니다 */
+function hiddenSlots(p, sv){
+  return p.left.map(l=>`<input type="hidden" data-k="${esc(l)}" value="${esc(sv[l]||'')}">`).join('');
+}
+
+/* 저장해 둔 선택 낱말 되살리기 */
+function pickedList(sv, id){
+  const v = sv && sv[id];
+  if(v && Array.isArray(v.list)) return v.list;
+  if(sv && Array.isArray(sv[id+'_list'])) return sv[id+'_list'];
+  return [];
+}
+function otherBox(p, sv){
+  return p.other ? `<label class="field" style="margin-top:14px">기타</label>
+    <input type="text" data-other="${p.id}" placeholder="찾은 낱말을 직접 적어도 좋아요"
+           value="${esc((sv&&sv[p.id+'_other'])||'')}">` : '';
+}
+
+/* ① 설명판에 형광펜 — 문장 속 낱말을 톡 눌러 표시합니다 */
+function highlightUI(p, sv){
+  const on = pickedList(sv, p.id);
+  const body = p.passage.split(/\[\[(.+?)\]\]/).map((seg,i)=> i%2
+    ? `<button type="button" class="hl" data-v="${esc(seg)}" aria-pressed="${on.includes(seg)}">${esc(seg)}</button>`
+    : esc(seg)).join('');
+  return `<h3>${esc(p.prompt)}</h3>
+    <p class="gsub">설명판을 읽고, 관련 있는 낱말을 톡 누르면 형광펜이 칠해집니다. 다시 누르면 지워집니다.</p>
+    <div class="board" data-part="${p.id}" data-type="multi" data-game="highlight">${body}</div>
+    ${otherBox(p, sv)}`;
+}
+
+/* ② 두 바구니로 가르기 */
+function sortUI(p, sv){
+  const on = new Set(pickedList(sv, p.id));
+  const done = on.size>0;
+  const pool = shuffled('sort-'+p.id, p.options);
+  const card = o => `<button type="button" class="tcard" data-v="${esc(o)}" aria-pressed="${on.has(o)}">${esc(o)}</button>`;
+  return `<h3>${esc(p.prompt)}</h3>
+    <p class="gsub">카드를 톡 누른 다음, 담을 바구니를 톡 누르세요. 바구니 속 카드를 누르면 도로 나옵니다.</p>
+    <div data-part="${p.id}" data-type="multi" data-game="sort">
+      <div class="pool">
+        ${pool.map(o=>done?'':card(o)).join('')}
+        <span class="empty" hidden>카드를 모두 담았습니다</span>
+      </div>
+      <div class="bins">
+        <div class="bin" data-bin="a"><h4>${esc(p.bins[0])}</h4><div class="in">
+          ${done?pool.filter(o=>on.has(o)).map(card).join(''):''}</div></div>
+        <div class="bin" data-bin="b"><h4>${esc(p.bins[1])}</h4><div class="in">
+          ${done?pool.filter(o=>!on.has(o)).map(card).join(''):''}</div></div>
+      </div>
+    </div>`;
+}
+
+/* ③ 장바구니에 담기 */
+function basketUI(p, sv){
+  const on = pickedList(sv, p.id);
+  const card = o => `<button type="button" class="tcard" data-v="${esc(o)}" aria-pressed="${on.includes(o)}">${esc(o)}</button>`;
+  const rest = p.options.filter(o=>!on.includes(o));
+  return `<h3>${esc(p.prompt)}</h3>
+    <p class="gsub">전시물을 톡 누르면 바구니에 담깁니다. 담은 것을 누르면 도로 나옵니다.</p>
+    <div data-part="${p.id}" data-type="multi" data-game="basket" ${p.limit?`data-limit="${p.limit}"`:''}>
+      <div class="stall">${rest.map(card).join('')}</div>
+      <div class="cart"><h4>🧺 우리 모둠의 장바구니</h4>
+        <div class="in">${on.map(card).join('')}</div></div>
+    </div>
+    ${otherBox(p, sv)}`;
+}
+
+/* ④ 담은 물건이 말을 겁니다 — 고르는 방식은 그대로 둡니다 */
+function speakBubbles(p, sv){
+  return `<div class="talk" data-src="${p.dependsOn}">${bubHTML(pickedList(sv, p.dependsOn))}</div>`;
+}
+function bubHTML(words){
+  if(!words.length) return `<p class="gsub" style="margin:0">장바구니에 담으면 물건이 말을 겁니다.</p>`;
+  return words.map(w=>`<div class="bub"><b>${esc(w)}</b> — “나는 시장에서 무엇을 알려 줄까?”</div>`).join('');
+}
+/* 장바구니가 바뀌면 말풍선도 곧바로 따라옵니다 */
+function paintTalk(){
+  view.querySelectorAll('.talk[data-src]').forEach(t=>{
+    const src=view.querySelector(`[data-part="${t.dataset.src}"]`); if(!src) return;
+    t.innerHTML = bubHTML([...src.querySelectorAll('[aria-pressed="true"]')].map(b=>b.dataset.v));
+  });
+}
+
+/* ⑤ 카드 놓기 — 도구 카드를 농사 순서대로 놓습니다 */
+function placeUI(p, sv){
+  const pool = shuffled('place-'+p.id, p.left);
+  return `<h3>${esc(p.prompt)}</h3>
+    <p class="gsub">도구 카드를 톡 누른 다음, 알맞은 자리를 톡 누르세요. 놓인 카드를 누르면 다시 가져옵니다.</p>
+    <div data-part="${p.id}" data-type="match" data-game="place">
+      <div class="pool">
+        ${pool.map(l=>`<button type="button" class="tcard" data-tool="${esc(l)}" ${sv[l]?'hidden':''}>${esc(l)}</button>`).join('')}
+        <span class="empty" hidden>카드를 모두 놓았습니다</span>
+      </div>
+      <ol class="road">
+        ${p.right.map((r,i)=>{
+          const who = p.left.find(l=>sv[l]===r) || '';
+          return `<li class="${who?'filled':''}" data-slot="${esc(r)}">
+            <span class="step">${i+1}</span>
+            <span class="use">${esc(r)}</span>
+            <span class="drop">${who?esc(who):'놓기'}</span>
+          </li>`; }).join('')}
+      </ol>
+      ${hiddenSlots(p, sv)}
+    </div>
+    ${helpBox('game-'+p.id, p)}`;
+}
+
+/* ② 한옥에서 찾기 — 단면도 위의 칸을 눌러 답합니다 */
+const BAYS = [
+  {k:'안방',   x:40},
+  {k:'온돌방', x:158},
+  {k:'대청',   x:276},
+  {k:'사랑방', x:394},
+  {k:'부엌',   x:512}
+];
+function hanokSVG(p, sv){
+  const W=110, top=138, h=104;
+  const bay = b => {
+    const on = !!sv[b.k], x=b.x;
+    let art='';
+    if(b.k==='안방') art = `<rect x="${x+22}" y="${top+34}" width="40" height="52" rx="3" fill="#C7B08A"/>
+      <line x1="${x+22}" y1="${top+60}" x2="${x+62}" y2="${top+60}" stroke="#8A7550" stroke-width="2"/>
+      <circle cx="${x+42}" cy="${top+58}" r="3" fill="#8A7550"/>`;
+    if(b.k==='온돌방') art = `<rect x="${x+16}" y="${top+22}" width="78" height="60" rx="3" fill="#E8DCC2" stroke="#B49F78" stroke-width="2"/>
+      ${[0,1,2].map(i=>`<line x1="${x+16+20*i+20}" y1="${top+22}" x2="${x+16+20*i+20}" y2="${top+82}" stroke="#B49F78" stroke-width="1.5"/>`).join('')}
+      ${[0,1,2,3].map(i=>`<path d="M${x+18+25*i} ${top+96} q7 -9 14 0" fill="none" stroke="#C2452D" stroke-width="2.5" stroke-linecap="round"/>`).join('')}`;
+    if(b.k==='대청') art = `${[0,1,2,3,4].map(i=>`<line x1="${x+14+18*i}" y1="${top+16}" x2="${x+14+18*i}" y2="${top+92}" stroke="#B49F78" stroke-width="2"/>`).join('')}
+      <rect x="${x+6}" y="${top+12}" width="10" height="82" fill="#8A7550"/>
+      <rect x="${x+94}" y="${top+12}" width="10" height="82" fill="#8A7550"/>`;
+    if(b.k==='사랑방') art = `<rect x="${x+16}" y="${top+22}" width="78" height="60" rx="3" fill="#E8DCC2" stroke="#B49F78" stroke-width="2"/>
+      <rect x="${x+30}" y="${top+56}" width="34" height="8" fill="#7A5AA8"/>
+      <rect x="${x+34}" y="${top+46}" width="26" height="8" fill="#2F6FA8"/>
+      <rect x="${x+38}" y="${top+38}" width="18" height="7" fill="#3E7C59"/>`;
+    if(b.k==='부엌') art = `<path d="M${x+26} ${top+86} v-30 a29 29 0 0 1 58 0 v30 z" fill="#5A4A33"/>
+      <ellipse cx="${x+55}" cy="${top+52}" rx="30" ry="10" fill="#3A3129"/>
+      <path d="M${x+44} ${top+84} q6 -16 11 -20 q5 12 11 20 z" fill="#D9873A"/>`;
+    return `<g class="bay ${on?'on':''}" data-place="${esc(b.k)}">
+      <rect x="${x}" y="${top}" width="${W}" height="${h}" fill="#EFE4CC" stroke="#B49F78" stroke-width="2"/>
+      ${art}
+      <rect class="glow" x="${x}" y="${top}" width="${W}" height="${h}"/>
+      <text class="nm" x="${x+W/2}" y="${top+h+42}">${esc(b.k)}</text>
+      <text class="tick" x="${x+W-16}" y="${top+22}">✓</text>
+      <rect class="hit" x="${x}" y="${top-24}" width="${W}" height="${h+42}"/>
+    </g>`;
+  };
+  return `<svg class="hanok" viewBox="0 0 662 296" role="img" aria-label="한옥 단면도">
+    <polygon points="8,136 331,44 654,136 612,136 331,80 50,136" fill="#4A4740"/>
+    <polygon points="50,136 331,80 612,136" fill="#6B665C"/>
+    <rect x="24" y="242" width="614" height="16" rx="3" fill="#9A8A6E"/>
+    <rect x="8" y="258" width="646" height="8" fill="#7E7157"/>
+    ${BAYS.map(bay).join('')}
+  </svg>`;
+}
+function hotspotUI(p, sv){
+  return `<h3>${esc(p.prompt)}</h3>
+    <p class="gsub">아래 쓰임을 하나 고르고, 그림에서 알맞은 칸을 톡 누르세요.</p>
+    <div data-part="${p.id}" data-type="match" data-game="hotspot">
+      <div class="qline"></div>
+      ${hanokSVG(p, sv)}
+      <ul class="checks">
+        ${p.right.map(r=>{ const who=p.left.find(l=>sv[l]===r)||'';
+          return `<li class="${who?'on':''}" data-use="${esc(r)}">
+            <span class="mark">${who?'●':'○'}</span><span>${esc(r)}</span>
+            <span class="got">${esc(who)}</span></li>`; }).join('')}
+      </ul>
+      ${hiddenSlots(p, sv)}
+    </div>
+    ${helpBox('game-'+p.id, p)}`;
+}
+
+/* 두 놀이 화면을 다시 칠합니다 */
+function paintGame(box){
+  const g0 = box.dataset.game;
+  if(g0==='highlight') return;
+  if(g0==='sort'){
+    const left=[...box.querySelectorAll('.pool .tcard')].length;
+    box.querySelector('.pool .empty').hidden = left>0;
+    box.dataset.incomplete = left>0 ? '1' : '0';
+    const sel=box.querySelector('.tcard.sel');
+    box.querySelectorAll('.bin').forEach(b=>b.classList.toggle('aim', !!sel));
+    return;
+  }
+  if(g0==='basket') return;
+  const vals={}; box.querySelectorAll('input[type=hidden][data-k]').forEach(i=>{ if(i.value) vals[i.dataset.k]=i.value; });
+  const used = new Set(Object.values(vals));
+
+  if(box.dataset.game==='place'){
+    box.querySelectorAll('.tcard').forEach(c=>{ c.hidden = !!vals[c.dataset.tool]; });
+    const left=[...box.querySelectorAll('.tcard')].filter(c=>!c.hidden).length;
+    box.querySelector('.pool .empty').hidden = left>0;
+    box.querySelectorAll('.road li').forEach(li=>{
+      const who=Object.keys(vals).find(k=>vals[k]===li.dataset.slot) || '';
+      li.classList.toggle('filled', !!who);
+      li.querySelector('.drop').textContent = who || '놓기';
+    });
+    const sel=box.querySelector('.tcard.sel');
+    box.querySelectorAll('.road li').forEach(li=>
+      li.classList.toggle('aim', !!sel && !used.has(li.dataset.slot)));
+    return;
+  }
+
+  const items=[...box.querySelectorAll('.checks li')];
+  items.forEach(li=>{
+    const who=Object.keys(vals).find(k=>vals[k]===li.dataset.use) || '';
+    li.classList.toggle('on', !!who);
+    li.querySelector('.mark').textContent = who ? '●' : '○';
+    li.querySelector('.got').textContent = who;
+  });
+  let aim = box.dataset.aim;
+  if(!aim || !items.some(li=>li.dataset.use===aim))
+    aim = (items.find(li=>!li.classList.contains('on')) || {dataset:{}}).dataset.use || '';
+  box.dataset.aim = aim || '';
+  items.forEach(li=>li.classList.toggle('aim', li.dataset.use===aim));
+  box.querySelectorAll('.hanok .bay').forEach(g=>{
+    g.classList.toggle('on', !!vals[g.dataset.place]);
+    g.classList.toggle('aim', !!aim && !vals[g.dataset.place]);
+  });
+  const q=box.querySelector('.qline');
+  q.innerHTML = aim
+    ? `지금 찾을 곳<b>${esc(aim)}</b>`
+    : `<span class="done">다섯 곳을 모두 찾았습니다. 아래 버튼을 누르세요.</span>`;
+}
+
+/* 톡-톡 조작 (끌지 않아도 됩니다) */
+function bindGames(){
+  view.addEventListener('click', e=>{
+    const box = e.target.closest('[data-game]'); if(!box) return;
+
+    if(box.dataset.game==='highlight'){
+      const b=e.target.closest('.hl'); if(!b) return;
+      b.setAttribute('aria-pressed', b.getAttribute('aria-pressed')==='true' ? 'false' : 'true');
+      return;
+    }
+    if(box.dataset.game==='sort'){
+      const card=e.target.closest('.tcard');
+      if(card){
+        if(card.closest('.bin')){ box.querySelector('.pool').insertBefore(card, box.querySelector('.pool .empty'));
+          card.setAttribute('aria-pressed','false'); card.classList.remove('sel'); return paintGame(box); }
+        const on=card.classList.contains('sel');
+        box.querySelectorAll('.tcard').forEach(c=>c.classList.remove('sel'));
+        if(!on) card.classList.add('sel');
+        return paintGame(box);
+      }
+      const bin=e.target.closest('.bin'); if(!bin) return;
+      const sel=box.querySelector('.tcard.sel'); if(!sel) return;
+      sel.classList.remove('sel');
+      sel.setAttribute('aria-pressed', bin.dataset.bin==='a' ? 'true' : 'false');
+      bin.querySelector('.in').appendChild(sel);
+      return paintGame(box);
+    }
+    if(box.dataset.game==='basket'){
+      const card=e.target.closest('.tcard'); if(!card) return;
+      const inCart=!!card.closest('.cart');
+      if(inCart){
+        card.setAttribute('aria-pressed','false');
+        box.querySelector('.stall').appendChild(card);
+      } else {
+        const lim=+box.dataset.limit||0, now=box.querySelectorAll('.cart .tcard').length;
+        if(lim && now>=lim) return flash(`${lim}개만 담을 수 있어요. 담은 것을 눌러 빼 주세요.`);
+        card.setAttribute('aria-pressed','true');
+        box.querySelector('.cart .in').appendChild(card);
+      }
+      return paintTalk();
+    }
+
+    const vals = {};
+    const hid = k => box.querySelector(`input[type=hidden][data-k="${CSS.escape(k)}"]`);
+    box.querySelectorAll('input[type=hidden][data-k]').forEach(i=>{ if(i.value) vals[i.dataset.k]=i.value; });
+
+    if(box.dataset.game==='place'){
+      const card = e.target.closest('.tcard');
+      if(card){
+        const on = card.classList.contains('sel');
+        box.querySelectorAll('.tcard').forEach(c=>c.classList.remove('sel'));
+        if(!on) card.classList.add('sel');
+        return paintGame(box);
+      }
+      const li = e.target.closest('.road li'); if(!li) return;
+      const slot = li.dataset.slot;
+      const sel = box.querySelector('.tcard.sel');
+      const owner = Object.keys(vals).find(k=>vals[k]===slot);
+      if(sel){
+        if(owner) hid(owner).value='';           // 자리를 비우고
+        hid(sel.dataset.tool).value = slot;      // 새 카드를 놓습니다
+        sel.classList.remove('sel');
+      } else if(owner){
+        hid(owner).value='';                     // 눌러서 도로 가져오기
+      }
+      return paintGame(box);
+    }
+
+    const li = e.target.closest('.checks li');
+    if(li){ box.dataset.aim = li.dataset.use; return paintGame(box); }
+    const g = e.target.closest('.hanok .bay'); if(!g) return;
+    const place = g.dataset.place, aim = box.dataset.aim;
+    if(vals[place]){ hid(place).value=''; box.dataset.aim=vals[place]; return paintGame(box); }
+    if(!aim) return;
+    const owner = Object.keys(vals).find(k=>vals[k]===aim);
+    if(owner) hid(owner).value='';
+    hid(place).value = aim;
+    box.dataset.aim = '';
+    paintGame(box);
+  });
+}
+
 function renderPart(p, saved){
+  if(p.type==='multi' && p.view==='highlight') return highlightUI(p, saved||{});
+  if(p.type==='multi' && p.view==='sort')      return sortUI(p, saved||{});
+  if(p.type==='multi' && p.view==='basket')    return basketUI(p, saved||{});
   if(p.type==='multi' || p.type==='depend' || p.type==='single'){
     const chosen = saved && saved[p.id] ? [].concat(saved[p.id]) : [];
     const wide = p.options.some(o=>o.length>8);
     return `<h3>${esc(p.prompt)}</h3>
+      ${p.view==='speak' ? speakBubbles(p, saved||{}) : ''}
       ${p.limit?`<p class="sub">${p.limit}개만 고르세요.</p>`:''}
       <div class="opts" data-part="${p.id}" data-type="${p.type}" ${p.limit?`data-limit="${p.limit}"`:''}>
         ${p.options.map(o=>`<button class="opt ${wide?'wide':''}" data-v="${esc(o)}" aria-pressed="${chosen.includes(o)}"><span class="box"></span>${esc(o)}</button>`).join('')}
@@ -1186,6 +1625,8 @@ function renderPart(p, saved){
   }
   if(p.type==='match'){
     const sv = saved && saved[p.id] || {};
+    if(p.view==='place')   return placeUI(p, sv);
+    if(p.view==='hotspot') return hotspotUI(p, sv);
     const opts = shuffled('match-'+p.id, p.right);
     return `<h3>${esc(p.prompt)}</h3>
       <div data-part="${p.id}" data-type="match">
@@ -1376,8 +1817,10 @@ function bindHelp(){
 function readPart(p, root){
   const box = root.querySelector(`[data-part="${p.id}"]`);
   if(!box) return null;
+  if(box.dataset.incomplete==='1') return null;
   if(p.type==='match'){
     const out={}; box.querySelectorAll('select').forEach(s=>{ if(s.value) out[s.dataset.k]=s.value; });
+    box.querySelectorAll('input[type=hidden][data-k]').forEach(i=>{ if(i.value) out[i.dataset.k]=i.value; });
     return Object.keys(out).length===p.left.length ? out : null;
   }
   if(p.type==='fill'){
@@ -2597,6 +3040,7 @@ document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==
 
 /* ── 시작 ─────────────────────────── */
 bindHelp();
+bindGames();
 S = load() || newState();
 
 /* 주소 뒤에 ?new 를 붙여 열면 이 태블릿의 기록을 지우고 첫 화면부터 시작합니다.
