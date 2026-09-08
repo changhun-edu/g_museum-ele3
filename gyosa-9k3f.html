@@ -245,6 +245,27 @@ function lastInput(g){
   }
   return g.prior && g.prior.reason ? '첫 추리: '+g.prior.reason : '';
 }
+/* 도움 사다리 사용 집계 — 벌점이 아니라 어느 모둠에 먼저 갈지 알려 주는 신호 */
+function helpStat(g){
+  const h=g.help||{}; let used=0, deep=0, copy=0;
+  Object.keys(h).forEach(k=>{
+    const v=h[k]||{};
+    if((v.lv||0)>=1) used++;
+    if((v.lv||0)>=3) deep++;
+    if(v.copy) copy++;
+  });
+  return {used, deep, copy};
+}
+function helpLabel(g){
+  const h=helpStat(g);
+  if(!h.used) return '';
+  const bits=[];
+  if(h.copy) bits.push(`✍ 예시와 비슷 ${h.copy}`);
+  if(h.deep) bits.push(`🪜 예시까지 ${h.deep}`);
+  if(!bits.length) bits.push(`🪜 도움 ${h.used}`);
+  return bits.join(' · ');
+}
+
 function render(){
   const keys=Object.keys(DATA).sort((a,b)=>(DATA[a].groupNo||0)-(DATA[b].groupNo||0));
   if(!keys.length) return renderEmpty();
@@ -252,7 +273,7 @@ function render(){
   $('live').textContent='연결됨';
 
   const staleMs=C.stale*60000;
-  let stopped=0, totalDone=0, ended=0, waiting=0;
+  let stopped=0, totalDone=0, ended=0, waiting=0, needHelp=0;
   const cards=keys.map(k=>{
     const g=DATA[k], pr=g.progress||{}, done=pr.missionsDone||0;
     const idle=Date.now()-(g.updatedAt||0);
@@ -260,6 +281,7 @@ function render(){
     const needsOk = pr.view==='conference' && !(g.conference||{}).passed;
     if(needsOk) waiting++;
     if(isStop) stopped++;
+    { const hs=helpStat(g); if(hs.deep>=2 || hs.copy) needHelp++; }
     totalDone+=done;
     if(pr.view==='end') ended++;
     const role=ROLE[pr.role];
@@ -274,6 +296,7 @@ function render(){
       <div class="where">${pr.topic?TOPIC[pr.topic].e+' '+TOPIC[pr.topic].t+' · ':''}${esc(VIEW[pr.view]||'시작 전')}</div>
       ${needsOk?`<span class="turn" style="background:var(--gold);color:#2A1D05">👩‍🏫 회의 승인 기다리는 중</span>`:''}
       ${role?`<span class="turn" style="background:${role.c}">${role.i} ${esc(pr.roleName||'')} 차례</span>`:''}
+      ${helpLabel(g)?`<span class="turn" style="background:${helpStat(g).copy?'var(--no,#B8442C)':'rgba(255,255,255,.14)'}">${helpLabel(g)}</span>`:''}
       <div class="last">${esc(lastInput(g))}</div>
       <div class="thumbs">${order.map(t=>{
         const p=photos[t];
@@ -289,6 +312,7 @@ function render(){
     <div><span>탐험 마침</span><b>${ended}</b></div>
     <div><span>승인 기다림</span><b style="color:${waiting?'#F0D79A':'inherit'}">${waiting}</b></div>
     <div><span>${C.stale}분 넘게 멈춤</span><b style="color:${stopped?'#F0B0A2':'inherit'}">${stopped}</b></div>
+    <div><span>도움 많이 쓴 모둠</span><b style="color:${needHelp?'#F0D79A':'inherit'}">${needHelp}</b></div>
     <div><span>회의 암호</span><b>${esc(C.password)}</b></div>`;
 }
 function renderEmpty(){
@@ -352,6 +376,15 @@ function detail(key){
       <h3>첫 추리</h3>
       <dl class="rec"><dd>${esc((g.prior||{}).choice||'')} — 우리는 ${esc((g.prior||{}).reason||'')} 때문에 그렇게 생각합니다.</dd></dl>
     </div>
+    ${(()=>{ const h=helpStat(g); if(!h.used) return '';
+      return `<div class="block"><h3>🪜 도움 사다리 사용</h3>
+        <dl class="rec">
+          <dt>도움을 연 문항</dt><dd>${h.used}개</dd>
+          <dt>예시 문장까지 본 문항</dt><dd>${h.deep}개</dd>
+          <dt>예시와 많이 닮은 문장</dt><dd>${h.copy?`${h.copy}개 — 직접 본 것을 넣도록 한 번 물어봐 주세요`:'없음'}</dd>
+        </dl>
+        <p class="note" style="margin-top:8px">도움을 쓴 것은 잘못이 아닙니다. 어느 모둠에 먼저 갈지 정하는 데만 쓰세요.</p></div>`;
+    })()}
     ${blocks}
     ${(g.conference&&g.conference.text)?`<div class="block"><h3>👩‍🏫 탐정 회의</h3>
       <dl class="rec"><dd>${esc(g.conference.text)}</dd>
@@ -393,14 +426,15 @@ function detail(key){
 /* ── 내려받기 ─────────────────────── */
 function exportAll(){
   if(!Object.keys(DATA).length) return alert('내려받을 기록이 없습니다.');
-  const rows=[['모둠','구성원','진행','현재 화면','지금 차례','마지막 입력 시각','첫 추리','탐정 회의']];
+  const rows=[['모둠','구성원','진행','현재 화면','지금 차례','마지막 입력 시각','첫 추리','탐정 회의','도움 연 문항','예시까지 본 문항','예시와 닮은 문장']];
   Object.keys(DATA).sort((a,b)=>(DATA[a].groupNo||0)-(DATA[b].groupNo||0)).forEach(k=>{
     const g=DATA[k], p=g.progress||{};
     rows.push([g.groupNo, Object.values(g.members||{}).join(' '),
       (p.missionsDone||0)+'/4', VIEW[p.view]||'', p.roleName||'',
       g.updatedAt?new Date(g.updatedAt).toLocaleString('ko-KR'):'',
       ((g.prior||{}).choice||'')+' / '+((g.prior||{}).reason||''),
-      (g.conference||{}).text||'']);
+      (g.conference||{}).text||'',
+      helpStat(g).used, helpStat(g).deep, helpStat(g).copy]);
   });
   const csv='\uFEFF'+rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
   dl(new Blob([csv],{type:'text/csv'}), `현황_${C.session}.csv`);
