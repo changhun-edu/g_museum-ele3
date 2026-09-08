@@ -503,7 +503,9 @@ button.ghost{
       <button class="opt" onclick="backup()">기록 내려받기</button>
       <button class="opt" onclick="wipe()">처음부터 다시</button>
     </div>
-    <p class="note" style="margin-top:10px">이 태블릿에 저장된 우리 모둠 기록만 해당됩니다.</p>
+    <p class="note" style="margin-top:10px">이 태블릿에 저장된 우리 모둠 기록만 해당됩니다.
+      주소 뒤에 <code>?new</code>를 붙여 열어도 처음부터 시작합니다.
+      6시간 넘게 손대지 않으면 첫 화면으로 돌아가고, 기록은 '이어서 하기'로 되살릴 수 있습니다.</p>
   </div>
   <div class="card">
     <h3>실시간 전송</h3>
@@ -515,10 +517,7 @@ button.ghost{
     <p class="note" style="margin-top:10px">비워 두면 이 태블릿에만 저장됩니다. 활동은 그대로 진행됩니다.</p>
     <button class="opt wide" style="margin-top:12px" onclick="flushNow(true)">지금 전송하기</button>
   </div>
-  <div class="card">
-    <h3>1차 버전에서 빠진 것</h3>
-    <p class="sub" style="margin:0">미션 5(동이의 하루), 보너스 미션, 교사 대시보드 화면은 다음 버전에서 붙입니다.</p>
-  </div>
+
   <button class="go" onclick="closeTeacher()">닫기</button>
 </div>
 
@@ -2379,6 +2378,11 @@ function screenEnd(){
     <div class="card">
       <h3>교실에서 이어가기</h3>
       <p class="sub" style="margin:0">결과 이미지를 저장해 패들렛이나 클래스룸에 올리세요. 기록 파일은 선생님께 드리면 됩니다.</p>
+    </div>
+    <div class="card">
+      <h3>다음 모둠에게 넘기기</h3>
+      <p class="sub">결과 이미지와 기록 파일을 먼저 저장한 뒤 눌러 주세요. 이 태블릿의 기록이 지워지고 첫 화면으로 돌아갑니다.</p>
+      <button class="opt wide" onclick="wipe()">기록 지우고 처음부터</button>
     </div>`;
   buildPoster().then(u=>{ const i=document.getElementById('poster'); if(i) i.src=u; }).catch(()=>{});
   btn('결과 이미지 저장', savePoster, {ghost:'기록 파일 내려받기', onGhost:backup});
@@ -2594,7 +2598,26 @@ document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==
 /* ── 시작 ─────────────────────────── */
 bindHelp();
 S = load() || newState();
-if(S.phase!=='start' && S.phase!=='story'){ migrate(); } else { S = newState(); }
+
+/* 주소 뒤에 ?new 를 붙여 열면 이 태블릿의 기록을 지우고 첫 화면부터 시작합니다.
+   다음 모둠·다음 반에 넘길 때 링크나 QR 하나로 해결됩니다. */
+const FRESH = /[?&]new\b/.test(location.search) || location.hash==='#new';
+const STALE_H = 6;   // 이만큼 손대지 않았으면 새 모둠으로 봅니다
+
+if(FRESH){
+  localStorage.removeItem(KEY);
+  SY={mainDirty:false, photos:{}, metaDone:false, idToken:'', refreshToken:'', exp:0};
+  saveSync();
+  S = newState();
+  history.replaceState(null,'',location.pathname);
+} else if(S.phase!=='start' && S.phase!=='story'){
+  migrate();
+  /* 지웠다가 되돌릴 수 없으니 기록은 그대로 두고 화면만 처음으로 돌립니다.
+     첫 화면의 '이어서 하기'로 언제든 되돌아갈 수 있습니다. */
+  if(Date.now() - (S.updatedAt||0) > STALE_H*3600*1000) S.phase='story';
+} else {
+  S = newState();
+}
 render();
 keepAwake();
 showStatus();
