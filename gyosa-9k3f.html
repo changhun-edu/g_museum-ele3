@@ -149,7 +149,7 @@ const VIEW={map:'탐험 지도',intro:'미션 안내',evidence:'증거 수집',r
             fsubmit:'미션5 발표·동의',fcomplete:'동이의 하루 완성',
             bintro:'보너스 역할 정하기',bobserve:'보너스 관찰',bwhy:'보너스 비교',
             bmeaning:'보너스 해석',bad:'보너스 광고',bfinal:'보너스 발표',
-            bcomplete:'최고의 큐레이터',end:'탐험 마침'};
+            bcomplete:'최고의 큐레이터',report:'활동 보고서',end:'탐험 마침'};
 const FIELD={w:'찾은 낱말',tools:'농사 도구',space:'공간과 쓰임',word:'고른 낱말',
              mean:'시장의 모습',effect:'집에 준 영향',use:'도구와 쓰임새',
              guess:'추리 문장',seq:'쌀의 순서',final:'발표 문장',checks:'발표 항목',text:'발표 내용',
@@ -460,6 +460,8 @@ function detail(key){
         <dt>최종 발표</dt><dd>${val(g.final.speech)}</dd>
         <dt>지금 생각</dt><dd>${esc(g.final.now||'')} <span class="note">(처음: ${esc((g.prior||{}).choice||'')})</span></dd>
         <dt>달라진 점</dt><dd>${val(g.final.compare)}</dd>
+        ${(g.final.reflect||{}).wonder?`<dt>❓ 더 알고 싶은 점</dt><dd>${esc(g.final.reflect.wonder)}</dd>`:''}
+        ${Object.values(g.growth||{}).filter(x=>x.right).length?`<dt>🌱 고친 답</dt><dd>${Object.values(g.growth).filter(x=>x.right).map(x=>esc(x.label+': '+x.wrong+' → '+x.right)).join('<br>')}</dd>`:''}
       </dl></div>`:''}
     ${(g.bonus&&g.bonus.name)?`<div class="block"><h3>🏛 최고의 큐레이터 ${g.bonus.done?'· 발표 완료':''}</h3>
       <dl class="rec">
