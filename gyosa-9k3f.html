@@ -152,7 +152,8 @@ const VIEW={map:'탐험 지도',intro:'미션 안내',evidence:'증거 수집',r
             bcomplete:'최고의 큐레이터',end:'탐험 마침'};
 const FIELD={w:'찾은 낱말',tools:'농사 도구',space:'공간과 쓰임',word:'고른 낱말',
              mean:'시장의 모습',effect:'집에 준 영향',use:'도구와 쓰임새',
-             guess:'추리 문장',seq:'쌀의 순서',final:'발표 문장',checks:'발표 항목',text:'발표 내용'};
+             guess:'추리 문장',seq:'쌀의 순서',final:'발표 문장',checks:'발표 항목',text:'발표 내용',
+             chain:'원인→결과 사슬',season:'계절별 생활',new:'새롭게 안 점',answers:'인터뷰 대답'};
 
 /* ── 연결 정보 ─────────────────────
    학생 앱(index.html) 아래쪽의 FB 값과 똑같이 채워 넣으세요.
@@ -395,11 +396,21 @@ function detail(key){
     const rows=[];
     ['evidence','record','prep','submit'].forEach(sec=>{
       Object.keys(d[sec]||{}).forEach(k=>{
-        if(k.endsWith('_list')||k.endsWith('_other')) return;
+        if(k.endsWith('_list')||k.endsWith('_other')||k==='chainOk'||k==='checks') return;
         const v=val(d[sec][k]); if(!v) return;
         rows.push(`<dt>${esc(FIELD[k]||k)}</dt><dd>${v}</dd>`);
       });
     });
+    if(d.prep && d.prep.chainOk===false) rows.push(`<dt>사슬 확인</dt><dd>두 번째에 넘어감 — 까닭과 결과를 한 번 더 물어봐 주세요</dd>`);
+    const pn=d.photoNote;
+    if(pn){
+      const bits=[];
+      if(pn.mark) bits.push('🔍 증거 위치 표시함');
+      if(pn.riddle) bits.push(`🧩 수수께끼 «${esc(pn.riddle)}» ${pn.solved?`${pn.guesses}번 만에 맞힘`:'푸는 중'}`);
+      if(pn.inShot && pn.inShot.length) bits.push(`🖼 사진 속 공간: ${esc([].concat(pn.inShot).join(', '))}`);
+      if(pn.title) bits.push(`📰 제목 「${esc(pn.title)}」`);
+      if(bits.length) rows.push(`<dt>사진 미션</dt><dd>${bits.join(' · ')}</dd>`);
+    }
     return `<div class="block">
       <h3>${TOPIC[t].e} ${TOPIC[t].t} ${d.done?'· 기억 복원 완료':'· 진행 중'}</h3>
       <dl class="rec">${rows.join('')||'<dd class="note">아직 기록이 없습니다.</dd>'}</dl></div>`;
