@@ -835,6 +835,8 @@ button.ghost{
 [data-game="order"] .road li.given .drop{background:#fff;color:#255C3E;border:1px solid #9DBFAA}
 [data-game="order"] .road li.given .use{color:#255C3E}
 
+.ricecheck{margin-top:12px;justify-content:center;border-color:var(--gold);background:#FBF0D8;font-weight:900}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -1048,7 +1050,10 @@ farm:{
       from:['땅을 갈 때','','벼를 거둘 때','벼에서 낟알을 뗄 때','','저장할 때'],
       choices:[['따비','호미','낫','홀태','디딜방아','매통'],['김','벼','씨앗'],
                ['따비','호미','낫','홀태','디딜방아','매통'],['따비','호미','낫','홀태','디딜방아','매통'],
-               ['도정','수확','저장'],['따비','호미','낫','홀태','디딜방아','매통']]
+               ['도정','수확','저장'],['따비','호미','낫','홀태','디딜방아','매통']],
+      answer:['따비','김','낫','홀태','도정','매통'],
+      ok:'정답입니다! 쌀은 따비로 간 땅에서 자라, 호미로 김을 매고, 낫으로 거두고, 홀태로 낟알을 떼고, 디딜방아로 도정해 매통에 저장했습니다.',
+      no:'아직 맞지 않는 칸이 있어요. 농사 전시에서 도구 이름표를 다시 읽고, 틀린 칸을 눌러 바꿔 보세요.'
     },
     parts:['','(으)로 땅을 갈아 → 씨앗을 뿌리고 → 호미로 ','을 매고 → ','(으)로 수확하여 → ','(으)로 벼에서 낟알을 떼고 → 디딜방아로 ','하여 → ','에 저장한다.'],
     ph:['땅 가는 도구','호미로 매는 것','거두는 도구','낟알 떼는 도구','방아로 하는 일','저장하는 도구'],
@@ -2102,7 +2107,33 @@ function riceUI(SB, t){
       <p class="rice">${story}</p>
       <div class="pool rtray"></div>
       ${v.map((x,i)=>`<input type="hidden" data-i="${i}" value="${esc(x)}">`).join('')}
-    </div>`;
+    </div>
+    <div data-ricefb></div>
+    <button type="button" class="opt wide ricecheck" data-rice-check>✔ 쌀의 여행 확인하기</button>`;
+}
+/* 쌀 한 톨 채점 — 몇 칸이 맞았는지만 알려 주고, 맞히면 칸을 잠급니다 */
+function bindRiceCheck(SB, d){
+  const b=view.querySelector('[data-rice-check]'); if(!b) return;
+  const R=SB.rice, fb=view.querySelector('[data-ricefb]');
+  const done=()=>{ lockAnswers(); b.hidden=true; refreshVotes(); };
+  if(d.submit.riceOk){ fb.innerHTML=`<div class="fb ok">${esc(R.ok)}</div>`; return done(); }
+  if(d.submit.ricePass){ b.hidden=true; }
+  b.onclick=()=>{
+    const v=[...view.querySelectorAll('[data-game="rice"] input[type=hidden]')].map(i=>i.value);
+    if(v.some(x=>!x)) return flash('빈칸을 모두 채워 주세요');
+    d.tries.rice=(d.tries.rice||0)+1;
+    const n=R.answer.filter((a,i)=>v[i]===a).length;
+    if(n===R.answer.length){
+      d.submit.riceOk=true; save({quiet:true});
+      fb.innerHTML=`<div class="fb ok">${esc(R.ok)}</div>`;
+      return done();
+    }
+    save({quiet:true});
+    fb.innerHTML=`<div class="fb no"><b style="display:block;margin:0 0 4px">${R.answer.length}칸 중 ${n}칸이 맞았어요.</b>${esc(R.no)}
+      ${d.tries.rice>=2?'<button type="button" class="linkbtn" data-rice-pass style="display:block;margin-top:6px">한 번 더 확인하고 그래도 넘어가기</button>':''}</div>`;
+    const ps=fb.querySelector('[data-rice-pass]');
+    if(ps) ps.onclick=()=>{ d.submit.ricePass=true; save({quiet:true}); b.hidden=true; fb.innerHTML=''; refreshVotes(); };
+  };
 }
 function paintRice(box){
   const R=TOPICS[box.dataset.t].submit.rice;
@@ -3293,6 +3324,7 @@ function screenSubmit(step){
   /* 듣기 확인에 쓸 발표 글 — 빈칸은 아이가 넣은 값만 봅니다 */
   QUIZ['submit-'+step.t] = ()=>{
     if(SB.type!=='fill') return (d.submit||{}).rehearsal ? (d.prep.text||'') : null;
+    if(SB.view==='rice' && !(d.submit.riceOk || d.submit.ricePass)) return null;   // 쌀의 여행 확인 먼저
     const box=view.querySelector('[data-part="final"]'); if(!box) return null;
     const v=[...box.querySelectorAll('input')].map(i=>i.value.trim());
     return v.some(x=>!x) ? null : v.join(' ');
@@ -3309,8 +3341,10 @@ function screenSubmit(step){
     </div>`;
   bindOpts();
   bindRehearse(d);
+  if(SB.view==='rice') bindRiceCheck(SB, d);
   btn('제출', ()=>{
     if(SB.type!=='fill' && !(d.submit||{}).rehearsal) return flash('먼저 30초 발표를 해 주세요');
+    if(SB.view==='rice' && !(d.submit.riceOk || d.submit.ricePass)) return flash('먼저 ✔ 쌀의 여행 확인하기를 눌러 주세요');
     const a=readVote('submit-'+step.t);
     if(!a) return;
     const finish=(v)=>{
