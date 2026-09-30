@@ -946,7 +946,7 @@ nature:{
         ph:'예) 남도는 바다와 따뜻한 해류 때문에 포근합니다. 그래서…',
         hint:'앞에서 찾은 낱말 두 개를 그대로 넣어 말해 보세요. 그리고 따뜻한 날씨가 집을 어떻게 바꾸었는지 떠올려 보세요.',
         frame:'남도는 ○○과 ○○ 때문에 따뜻합니다. 그래서 ○○○을(를) 새롭게 알게 되었습니다.',
-        sample:'남도가 단순히 남쪽에 있어서 따뜻한 것이 아니라, 바다와 해류가 날씨에 영향을 주었다는 것입니다. 또 따뜻한 자연환경 때문에 시원하게 지낼 수 있는 마루가 발달했다는 것도 알게 되었습니다.'},
+        sample:'설명판을 읽기 전에는 남쪽에 있어서 따뜻한 줄로만 알았는데, 날씨가 사람들의 집 모양까지 바꾼다는 것을 새롭게 알게 되었습니다.'},
   submit:{title:'남도의 자연', type:'prepText'},
   done:{mood:'🙂 자연이 떠올랐어', badge:'자연 배지',
         cardTitle:'자연의 기억 카드가 열렸습니다.',
@@ -2355,7 +2355,7 @@ function paintVote(box){
     mid=`<div class="vturn"><p class="who">${ROLES[k].icon} ${esc(nameOf(k))}</p>
       <p class="ask">어디를 고치면 좋을까요? 한 줄로 적어 주세요.</p>
       <div class="vfix">
-        <input type="text" data-fixnote placeholder="예) 마루라는 낱말을 넣으면 좋겠어요">
+        <input type="text" data-fixnote placeholder="예) 우리가 찾은 증거를 하나 더 넣으면 좋겠어요">
         <div class="vbtns">
           <button data-act="fixsend">발표 탐정에게 전달</button>
           <button data-act="fixcancel">다시 고르기</button>
@@ -2944,7 +2944,7 @@ function chainUI(P, sv){
     </div>
     <div class="fbslot"></div>
     <label class="field" style="margin-top:14px" for="prepNew">✨ 새롭게 알게 된 점 한 문장</label>
-    <textarea id="prepNew" placeholder="예) 바다와 해류가 날씨를 바꾼다는 것을 알게 되었습니다.">${esc(sv.new||'')}</textarea>
+    <textarea id="prepNew" placeholder="설명판을 읽고 처음 알게 된 것을 한 문장으로 써 보세요. (…을 새롭게 알게 되었습니다.)">${esc(sv.new||'')}</textarea>
     ${sendNote()}${helpBox('prep', P)}`;
 }
 function paintChain(box){
@@ -2975,7 +2975,7 @@ function seasonUI(P, sv){
         `<button type="button" class="tcard" data-w="${w}">${w}에서</button>`).join('')}</div>
     </div>
     <label class="field" for="prepNew">✨ 새롭게 알게 된 점</label>
-    <textarea id="prepNew" placeholder="예) 집도 날씨에 맞게 만들어졌다는 점이 새로웠습니다.">${esc(sv.new||'')}</textarea>
+    <textarea id="prepNew" placeholder="전시를 보고 처음 알게 된 것을 한 문장으로 써 보세요. (…이 새로웠습니다.)">${esc(sv.new||'')}</textarea>
     ${sendNote()}${helpBox('prep', P)}`;
 }
 function paintSeason(box, typing){
