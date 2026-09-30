@@ -675,6 +675,8 @@ button.ghost{
 .chain .lab{flex:none;width:90px;font-size:14px;font-weight:800;color:var(--muted)}
 .chain .drop{flex:1;font-weight:800;color:var(--muted)}
 .chain li.filled .drop{color:var(--text)}
+.chain li.cgroup{font-size:15px;font-weight:900;color:var(--text);margin:4px 0 6px}
+.chain li[data-slot]+li[data-slot]{margin-top:6px}
 .chain li.carr{text-align:center;color:var(--gold);font-weight:900;line-height:1.3}
 /* 계절 스위치 */
 .season{border-radius:12px;padding:12px;margin:0 0 12px;transition:background .3s}
@@ -935,12 +937,13 @@ nature:{
   photo:{mode:'mark', prompt:'남도의 자연을 설명하는 전시물이나 설명판을 한 장 찍으세요.',
          examples:['남도의 자연 설명판','전라도 지도','전라도명 분청사기 항아리','대나무숲·동백꽃 전시']},
   prep:{view:'chain',
-        chain:{slots:['까닭 ①','까닭 ②','그래서 날씨는','그래서 집은'],
+        chain:{slots:['까닭','이유','까닭','이유'],
+               groups:{0:'🌡 남도는 왜 따뜻할까요?', 2:'🏠 따뜻해서 어떤 일이 생겼을까요?'},
                cards:['바다','해류','봄이 일찍 오고 여름이 길다','마루가 발달했다','성벽이 높아졌다','겨울이 길고 춥다'],
                say:{'봄이 일찍 오고 여름이 길다':'봄이 일찍 오고 여름이 깁니다','마루가 발달했다':'마루가 발달했습니다',
                     '성벽이 높아졌다':'성벽이 높아졌습니다','겨울이 길고 춥다':'겨울이 길고 춥습니다'},
-               answer:[['바다','해류'],['바다','해류'],['봄이 일찍 오고 여름이 길다'],['마루가 발달했다']],
-               no:'사슬이 끊어졌어요. 까닭 두 개 → 날씨 → 집 순서로 다시 이어 보세요. 까닭은 설명판에서 형광펜으로 칠한 낱말입니다.'},
+               answer:[['바다','해류'],['바다','해류'],['봄이 일찍 오고 여름이 길다','마루가 발달했다'],['봄이 일찍 오고 여름이 길다','마루가 발달했다']],
+               no:'사슬이 끊어졌어요. 위의 두 칸에는 남도가 따뜻한 까닭을, 아래 두 칸에는 따뜻해서 생긴 일을 놓아 보세요. 따뜻한 까닭은 설명판에서 찾은 낱말입니다.'},
         checks:['남도는 왜 따뜻했을까?','새롭게 알게 된 점'],
         label:'30초 동안 말할 내용을 적어 보세요',
         ph:'예) 남도는 바다와 따뜻한 해류 때문에 포근합니다. 그래서…',
@@ -2938,7 +2941,7 @@ function chainUI(P, sv){
     <div data-game="chain">
       <div class="pool">${shuffled('chain',C.cards).map(c=>
         `<button type="button" class="tcard" data-c="${esc(c)}">${esc(c)}</button>`).join('')}</div>
-      <ol class="chain">${C.slots.map((x,i)=>`${i?'<li class="carr" aria-hidden="true">⬇</li>':''}
+      <ol class="chain">${C.slots.map((x,i)=>`${(C.groups&&C.groups[i]) ? `${i?'<li class="carr" aria-hidden="true">⬇ 그래서</li>':''}<li class="cgroup">${esc(C.groups[i])}</li>` : ''}
         <li data-slot="${i}"><span class="lab">${esc(x)}</span><span class="drop">놓기</span>
           <input type="hidden" data-ci="${i}" value="${esc(got[i]||'')}"></li>`).join('')}</ol>
     </div>
@@ -3021,7 +3024,7 @@ function prepSubmit(P, step, w){
   if(P.view==='chain'){
     const C=P.chain, v=[...view.querySelectorAll('[data-ci]')].map(i=>i.value);
     if(v.some(x=>!x)) return flash('사슬 네 칸을 모두 이어 주세요');
-    const ok = v.every((x,i)=>C.answer[i].includes(x)) && v[0]!==v[1];
+    const ok = v.every((x,i)=>C.answer[i].includes(x)) && v[0]!==v[1] && v[2]!==v[3];
     d.tries.prepchain=(d.tries.prepchain||0)+1; save({quiet:true});
     const slot=view.querySelector('.fbslot');
     if(!ok && d.tries.prepchain<2){
@@ -3032,7 +3035,10 @@ function prepSubmit(P, step, w){
     const nw=document.getElementById('prepNew').value.trim();
     if(!nw) return flash('새롭게 알게 된 점을 한 문장 써 주세요');
     const say=x=>C.say[x]||x;
-    text=`남도는 ${v[0]}${hasBat(v[0])?'과':'와'} ${v[1]} 때문에 따뜻합니다. 그래서 ${say(v[2])}. 그 덕분에 ${say(v[3])}. ${nw}`;
+    /* 아래 묶음은 칸 순서와 상관없이 날씨 → 집 순서로 말합니다 */
+    const ord=['봄이 일찍 오고 여름이 길다','마루가 발달했다'];
+    const res=[v[2],v[3]].sort((a,b)=>(ord.indexOf(a)+9)%9-(ord.indexOf(b)+9)%9);
+    text=`남도는 ${v[0]}${hasBat(v[0])?'과':'와'} ${v[1]} 때문에 따뜻합니다. 그래서 ${say(res[0])}. 그 덕분에 ${say(res[1])}. ${nw}`;
     raw=[nw]; extra={chain:v, chainOk:ok, new:nw};
   }
   if(P.view==='season'){
