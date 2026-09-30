@@ -819,8 +819,8 @@ button.ghost{
 .pool .tcard{padding:11px 16px;font-size:17px}
 .growin[data-game="basket"] .cart{flex:1;min-height:150px;display:flex;flex-direction:column}
 .growin[data-game="basket"] .cart .in{flex:1}
-.growin[data-game="place"] .road{flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:8px}
-.growin[data-game="place"] .road li{flex:1;min-height:54px;margin:0}
+.growin[data-game="order"] .road,.growin[data-game="place"] .road{flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:8px}
+.growin[data-game="order"] .road li,.growin[data-game="place"] .road li{flex:1;min-height:54px;margin:0}
 .growin[data-game="sticker"] .items{flex:1}
 .growin[data-game="sticker"] .items li{min-height:78px}
 .growin[data-game="chain"] .chain{flex:1;display:flex;flex-direction:column}
@@ -1022,12 +1022,13 @@ farm:{
   photo:{mode:'title', titlePh:'예) 호미 한 자루에 담긴 농부의 한 해!', prompt:'남도의 농업을 설명하는 전시물이나 설명판을 한 장 찍으세요.',
          examples:['남도의 농업 설명판','농사 도구','농사 짓는 모습']},
   prep:{question:{
-    id:'seq', type:'single', view:'gap',
+    id:'seq', type:'single', view:'order',
+    lookup:'농업 전시의 설명판과 도구가 놓인 순서를 보고 채우세요. 화면에는 힌트가 없어요.',
     prompt:'쌀 한 톨의 순서를 찾으세요.',
     options:['씨앗 → 농사도구 → 수확 → 도정 → 저장','도정 → 씨앗 → 수확 → 저장 → 농사도구','시장 → 저장 → 씨앗 → 도정 → 수확'],
     answer:'씨앗 → 농사도구 → 수확 → 도정 → 저장',
     ok:'정답입니다! 쌀은 씨앗에서 시작해 농사도구로 가꾸고, 수확한 뒤 도정하고 저장하는 과정을 거칩니다.',
-    no:'다시 생각해 봅시다. 쌀은 먼저 씨앗을 심어야 자랍니다. 수확한 뒤에야 도정하고 저장할 수 있습니다.'
+    no:'다시 생각해 봅시다. 설명판에서 쌀이 밥상에 오기까지의 과정을 처음부터 손가락으로 따라가 보세요.'
   }},
   submit:{title:'쌀 한 톨의 여행', type:'fill', view:'rice',
     /* 쌀 한 톨이 되어 말하기 — 저장되는 빈칸 6개는 아래 parts와 같습니다 */
@@ -1375,7 +1376,7 @@ function render(){
 }
 
 /* 활동 칸이 남는 화면 높이를 채우도록 — 마지막 활동 카드를 늘립니다 */
-const GROW = ['sort','basket','place','sticker','chain'];
+const GROW = ['sort','basket','place','sticker','chain','order'];
 function growWorkArea(){
   const cards=[...view.querySelectorAll(':scope > .card')].filter(c=>
     GROW.some(g=>c.querySelector(`[data-game="${g}"]`)));
@@ -1787,6 +1788,7 @@ function hotspotUI(p, sv){
 /* 두 놀이 화면을 다시 칠합니다 */
 function paintGame(box){
   const g0 = box.dataset.game;
+  if(g0==='order') return paintOrder(box);
   if(g0==='gap' || g0==='clock' || g0==='talk' || g0==='fixm' || g0==='cry') return;
   if(g0==='sticker') return paintSticker(box);
   if(g0==='chain') return paintChain(box);
@@ -1927,6 +1929,17 @@ function bindGames(){
       inp.value = `${w}에서 ` + inp.value.trim().replace(/^\S+에서\s*/,'');
       inp.focus(); inp.dispatchEvent(new Event('input',{bubbles:true}));
       return paintSeason(box);
+    }
+    if(box.dataset.game==='order'){
+      const card=e.target.closest('.pool .tcard');
+      if(card){ const on=card.classList.contains('sel');
+        box.querySelectorAll('.pool .tcard').forEach(c=>c.classList.remove('sel'));
+        if(!on) card.classList.add('sel'); return paintOrder(box); }
+      const li=e.target.closest('.road li'); if(!li) return;
+      const hid=li.querySelector('[data-oi]'), sel=box.querySelector('.pool .tcard.sel');
+      if(sel){ hid.value=sel.dataset.v; sel.classList.remove('sel'); }
+      else hid.value='';
+      return paintOrder(box);
     }
     if(box.dataset.game==='gap'){
       const c=e.target.closest('.tcard'); if(!c) return;
@@ -2189,8 +2202,42 @@ function paintSticker(box){
     : '<li class="none">먼저 위의 장바구니에 물건을 담으세요.</li>';
 }
 
+/* ⑫ 순서 전부 채우기 — 빈 칸만 있고, 함정 카드가 섞여 있습니다 */
+function orderUI(p, sv){
+  const seq=p.answer.split(' → ');
+  const toks=[...new Set(p.options.join(' → ').split(' → '))];
+  const got=sv[p.id] ? String(sv[p.id]).split(' → ') : [];
+  return `<h3>쌀 한 톨은 어떤 순서로 밥상에 왔을까요?</h3>
+    ${p.lookup?`<div class="lookup"><span class="ic">📋</span><span><b>화면이 아니라 전시실에서 찾아요</b>${esc(p.lookup)}</span></div>`:''}
+    <p class="gsub">카드를 톡 누른 다음 알맞은 칸을 누르세요. 놓인 카드를 누르면 다시 가져옵니다. 쓰지 않는 카드도 있어요.</p>
+    <div data-part="${p.id}" data-type="single" data-game="order" data-n="${seq.length}">
+      <div class="pool">${shuffled('order-'+p.id, toks).map(w=>
+        `<button type="button" class="tcard" data-v="${esc(w)}">${esc(w)}</button>`).join('')}</div>
+      <ol class="road">${seq.map((_,i)=>
+        `<li data-slot="${i}"><span class="step">${i+1}</span><span class="use">${i===0?'처음':i===seq.length-1?'마지막':''}</span>
+          <span class="drop">놓기</span><input type="hidden" data-oi="${i}" value="${esc(got[i]||'')}"></li>`).join('')}</ol>
+    </div>`;
+}
+/* 몇 칸이 맞았는지만 알려 줍니다 (어느 칸인지는 알려 주지 않음) */
+function orderScore(p, v){
+  const want=p.answer.split(' → '), got=String(v).split(' → ');
+  const n=want.filter((w,i)=>got[i]===w).length;
+  return `${want.length}칸 중 ${n}칸이 제자리에 있어요. 전시실에서 다시 확인해 보세요.`;
+}
+function paintOrder(box){
+  const vals=[...box.querySelectorAll('[data-oi]')].map(i=>i.value);
+  const sel=box.querySelector('.pool .tcard.sel');
+  box.querySelectorAll('.pool .tcard').forEach(c=>{ c.hidden=vals.includes(c.dataset.v); });
+  box.querySelectorAll('.road li').forEach((li,i)=>{
+    li.classList.toggle('filled', !!vals[i]);
+    li.classList.toggle('aim', !!sel && !vals[i]);
+    li.querySelector('.drop').textContent = vals[i] || '놓기';
+  });
+}
+
 function renderPart(p, saved){
   if(p.type==='single' && p.view==='gap') return gapUI(p, saved||{});
+  if(p.type==='single' && p.view==='order') return orderUI(p, saved||{});
   if(p.type==='single' && p.view==='fix') return fixUI(p, saved||{});
   if(p.type==='depend' && p.view==='sticker') return stickerUI(p, saved||{});
   if(p.type==='multi' && p.view==='highlight') return highlightUI(p, saved||{});
@@ -2614,6 +2661,7 @@ function readPart(p, root){
     return vals.every(v=>v) ? vals : null;
   }
   if(box.dataset.game==='gap'){ const h=box.querySelector('[data-gapval]'); return h && h.value ? h.value : null; }
+  if(box.dataset.game==='order'){ const v=[...box.querySelectorAll('[data-oi]')].map(i=>i.value); return v.every(Boolean) ? v.join(' → ') : null; }
   if(box.dataset.game==='fixm'){ const h=box.querySelector('[data-fixval]'); return h && h.value ? h.value : null; }
   if(box.dataset.game==='sticker'){
     let by={}; try{ by=JSON.parse(box.dataset.by||'{}'); }catch(e){}
@@ -3137,13 +3185,13 @@ function screenPrep(step){
   btn('발표 탐정 완료', ()=>{
     if(P.question){
       const v=readPart(P.question, view);
-      if(v===null) return flash('하나를 골라 주세요');
+      if(v===null) return flash(P.question.view==='order' ? '칸을 모두 채워 주세요' : '하나를 골라 주세요');
       const g=gradePart(P.question, v, {});
       S.topics[step.t].prep[P.question.id]=v;
       S.topics[step.t].tries.prep=(S.topics[step.t].tries.prep||0)+1;
       save();
       view.querySelector('.fbslot').innerHTML=
-        `<div class="fb ${g.ok?'ok':'no'}">${myAnswer(P.question, v)}${esc(g.ok?P.question.ok:P.question.no)}</div>`;
+        `<div class="fb ${g.ok?'ok':'no'}">${myAnswer(P.question, v)}${(!g.ok && P.question.view==='order') ? `<b style="display:block;margin:0 0 4px">${orderScore(P.question, v)}</b>` : ''}${esc(g.ok?P.question.ok:P.question.no)}</div>`;
       if(g.ok){
         lockAnswers();
         view.querySelector('.fbslot').insertAdjacentHTML('beforeend', readAloud(step));
