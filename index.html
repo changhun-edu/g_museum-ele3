@@ -720,6 +720,59 @@ button.ghost{
 .adpost .cp{font-size:18px;font-weight:800;line-height:1.45;min-height:1.45em}
 .adpost .ft{margin-top:10px;font-size:12px;opacity:.75}
 
+/* 30초 리허설 */
+.script{background:#fff;border:2px solid var(--line);border-radius:10px;padding:14px;font-size:18px;
+  font-weight:700;line-height:1.7;margin:0 0 12px}
+.rbar{height:12px;border-radius:99px;background:var(--paper-dim);overflow:hidden}
+.rbar i{display:block;height:100%;background:var(--gold);transition:width .2s linear}
+.rrow{display:flex;align-items:center;gap:10px;margin-top:10px}
+.rtime{font-weight:900;font-size:18px}
+.rbtn{margin-left:auto;min-height:50px;padding:0 18px;border:0;border-radius:12px;background:var(--ink);
+  color:var(--paper);font:inherit;font-weight:800;font-size:16px;cursor:pointer}
+/* 헛기억 바로잡기 */
+.fixbub{background:#fff;border:2px solid var(--line);border-radius:14px 14px 14px 4px;padding:14px;
+  font-size:17px;font-weight:700;line-height:2;margin:0 0 12px}
+.wrongw{font:inherit;font-weight:900;color:#B8442C;background:#F6E3DE;border:0;border-radius:6px;padding:0 6px;
+  text-decoration:underline wavy #B8442C;cursor:pointer}
+.wrongw.fixed{color:#255C3E;background:#E2EFE6;text-decoration:underline solid var(--ok)}
+/* 스티커 */
+.stray .tcard{font-size:14px;padding:6px 10px}
+.items{list-style:none;margin:12px 0 0;padding:0}
+.items li{border:2px dashed var(--line);border-radius:10px;padding:10px;margin:0 0 8px;background:#fff;cursor:pointer}
+.items li.aim{border-style:solid;border-color:var(--gold);box-shadow:0 0 0 3px rgba(217,164,65,.3)}
+.items li.none{cursor:default;color:var(--muted);font-weight:700}
+.items b{display:block;margin:0 0 6px}
+.stks{display:flex;flex-wrap:wrap;gap:6px}
+.stks em{color:var(--muted);font-size:14px;font-style:normal;font-weight:700}
+.stuck{border:0;border-radius:999px;background:var(--gold);color:#2A1D05;font:inherit;font-size:14px;
+  font-weight:800;padding:5px 11px;cursor:pointer}
+/* 장날 알림 */
+.cryboard{background:#D8B77E;border:4px solid #8A6A3E;border-radius:8px;padding:14px;color:#2A1D05;
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.25)}
+.crt{text-align:center;font-weight:900;font-size:20px;margin:0 0 6px}
+.cline{font-size:17px;font-weight:800;line-height:2.2;margin:0}
+.cline input{display:inline-block;width:10em;max-width:100%;min-height:44px;padding:6px 10px;margin:0 3px}
+/* 온도계 */
+.thermo{display:flex;align-items:center;justify-content:center;gap:12px;margin:0 0 10px}
+.tb{width:180px;height:16px;border-radius:99px;background:#fff;border:2px solid var(--line);overflow:hidden}
+.tb i{display:block;height:100%;transition:width .4s,background .4s}
+.thermo b{font-size:22px;font-weight:900}
+/* 생각 저울 */
+.twopan{display:flex;align-items:stretch;gap:8px;margin:0 0 14px}
+.tp{flex:1;background:var(--paper-dim);border-radius:10px;padding:10px;text-align:center}
+.tp span{display:block;font-size:13px;color:var(--muted);font-weight:800}
+.tp b{display:block;font-size:24px;font-weight:900;margin:2px 0}
+.tp small{font-size:13px;color:var(--muted)}
+.tp.now{background:#FBF0D8;border:2px solid var(--gold)}
+.tarrow{align-self:center;font-size:22px;color:var(--gold);font-weight:900}
+
+.stall .tcard,.cart .tcard{background:var(--paper);color:var(--text);border:2px solid var(--line);border-radius:10px;
+  padding:8px 13px;font:inherit;font-size:16px;font-weight:800;cursor:pointer}
+.cart .tcard{border-color:var(--gold);background:#FBF0D8}
+.card .vdone .note{color:var(--muted)}
+.card .vdone li.ok .note{color:var(--ok)}
+.card .vdone li.fix .note{color:#8C2F1C}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -854,7 +907,7 @@ nature:{
     no:'다시 생각해 봅시다. 따뜻한 남도에서 나타난 생활 모습과, 남도가 따뜻한 까닭을 구분해 보세요.'
   }],
   record:[{
-    id:'effect', type:'single',
+    id:'effect', type:'single', view:'fix', claim:'성벽이 높아졌다',
     prompt:'따뜻한 자연은 사람들의 집에 어떤 영향을 주었나요?',
     options:['마루가 발달했다','성벽이 높아졌다','배가 작아졌다','시장이 사라졌다'],
     answer:'마루가 발달했다',
@@ -908,7 +961,7 @@ farm:{
     ok:'정답입니다! 도구마다 쓰이는 때가 달랐습니다.',
     no:'다시 생각해 봅시다. 자리를 눌러 카드를 도로 가져온 뒤, 땅을 갈 때 → 기를 때 → 거둘 때 → 찧을 때 순서로 다시 놓아 보세요.'
   }],
-  photo:{mode:'riddle', prompt:'남도의 농업을 설명하는 전시물이나 설명판을 한 장 찍으세요.',
+  photo:{mode:'title', titlePh:'예) 호미 한 자루에 담긴 농부의 한 해!', prompt:'남도의 농업을 설명하는 전시물이나 설명판을 한 장 찍으세요.',
          examples:['남도의 농업 설명판','농사 도구','농사 짓는 모습']},
   prep:{question:{
     id:'seq', type:'single', view:'gap',
@@ -940,6 +993,7 @@ farm:{
 
 house:{
   title:'남도의 집', emoji:'🏠',
+  flow:['photo','evidence','record'],   // 사진부터 찍고, 사진 속에서 찾기
   dongi:'우리 집에는 시원한 곳도 있고 따뜻한 곳도 있었던 것 같아. 남도의 집 전시에서 내가 어디에서 생활했는지 찾아줘.',
   goals:['대청, 온돌, 부엌 등 관찰하기','그 공간의 쓰임 찾기','계절과 연결하기'],
   evidence:[{
@@ -981,13 +1035,14 @@ house:{
 
 market:{
   title:'남도의 시장', emoji:'🛒',
+  flow:['evidence','photo','record'],   // 장바구니 → 사진 수수께끼 → 장터 대화
   dongi:'시장에 가면 물건만 산 게 아니었어. 사람들도 만나고 소식도 나눴던 것 같아. 장터의 기억을 찾아줘.',
   goals:['시장 전시 관찰하기','물건 또는 화폐 찾기','시장이 사람들에게 어떤 곳이었는지 설명하기'],
   evidence:[
     {id:'word', type:'multi', view:'basket', limit:2,
      prompt:'전시에서 찾은 것을 두 개만 장바구니에 담으세요.',
      options:['교환','곡식','생필품','상평통보','주판','목화','무명','명태','소식','놀이'], other:true},
-    {id:'mean', type:'depend', view:'speak', dependsOn:'word',
+    {id:'mean', type:'depend', view:'sticker', dependsOn:'word',
      prompt:'담은 것들은 시장의 어떤 모습을 알려 주나요?',
      options:['물건을 사고 팔았다','물건을 서로 바꾸었다','돈을 사용했다','값을 계산했다','먼 지역의 물건이 오갔다','사람들이 모여 소식을 나눴다','놀이와 구경이 있었다'],
      map:{
@@ -1015,9 +1070,9 @@ market:{
     frame:'첫 칸에는 동이가 시장에서 한 일, 둘째 칸에는 전시에서 본 물건이나 설명을 씁니다.',
     sample:'동이는 시장에서 상평통보로 물건값을 냈을 것 같습니다. 그렇게 생각한 증거는 상평통보가 조선시대에 쓰인 돈으로 전시되어 있기 때문입니다.'
   }],
-  photo:{mode:'title', prompt:'시장이 어떤 곳이었는지 알 수 있는 전시물을 한 장 찍으세요.',
+  photo:{mode:'riddle', riddle:['상평통보','주판','목화','무명','엿가위','골패','명태'], prompt:'시장이 어떤 곳이었는지 알 수 있는 전시물을 한 장 찍으세요.',
          examples:['상평통보','주판','목화','엿가위와 골패','장터 그림 또는 설명판']},
-  prep:{view:'interview', checks:['시장은 어떤 곳인가?','그렇게 생각한 이유는?'],
+  prep:{view:'cry', checks:['시장은 어떤 곳인가?','그렇게 생각한 이유는?'],
         label:'30초 동안 말할 내용을 적어 보세요',
         ph:'예) 시장은 물건을 사고팔고 소식도 나누는 곳이었습니다…',
         hint:'시장에서는 물건만 오갔을까요? 사람과 소식은 어땠는지도 생각해 보세요.',
@@ -1118,9 +1173,7 @@ function buildSteps(){
   const steps = [{v:'map'}];
   S.order.forEach((t,i)=>{
     steps.push({v:'intro',    t, m:i+1});
-    steps.push({v:'evidence', t, m:i+1, role:'evidence'});
-    steps.push({v:'record',   t, m:i+1, role:'record'});
-    steps.push({v:'photo',    t, m:i+1, role:'photo'});
+    (TOPICS[t].flow || ['evidence','record','photo']).forEach(v=>steps.push({v, t, m:i+1, role:v}));
     steps.push({v:'prep',     t, m:i+1, role:'present'});
     steps.push({v:'submit',   t, m:i+1, role:'present'});
     steps.push({v:'complete', t, m:i+1});
@@ -1236,6 +1289,7 @@ const bar  = document.getElementById('bar');
 function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
 function render(){
+  if(RH.t){ clearInterval(RH.t); RH.t=null; }
   const st0 = S.steps && S.steps[S.stepIdx];
   HK = S.phase==='run' && st0 ? (st0.v + (st0.t ? '-'+st0.t : '')) : S.phase;
   if(S.phase==='story')  return screenStory();
@@ -1458,10 +1512,11 @@ function screenIntro(step){
       <ol class="goals">${T.goals.map(g=>`<li>${esc(g)}</li>`).join('')}</ol>
     </div>
     <div class="card">
-      <h3>이번 역할</h3>
-      ${['evidence','photo','record','present'].map(k=>{
+      <h3>이번 순서와 역할</h3>
+      <p class="sub">미션마다 순서가 조금씩 다릅니다.</p>
+      ${[...(T.flow||['evidence','record','photo']),'present'].map((k,i)=>{
         const r=ROLES[k], w=whoIs(k, step.m);
-        return `<div class="pair"><span class="k">${r.icon} ${r.name}</span><b>${esc(w.name)}</b></div>`;
+        return `<div class="pair"><span class="k">${i+1}. ${r.icon} ${r.name}</span><b>${esc(w.name)}</b></div>`;
       }).join('')}
     </div>`;
   btn('탐색 시작', next);
@@ -1570,6 +1625,7 @@ function paintTalk(){
     const src=view.querySelector(`[data-part="${t.dataset.src}"]`); if(!src) return;
     t.innerHTML = bubHTML([...src.querySelectorAll('[aria-pressed="true"]')].map(b=>b.dataset.v));
   });
+  view.querySelectorAll('[data-game="sticker"]').forEach(paintSticker);
 }
 
 /* ⑤ 카드 놓기 — 도구 카드를 농사 순서대로 놓습니다 */
@@ -1662,7 +1718,8 @@ function hotspotUI(p, sv){
 /* 두 놀이 화면을 다시 칠합니다 */
 function paintGame(box){
   const g0 = box.dataset.game;
-  if(g0==='gap' || g0==='clock' || g0==='talk') return;
+  if(g0==='gap' || g0==='clock' || g0==='talk' || g0==='fixm' || g0==='cry') return;
+  if(g0==='sticker') return paintSticker(box);
   if(g0==='chain') return paintChain(box);
   if(g0==='season') return paintSeason(box);
   if(g0==='rice') return paintRice(box);
@@ -1724,10 +1781,48 @@ function bindGames(){
     if(tk){ const v=tk.querySelector('input[data-i="1"]').value.trim();
       tk.querySelector('[data-josa]').textContent=riceJosa(v,'을(를) 보았어요.'); }
     const se=e.target.closest('[data-game="season"]'); if(se) paintSeason(se, true);
+    const cr=e.target.closest('[data-game="cry"]');
+    if(cr) cr.querySelector('[data-cj]').textContent=josaIo(cr.querySelector('[data-cry="1"]').value.trim());
   });
   view.addEventListener('click', e=>{
     const box = e.target.closest('[data-game]'); if(!box) return;
 
+    if(box.dataset.game==='fixm'){
+      if(e.target.closest('.wrongw')){ box.querySelector('[data-fixpool]').hidden=false; return; }
+      const c=e.target.closest('.tcard'); if(!c) return;
+      box.querySelectorAll('[data-fixpool] .tcard').forEach(x=>x.setAttribute('aria-pressed','false'));
+      c.setAttribute('aria-pressed','true');
+      const w=box.querySelector('.wrongw'); w.textContent=c.dataset.v; w.classList.add('fixed');
+      box.querySelector('[data-fixval]').value=c.dataset.v;
+      return;
+    }
+    if(box.dataset.game==='sticker'){
+      const st=e.target.closest('.stray .stk');
+      if(st){ const on=st.classList.contains('sel');
+        box.querySelectorAll('.stray .stk').forEach(x=>x.classList.remove('sel'));
+        if(!on) st.classList.add('sel'); return paintSticker(box); }
+      let by={}; try{ by=JSON.parse(box.dataset.by||'{}'); }catch(err){}
+      const stuck=e.target.closest('.stuck');
+      if(stuck){ const it=stuck.closest('li').dataset.item;
+        by[it]=(by[it]||[]).filter(x=>x!==stuck.dataset.s);
+        box.dataset.by=JSON.stringify(by); return paintSticker(box); }
+      const li=e.target.closest('li[data-item]'); if(!li) return;
+      const sel=box.querySelector('.stray .sel'); if(!sel) return flash('먼저 스티커를 고르세요');
+      const it=li.dataset.item, arr=by[it]||[];
+      if(!arr.includes(sel.dataset.s)){
+        if(arr.length>=2) return flash('물건 하나에 스티커는 두 장까지예요');
+        arr.push(sel.dataset.s);
+      }
+      by[it]=arr; sel.classList.remove('sel');
+      box.dataset.by=JSON.stringify(by); return paintSticker(box);
+    }
+    if(box.dataset.game==='cry'){
+      const c=e.target.closest('.tcard'); if(!c) return;
+      const inp=box.querySelector('[data-cry="1"]'), cur=inp.value.trim(), w=c.dataset.w;
+      inp.value = !cur ? w : (cur.includes(w) ? cur : cur+(hasBat(cur)?'과 ':'와 ')+w);
+      inp.dispatchEvent(new Event('input',{bubbles:true}));
+      return;
+    }
     if(box.dataset.game==='clock'){
       const tc=e.target.closest('.times .tcard');
       if(tc){ box.querySelectorAll('.times .tcard').forEach(x=>x.setAttribute('aria-pressed','false'));
@@ -1986,8 +2081,49 @@ function sayFill(p, v){
   return joinFill(p, v);
 }
 
+/* ⑩ 동이의 헛기억 바로잡기 — 동이의 말 속 틀린 곳을 눌러 고칩니다 (보기·정답 그대로) */
+function fixUI(p, sv){
+  const got=sv[p.id]||'';
+  const rest=p.options.filter(o=>o!==p.claim);
+  return `<h3>🤔 동이가 잘못 기억하고 있어요!</h3>
+    <p class="gsub">${esc(p.prompt)} 동이의 말에서 틀린 곳(빨간 물결 밑줄)을 톡 누르고, 알맞은 말로 바꿔 주세요.</p>
+    <div data-part="${p.id}" data-type="single" data-game="fixm">
+      <div class="fixbub">👦 “우리 남도는 따뜻했잖아. 그래서 집들은
+        <button type="button" class="wrongw ${got?'fixed':''}">${esc(got||p.claim)}</button>고 기억나!”</div>
+      <div class="pool" data-fixpool ${got?'':'hidden'}>${shuffled('fix-'+p.id, rest).map(o=>
+        `<button type="button" class="tcard" data-v="${esc(o)}" aria-pressed="${got===o}">${esc(o)}</button>`).join('')}</div>
+      <input type="hidden" data-fixval value="${esc(got)}">
+    </div>`;
+}
+
+/* ⑪ 물건마다 뜻 스티커 붙이기 — 장바구니에 담은 물건 하나하나에 붙입니다 */
+function stickerUI(p, sv){
+  const by=(sv[p.id]&&sv[p.id].by)||{};
+  return `<h3>${esc(p.prompt)}</h3>
+    <p class="gsub">스티커를 톡 누른 다음, 붙일 물건을 누르세요. 물건마다 스티커를 한두 장 붙여요. 붙인 스티커를 누르면 떨어집니다.</p>
+    <div data-part="${p.id}" data-type="depend" data-game="sticker" data-src="${p.dependsOn}" data-by="${esc(JSON.stringify(by))}">
+      <div class="pool stray">${p.options.map(o=>`<button type="button" class="tcard stk" data-s="${esc(o)}">🏷 ${esc(o)}</button>`).join('')}</div>
+      <ul class="items"></ul>
+    </div>`;
+}
+function paintSticker(box){
+  const src=view.querySelector(`[data-part="${box.dataset.src}"]`);
+  const words=src ? [...src.querySelectorAll('[aria-pressed="true"]')].map(b=>b.dataset.v) : [];
+  let by={}; try{ by=JSON.parse(box.dataset.by||'{}'); }catch(e){}
+  Object.keys(by).forEach(k=>{ if(!words.includes(k)) delete by[k]; });
+  box.dataset.by=JSON.stringify(by);
+  const sel=box.querySelector('.stray .sel');
+  box.querySelector('.items').innerHTML = words.length
+    ? words.map(w=>`<li data-item="${esc(w)}" class="${sel?'aim':''}"><b>🧺 ${esc(w)}</b>
+        <span class="stks">${(by[w]||[]).map(x=>`<button type="button" class="stuck" data-s="${esc(x)}">${esc(x)} ✕</button>`).join('')
+          || '<em>여기에 스티커를 붙여 주세요</em>'}</span></li>`).join('')
+    : '<li class="none">먼저 위의 장바구니에 물건을 담으세요.</li>';
+}
+
 function renderPart(p, saved){
   if(p.type==='single' && p.view==='gap') return gapUI(p, saved||{});
+  if(p.type==='single' && p.view==='fix') return fixUI(p, saved||{});
+  if(p.type==='depend' && p.view==='sticker') return stickerUI(p, saved||{});
   if(p.type==='multi' && p.view==='highlight') return highlightUI(p, saved||{});
   if(p.type==='multi' && p.view==='sort')      return sortUI(p, saved||{});
   if(p.type==='multi' && p.view==='basket')    return basketUI(p, saved||{});
@@ -2133,11 +2269,32 @@ function listenQuiz(id, role){
   const wrong=pool.filter(w=>!text.includes(w) && !GENERIC.includes(w));
   if(wrong.length<2) return null;
   const rnd=seedRand(id+'|'+role+'|'+text);
+  /* 사람마다 · 동의마다 모양이 돌아갑니다: 낱말 고르기 → O/X → 먼저 나온 말 */
+  let h=0; for(const c of id) h=(h*31+c.charCodeAt(0))>>>0;
+  let kind=['word','ox','first'][(['evidence','photo','record','present'].indexOf(role)+h)%3];
+  if(kind==='first'){
+    const pos=[];
+    right.map(w=>[w, text.indexOf(w)]).sort((a,b)=>a[1]-b[1]).forEach(([w,i])=>{
+      if(!pos.some(([u])=>u.includes(w)||w.includes(u))) pos.push([w,i]); });
+    if(pos.length>=2){
+      const a=Math.floor(rnd()*(pos.length-1));
+      const b=a+1+Math.floor(rnd()*(pos.length-1-a));
+      const A=pos[a][0], B=pos[b][0];
+      return {kind, q:'🥇 발표에서 먼저 나온 말은 무엇인가요?', ans:A, chips: rnd()<.5?[A,B]:[B,A]};
+    }
+    kind='word';
+  }
+  if(kind==='ox'){
+    const yes=rnd()<.5;
+    const w=yes ? right[Math.floor(rnd()*right.length)] : wrong[Math.floor(rnd()*wrong.length)];
+    return {kind, q:`⭕❌ 발표에 ‘${w}’${hasBat(w)?'이라는':'라는'} 말이 나왔나요?`,
+            ans: yes?'⭕ 나왔어요':'❌ 안 나왔어요', chips:['⭕ 나왔어요','❌ 안 나왔어요']};
+  }
   const ans=right[Math.floor(rnd()*right.length)];
   const ws=wrong.slice(), chips=[ans];
   while(chips.length<3 && ws.length) chips.push(ws.splice(Math.floor(rnd()*ws.length),1)[0]);
   for(let i=chips.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); const t=chips[i]; chips[i]=chips[j]; chips[j]=t; }
-  return {ans, chips};
+  return {kind:'word', q:'👂 발표에서 들은 낱말을 골라 주세요', ans, chips};
 }
 function refreshVotes(){
   view.querySelectorAll('[data-vote]').forEach(b=>{ if(!b.dataset.fix && !b.dataset.heard) paintVote(b); });
@@ -2188,9 +2345,9 @@ function paintVote(box){
     const q=listenQuiz(id, turn), heard=box.dataset.heard===turn, locked=!!q && !heard;
     const wrong=(box.dataset.wrong||'').split('|');
     const lq = !q ? '' : q.wait
-      ? `<p class="lq wait">👂 발표 내용을 모두 채우면 듣기 확인 문제가 나옵니다.</p>`
+      ? `<p class="lq wait">👂 발표 탐정이 발표를 마치면 확인 문제가 나옵니다.</p>`
       : heard ? `<p class="lq okay">👂 잘 들었어요! 이제 도장을 찍을 수 있어요.</p>`
-      : `<div class="lq"><p class="lqq">👂 발표에서 들은 낱말을 골라 주세요</p>
+      : `<div class="lq"><p class="lqq">${esc(q.q)}</p>
           <div class="lchips">${q.chips.map(c=>`<button type="button" data-act="hear" data-w="${esc(c)}"
             ${wrong.includes(c)?'class="bad" disabled':''}>${esc(c)}</button>`).join('')}</div></div>`;
     mid=`<div class="vturn">
@@ -2200,7 +2357,7 @@ function paintVote(box){
       <div class="vbtns">
         <button class="stampbtn" data-act="ok" data-role="${turn}" ${locked?'disabled':''}>
           <span class="fill"></span>
-          <span class="lab">좋아요<span class="sub2">${locked?'먼저 들은 낱말을 골라 주세요':'1.5초 꾹 누르면 도장이 찍힙니다'}</span></span></button>
+          <span class="lab">좋아요<span class="sub2">${locked?'먼저 확인 문제를 풀어 주세요':'1.5초 꾹 누르면 도장이 찍힙니다'}</span></span></button>
         <button data-act="fix" data-role="${turn}">한 가지 고칠 게 있어요</button>
         <button data-act="again" data-role="${turn}">잘 모르겠어요<span class="sub2">한 번 더 들려 달라고 하세요</span></button>
       </div></div>`;
@@ -2331,6 +2488,7 @@ function reviewSend(o){
   const joined = raw.join(' ');
   const bad2 = weakText(joined, o.min || 8);
   if(bad2) return flash(bad2);
+  if(o.skip){ o.onSend(); return; }                 // 카드로 고른 글·이미 확인한 글은 바로 저장
 
   const key = HK;
   const kws = o.keywords || KEYWORDS[key] || [];
@@ -2385,6 +2543,13 @@ function readPart(p, root){
     return vals.every(v=>v) ? vals : null;
   }
   if(box.dataset.game==='gap'){ const h=box.querySelector('[data-gapval]'); return h && h.value ? h.value : null; }
+  if(box.dataset.game==='fixm'){ const h=box.querySelector('[data-fixval]'); return h && h.value ? h.value : null; }
+  if(box.dataset.game==='sticker'){
+    let by={}; try{ by=JSON.parse(box.dataset.by||'{}'); }catch(e){}
+    const items=[...box.querySelectorAll('li[data-item]')].map(l=>l.dataset.item);
+    if(!items.length || items.some(i=>!(by[i]||[]).length)) return null;
+    return {list:[...new Set(items.flatMap(i=>by[i]))], other:'', by};
+  }
   const sel=[...box.querySelectorAll('[aria-pressed="true"]')].map(b=>b.dataset.v);
   const other = root.querySelector(`[data-other="${p.id}"]`);
   const otherVal = other ? other.value.trim() : '';
@@ -2396,6 +2561,8 @@ function readPart(p, root){
 /* 우리가 고른 답을 사람이 읽을 수 있게 정리 */
 function myAnswer(p, val){
   if(val==null) return '';
+  if(val.by) return `<span class="mine">우리가 붙인 스티커</span>
+      <span class="pairs">${Object.keys(val.by).map(w=>`<span>${esc(w)} → ${val.by[w].map(esc).join(' · ')}</span>`).join('')}</span>`;
   if(p.type==='match'){
     return `<span class="mine">우리가 연결한 답</span>
       <span class="pairs">${p.left.map(l=>`<span>${esc(l)} → ${esc(val[l]||'')}</span>`).join('')}</span>`;
@@ -2424,6 +2591,10 @@ function gradePart(p, val, ctx){
     const got=new Set(val.list), want=new Set(p.answer);
     const wrong=p.options.filter(o=>!want.has(o)&&got.has(o));
     return {graded:true, ok: p.answer.every(a=>got.has(a)) && !wrong.length};
+  }
+  if(p.type==='depend' && val && val.by){       // 물건마다 붙인 스티커를 따로 채점
+    const ok=Object.keys(val.by).every(w=>(val.by[w]||[]).length && val.by[w].every(m=>(p.map[w]||[]).includes(m)));
+    return {graded:true, ok};
   }
   if(p.type==='depend'){
     const words = (ctx[p.dependsOn]||{}).list || [];
@@ -2571,7 +2742,7 @@ function screenPhoto(step){
     if(mode==='mark' && !p.mark) return flash('사진에서 증거가 되는 곳을 톡 눌러 표시해 주세요');
     if(mode==='frame' && !(p.inShot||[]).length) return flash('사진에 나온 공간을 골라 주세요');
     if(mode==='title'){ const bad=weakText(p.title, 4); if(bad) return flash('사진 제목: '+bad); }
-    if(mode==='riddle' && !p.solved) return flash(p.riddle ? '친구들이 수수께끼를 맞혀야 넘어갈 수 있어요' : '사진 속 도구를 몰래 골라 주세요');
+    if(mode==='riddle' && !p.solved) return flash(p.riddle ? '친구들이 수수께끼를 맞혀야 넘어갈 수 있어요' : '사진 속 전시물을 몰래 골라 주세요');
     save(); next();
   }, {disabled:!d.photo});
 }
@@ -2579,12 +2750,12 @@ function screenPhoto(step){
 /* 미션마다 다른 사진 과제 */
 const PHOTO_TASK = {
   mark  :'📍 <b>증거 표시하기</b> — 찍은 사진에서 증거가 되는 곳을 톡 눌러 🔍 동그라미를 그리세요.',
-  riddle:'🧩 <b>확대 수수께끼</b> — 도구 하나를 가까이, 일부만 크게 찍으세요. 찍은 뒤 모둠 친구들이 무슨 도구인지 맞혀 봅니다.',
+  riddle:'🧩 <b>확대 수수께끼</b> — 전시물 하나를 가까이, 일부만 크게 찍으세요. 찍은 뒤 모둠 친구들이 무엇인지 맞혀 봅니다.',
   frame :'🖼 <b>구도 미션</b> — 두 공간 이상이 한 장에 함께 나오게 찍어 보세요. 예) 대청과 온돌방',
   title :'📰 <b>사진 제목 붙이기</b> — 찍은 뒤 신문 기사 제목처럼 한 줄 제목을 붙이세요.'
 };
 const SPACES = ['대청','온돌방','부엌','사랑방','안방','마루','아궁이'];
-function photoExtra(p, mode){
+function photoExtra(p, mode, topic){
   if(mode==='mark') return `<p class="gsub" style="margin:10px 0 0">${p.mark
     ? '🔍 표시했어요! 다른 곳을 누르면 옮겨집니다.' : '👆 사진에서 증거가 되는 곳을 톡 누르세요.'}</p>`;
   if(mode==='frame') return `<p class="gsub" style="margin:12px 0 8px">이 사진에 나온 공간을 모두 고르세요. 두 곳 이상이면 구도 미션 성공!</p>
@@ -2592,14 +2763,19 @@ function photoExtra(p, mode){
       `<button type="button" class="tcard" data-w="${w}" aria-pressed="${(p.inShot||[]).includes(w)}">${w}</button>`).join('')}</div>
     <p class="gsub" id="frameOk" style="margin:0">${(p.inShot||[]).length>=2?'🎉 구도 미션 성공!':''}</p>`;
   if(mode==='title') return `<label class="field" style="margin-top:12px" for="ptitleIn">📰 사진 제목</label>
-    <input type="text" id="ptitleIn" placeholder="예) 옛날 장터의 돈, 상평통보를 찾았다!" value="${esc(p.title||'')}">`;
+    <input type="text" id="ptitleIn" placeholder="${esc((TOPICS[topic].photo||{}).titlePh||'예) 우리가 찾은 증거!')}" value="${esc(p.title||'')}">`;
   if(mode==='riddle'){
-    const tools=TOPICS.farm.record[0].left;
-    if(!p.riddle) return `<p class="gsub" style="margin:12px 0 8px">🤫 사진을 찍은 사람만 보세요. 이 사진 속 도구는 무엇인가요?</p>
-      <div class="pool" id="rdSecret">${tools.map(w=>`<button type="button" class="tcard" data-w="${w}">${w}</button>`).join('')}</div>`;
-    if(!p.solved) return `<p class="gsub" style="margin:12px 0 8px">이제 태블릿을 모둠 친구들에게 보여 주세요. 확대된 사진을 보고 무슨 도구인지 맞혀요!</p>
-      <div class="pool" id="rdGuess">${shuffled('riddle',tools).map(w=>
-        `<button type="button" class="tcard ${(p.wrong||[]).includes(w)?'bad':''}" data-w="${w}">${w}</button>`).join('')}</div>`;
+    const list=(TOPICS[topic].photo||{}).riddle||[];
+    if(!p.riddle) return `<p class="gsub" style="margin:12px 0 8px">🤫 사진을 찍은 사람만 보세요. 이 사진 속 전시물은 무엇인가요?</p>
+      <div class="pool" id="rdSecret">${list.map(w=>`<button type="button" class="tcard" data-w="${esc(w)}">${esc(w)}</button>`).join('')}</div>
+      <div class="row" style="margin-top:8px"><input type="text" id="rdOwn" placeholder="목록에 없으면 직접 쓰기">
+        <button type="button" class="opt" id="rdOwnGo" style="flex:none">정하기</button></div>`;
+    if(!p.solved){
+      const g=[...new Set(list.concat([p.riddle]))];
+      return `<p class="gsub" style="margin:12px 0 8px">이제 태블릿을 모둠 친구들에게 보여 주세요. 확대된 사진을 보고 무엇인지 맞혀요!</p>
+      <div class="pool" id="rdGuess">${shuffled('riddle-'+topic,g).map(w=>
+        `<button type="button" class="tcard ${(p.wrong||[]).includes(w)?'bad':''}" data-w="${esc(w)}">${esc(w)}</button>`).join('')}</div>`;
+    }
     return `<div class="fb ok" style="margin:12px 0 0">🎉 정답은 <b>${esc(p.riddle)}</b>! ${p.guesses||1}번 만에 맞혔어요.</div>`;
   }
   return '';
@@ -2628,6 +2804,12 @@ function bindPhotoExtra(topic, p, mode){
     inp.onchange=()=>save({quiet:true});
   }
   if(mode==='riddle'){
+    const og=document.getElementById('rdOwnGo');
+    if(og) og.onclick=()=>{
+      const v=document.getElementById('rdOwn').value.trim();
+      if(!v) return flash('전시물 이름을 적어 주세요');
+      p.riddle=v; p.guesses=0; p.wrong=[]; save({quiet:true}); drawShot(topic);
+    };
     document.querySelectorAll('#rdSecret .tcard').forEach(b=>b.onclick=()=>{
       p.riddle=b.dataset.w; p.guesses=0; p.wrong=[]; save({quiet:true}); drawShot(topic);
     });
@@ -2653,7 +2835,7 @@ function drawShot(topic){
         ${mode==='title'?`<span class="ptitle" ${p.title?'':'hidden'}>${esc(p.title||'')}</span>`:''}
         ${mode==='mark'&&p.mark?`<span class="pmark" style="left:${p.mark.x}%;top:${p.mark.y}%">🔍</span>`:''}
         <span class="meta">${p.w}×${p.h} · ${p.kb}KB</span></div>`}
-      ${photoExtra(p, mode)}
+      ${photoExtra(p, mode, topic)}
       <button class="opt wide" style="margin-top:12px" id="retake">다시 찍기</button>`;
     document.getElementById('retake').onclick=()=>inp.click();
     bindPhotoExtra(topic, p, mode);
@@ -2710,7 +2892,7 @@ function joinFill(p, vals){
 function prepUI(P, sv){
   if(P.view==='chain')     return chainUI(P, sv);
   if(P.view==='season')    return seasonUI(P, sv);
-  if(P.view==='interview') return interviewUI(P, sv);
+  if(P.view==='cry')       return cryUI(P, sv);
   return '';
 }
 function chainUI(P, sv){
@@ -2744,13 +2926,13 @@ function seasonUI(P, sv){
   const s=sv.season||{};
   return `<h3>☀️❄️ 계절 스위치</h3>
     <p class="gsub">스위치를 눌러 계절을 바꿔 보세요. 계절마다 동이네 식구가 어디서 어떻게 지냈는지 한 문장씩 적어요.
-      한옥 그림이나 아래 카드를 누르면 장소가 들어갑니다.</p>
+      아래 장소 카드를 누르면 문장 앞에 들어갑니다.</p>
     <div class="season summer" data-game="season" data-cur="summer">
       <div class="swt">
         <button type="button" data-s="summer" aria-pressed="true">☀️ 무더운 여름</button>
         <button type="button" data-s="winter" aria-pressed="false">❄️ 추운 겨울</button></div>
       <p class="sky" data-sky></p>
-      ${hanokSVG({}, {})}
+      <div class="thermo"><span class="tb"><i data-tf></i></span><b data-temp></b></div>
       <p class="sline" data-sl="summer">더울 때는 <input type="text" data-sin="summer" placeholder="어디에서 어떻게" value="${esc(s.summer||'')}"> 지냈습니다.</p>
       <p class="sline" data-sl="winter" hidden>추울 때는 <input type="text" data-sin="winter" placeholder="어디에서 어떻게" value="${esc(s.winter||'')}"> 지냈습니다.</p>
       <div class="pool">${['대청','마루','온돌방','부엌','사랑방','안방'].map(w=>
@@ -2765,6 +2947,9 @@ function paintSeason(box, typing){
   if(!typing){
     box.className='season '+cur;
     box.querySelectorAll('[data-sl]').forEach(p=>{ p.hidden = p.dataset.sl!==cur; });
+    const tf=box.querySelector('[data-tf]');
+    if(tf){ tf.style.width=cur==='summer'?'88%':'14%'; tf.style.background=cur==='summer'?'#D9573A':'#2F6FA8';
+      box.querySelector('[data-temp]').textContent=cur==='summer'?'33℃':'영하 8℃'; }
     box.querySelector('[data-sky]').textContent = cur==='summer'
       ? '☀️ 햇볕이 쨍쨍, 땀이 뻘뻘 — 어디가 시원했을까?' : '❄️ 찬 바람이 쌩쌩, 손이 꽁꽁 — 어디가 따뜻했을까?';
   }
@@ -2776,15 +2961,21 @@ function paintSeason(box, typing){
   const place=(box.querySelector(`[data-sin="${cur}"]`).value.match(/^(\S+)에서/)||[])[1]||'';
   box.querySelectorAll('.hanok .bay').forEach(g=>g.classList.toggle('on', g.dataset.place===place));
 }
-function interviewUI(P, sv){
-  const a=sv.answers||[];
-  return `<h3>🎙 동이의 인터뷰</h3>
-    <p class="gsub">동이가 발표 탐정에게 두 가지를 묻습니다. 말하듯이 대답을 적어 보세요. 이 대답이 그대로 30초 발표가 됩니다.</p>
-    <div class="chat">
-      <div class="cb l"><span class="who">👦 동이</span>탐정님, 옛날 시장은 어떤 곳이었나요?</div>
-      <div class="cb r wide"><span class="who">🎤 발표 탐정</span><textarea data-ans="0" placeholder="시장은 …하는 곳이었어요.">${esc(a[0]||'')}</textarea></div>
-      <div class="cb l"><span class="who">👦 동이</span>우아! 어떻게 알았어요? 증거가 있나요?</div>
-      <div class="cb r wide"><span class="who">🎤 발표 탐정</span><textarea data-ans="1" placeholder="우리가 찾은 증거는 …예요.">${esc(a[1]||'')}</textarea></div>
+function josaIo(w){ return w ? (hasBat(w)?'이오':'요') : '이오'; }
+function cryUI(P, sv){
+  const c=sv.cry||[], words=pickedList(S.topics.market.evidence, 'word');
+  return `<h3>📣 장날 알림 외치기</h3>
+    <p class="gsub">옛날 장터에서는 큰 소리로 소식을 알렸어요. 알림판을 완성하고, 발표 탐정이 장터 알림꾼처럼 크게 외쳐 보세요.</p>
+    <div data-game="cry">
+      <div class="cryboard">
+        <p class="crt">📣 장날 알림</p>
+        <p class="cline">“여러분, 들으시오! 시장은
+          <input type="text" data-cry="0" placeholder="무엇을 하는" value="${esc(c[0]||'')}"> 곳이오!”</p>
+        <p class="cline">“그 증거는 바로
+          <input type="text" data-cry="1" placeholder="우리가 찾은 증거" value="${esc(c[1]||'')}"><span data-cj>${josaIo(c[1]||'')}</span>!”</p>
+      </div>
+      ${words.length?`<div class="pool" style="margin:10px 0 0"><span class="gsub" style="width:100%;margin:0">🧺 우리 장바구니 — 눌러서 증거 칸에 넣기</span>${
+        words.map(w=>`<button type="button" class="tcard" data-w="${esc(w)}">${esc(w)}</button>`).join('')}</div>`:''}
     </div>
     ${sendNote()}${helpBox('prep', P)}`;
 }
@@ -2817,10 +3008,11 @@ function prepSubmit(P, step, w){
     text=`더울 때는 ${su} 지냈습니다. 추울 때는 ${wi} 지냈습니다. ${nw}`;
     raw=[su,wi,nw]; extra={season:{summer:su, winter:wi}, new:nw};
   }
-  if(P.view==='interview'){
-    const a=[...view.querySelectorAll('[data-ans]')].map(t=>t.value.trim());
-    if(a.some(x=>!x)) return flash('동이의 두 질문에 모두 대답해 주세요');
-    text=a.join(' '); raw=a; extra={answers:a};
+  if(P.view==='cry'){
+    const a=[...view.querySelectorAll('[data-cry]')].map(t=>t.value.trim());
+    if(a.some(x=>!x)) return flash('알림판 두 줄을 모두 채워 주세요');
+    text=`여러분, 들으시오! 시장은 ${a[0]} 곳이오! 그 증거는 바로 ${a[1]}${josaIo(a[1])}!`;
+    raw=a; extra={cry:a};
   }
   reviewSend({title:'30초 발표 내용', who:`🎤 발표 탐정 · ${esc(w.name)}`,
     texts:[text], raw, min:10, onSend:()=>{
@@ -2888,16 +3080,53 @@ function screenPrep(step){
 }
 
 /* ── 발표 · 동의 체크 ──────────────── */
+/* 30초 리허설 — 발표 탐정이 실제로 말해야 듣기 확인 문제가 열립니다 */
+let RH={t:null, start:0};
+function rehearseUI(d){
+  const done=(d.submit||{}).rehearsal;
+  return `<h3>🎤 30초 발표</h3>
+    <p class="gsub">발표 탐정은 대본을 보며 친구들에게 소리 내어 발표하세요. 친구들은 잘 듣고 아래 확인 문제를 풉니다.</p>
+    <div class="script">${esc(d.prep.text||'')}</div>
+    <div class="rbar"><i style="width:${done?100:0}%"></i></div>
+    <div class="rrow"><span class="rtime" data-rtime>${done?`✓ ${done}초 동안 발표했어요`:'30초'}</span>
+      <button type="button" class="rbtn" data-rhgo>${done?'↺ 다시 발표하기':'▶ 발표 시작'}</button></div>`;
+}
+function bindRehearse(d){
+  const b=view.querySelector('[data-rhgo]'); if(!b) return;
+  const bar=view.querySelector('.rbar i'), tm=view.querySelector('[data-rtime]');
+  const stop=(sec, timeout)=>{
+    clearInterval(RH.t); RH.t=null;
+    d.submit.rehearsal=sec; save({quiet:true});
+    bar.style.width='100%'; tm.textContent=`✓ ${sec}초 동안 발표했어요`; b.textContent='↺ 다시 발표하기';
+    if(timeout) flash('30초가 다 됐어요!');
+    refreshVotes();
+  };
+  b.onclick=()=>{
+    if(RH.t){
+      const sec=Math.round((Date.now()-RH.start)/1000);
+      if(sec<8) return flash('조금 더 발표해 주세요');
+      return stop(sec);
+    }
+    RH.start=Date.now(); b.textContent='■ 발표 끝'; bar.style.width='0%';
+    RH.t=setInterval(()=>{
+      const s2=(Date.now()-RH.start)/1000;
+      bar.style.width=Math.min(100, s2/30*100)+'%';
+      tm.textContent=`${Math.max(0, Math.ceil(30-s2))}초`;
+      if(s2>=30) stop(30, true);
+    }, 200);
+  };
+}
+
 function screenSubmit(step){
   const T=TOPICS[step.t], SB=T.submit, d=S.topics[step.t];
   const others=['evidence','photo','record'];
   const body = SB.view==='rice' ? riceUI(SB, step.t)
     : SB.type==='fill'
     ? renderPart({...SB, id:'final', type:'fill', prompt:''}, {final:d.submit.final})
-    : `<div class="auto"><dt>발표 탐정이 준비한 내용</dt><dd>${esc(d.prep.text||'')}</dd></div>`;
+    : rehearseUI(d);
   /* 듣기 확인에 쓸 발표 글 — 빈칸은 아이가 넣은 값만 봅니다 */
   QUIZ['submit-'+step.t] = ()=>{
-    if(SB.type!=='fill') return d.prep.text||'';
+    if(SB.type!=='fill') return (d.submit||{}).rehearsal ? (d.prep.text||'') : null;
     const box=view.querySelector('[data-part="final"]'); if(!box) return null;
     const v=[...box.querySelectorAll('input')].map(i=>i.value.trim());
     return v.some(x=>!x) ? null : v.join(' ');
@@ -2909,11 +3138,13 @@ function screenSubmit(step){
     <div class="card">${body}</div>
     <div class="card">
       <h3>발표 내용에 동의하나요?</h3>
-      <p class="sub">한 사람씩 차례로 묻습니다. 발표를 잘 듣고, <b>들은 낱말을 먼저 고른 뒤</b> 도장을 찍어 주세요.</p>
+      <p class="sub">한 사람씩 차례로 묻습니다. 발표를 잘 듣고, <b>확인 문제를 먼저 푼 뒤</b> 도장을 찍어 주세요.</p>
       ${voteBox('submit-'+step.t, others, k=>whoIs(k, step.m).name)}
     </div>`;
   bindOpts();
+  bindRehearse(d);
   btn('제출', ()=>{
+    if(SB.type!=='fill' && !(d.submit||{}).rehearsal) return flash('먼저 30초 발표를 해 주세요');
     const a=readVote('submit-'+step.t);
     if(!a) return;
     const finish=(v)=>{
@@ -2927,13 +3158,13 @@ function screenSubmit(step){
       if(SB.view==='rice'){
         const txt=riceText(SB, v);
         return reviewSend({title:esc(SB.title), who:'🌾 쌀 한 톨의 이야기 · 모둠 전체가 동의',
-          texts:[txt], raw:[txt], min:8, onSend:()=>finish(v)});
+          texts:[txt], raw:[txt], min:8, skip:true, onSend:()=>finish(v)});
       }
       return reviewSend({title:esc(SB.title), who:'모둠 전체가 동의한 문장',
         texts:[joinFill(SB, v)], raw:v, min:8, onSend:()=>finish(v)});
     }
     return reviewSend({title:esc(SB.title), who:'모둠 전체가 동의한 문장',
-      texts:[d.prep.text||''], min:10, onSend:()=>finish(null)});
+      texts:[d.prep.text||''], min:10, skip:true, onSend:()=>finish(null)});
   });
 }
 
@@ -3294,24 +3525,42 @@ const CHANGES=['집에 대한 생각이 달라졌다','일과 먹을 것에 대�
   '사람들이 함께 살아간다는 점을 알게 되었다'];
 
 function finCompare(){
+  const first=S.prior.choice, now=S.final.now||'';
+  const whyQ=v=> v===first ? '생각이 그대로예요. 무엇을 보고 더 확신하게 되었나요?' : '생각이 바뀌었어요! 무엇이 생각을 바꾸었나요?';
   view.innerHTML = `
     <p class="eyebrow">미션 5 · 처음 생각과 비교</p>
-    <h1>📖 무엇이 달라졌나요</h1>
+    <h1>⚖ 생각 저울</h1>
     <div class="card">
-      <h3>처음 우리 모둠의 생각</h3>
-      <div class="auto"><dd>${esc(S.prior.choice)} — 우리는 ${esc(S.prior.reason)} 때문에 그렇게 생각합니다.</dd></div>
+      <h3>옛날 남도 사람들은 무엇에 가장 의지하며 살았을까요?</h3>
+      <p class="sub">탐험을 시작할 때 했던 질문이에요. 지금 우리 모둠의 생각을 다시 골라 보세요.</p>
+      <div class="twopan">
+        <div class="tp"><span>처음 생각</span><b>${esc(first)}</b><small>${esc(S.prior.reason)}</small></div>
+        <div class="tarrow">➜</div>
+        <div class="tp now"><span>지금 생각</span><b data-now>${esc(now||'?')}</b></div>
+      </div>
+      <div class="opts" id="nowpick">${['자연','농사','집','시장'].map(o=>
+        `<button class="opt" data-v="${o}" aria-pressed="${now===o}"><span class="box"></span>${o}</button>`).join('')}</div>
     </div>
-    <div class="card">
-      <h3>처음 생각과 달라진 점은 무엇인가요?</h3>
+    <div class="card" id="whyCard" ${now?'':'hidden'}>
+      <h3 data-whyq>${esc(now?whyQ(now):'')}</h3>
       <div class="opts" data-part="chg" data-type="multi">
         ${CHANGES.map(c=>`<button class="opt wide" data-v="${esc(c)}" aria-pressed="${S.final.compare.includes(c)}"><span class="box"></span>${esc(c)}</button>`).join('')}
       </div>
     </div>`;
   bindOpts();
+  view.querySelectorAll('#nowpick .opt').forEach(b=>b.onclick=()=>{
+    view.querySelectorAll('#nowpick .opt').forEach(x=>x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true');
+    view.querySelector('[data-now]').textContent=b.dataset.v;
+    view.querySelector('[data-whyq]').textContent=whyQ(b.dataset.v);
+    document.getElementById('whyCard').hidden=false;
+  });
   btn('동이에게 전달', ()=>{
+    const nb=view.querySelector('#nowpick [aria-pressed="true"]');
+    if(!nb) return flash('지금 생각을 골라 주세요');
     const v=[...view.querySelectorAll('[data-part="chg"] [aria-pressed="true"]')].map(b=>b.dataset.v);
-    if(!v.length) return flash('하나 이상 골라 주세요');
-    S.final.compare=v; save(); next();
+    if(!v.length) return flash('까닭을 하나 이상 골라 주세요');
+    S.final.now=nb.dataset.v; S.final.compare=v; save(); next();
   });
 }
 
@@ -3328,7 +3577,7 @@ function finSubmit(){
     </div>
     <div class="card">
       <h3>발표 내용에 동의하나요?</h3>
-      <p class="sub">한 사람씩 차례로 묻습니다. 발표를 잘 듣고, <b>들은 낱말을 먼저 고른 뒤</b> 도장을 찍어 주세요.</p>
+      <p class="sub">한 사람씩 차례로 묻습니다. 발표를 잘 듣고, <b>확인 문제를 먼저 푼 뒤</b> 도장을 찍어 주세요.</p>
       ${voteBox('final', others, k=>whoIs(k,5).name)}
     </div>`;
   bindOpts();
@@ -3508,7 +3757,7 @@ function bonWhy(){
     const o=document.getElementById('wOther').value.trim(), a=document.getElementById('wA').value.trim(), b=document.getElementById('wB').value.trim();
     if(!o||!a||!b) return flash('세 칸을 모두 채워 주세요');
     const why=`${o}${eun(o)} ${a}${riceJosa(a,'을(를)')} 보여 주지만, ${B.name}${eun(B.name)} ${b}까지 보여 줍니다. 그래서 우리는 ${B.name}${eul(B.name)} 골랐습니다.`;
-    reviewSend({title:'왜 이 전시물일까?', who:'🏛 탐정단의 생각', texts:[why], raw:[a,b], min:6, keywords:[],
+    reviewSend({title:'왜 이 전시물일까?', who:'🏛 탐정단의 생각', texts:[why], raw:[a,b], min:6, keywords:[], skip:true,
       onSend:()=>{ B.why=why; B.whyParts={other:o,a,b}; save(); next(); }});
   });
 }
@@ -3538,7 +3787,7 @@ function bonMeaning(){
     const m=[...view.querySelectorAll('[data-m]')].map(i=>i.value.trim());
     if(m.some(x=>!x)) return flash('두 칸을 모두 채워 주세요');
     const t=`나는 ${B.name}${ya}. 옛날 사람들은 나를 ${m[0]} 썼어. 나를 보면 옛날 사람들이 ${m[1]} 생활을 했다는 걸 알 수 있지.`;
-    reviewSend({title:'전시물이 되어 말하기', who:'🏛 탐정단의 해석', texts:[t], raw:m, min:6, keywords:[],
+    reviewSend({title:'전시물이 되어 말하기', who:'🏛 탐정단의 해석', texts:[t], raw:m, min:6, keywords:[], skip:true,
       onSend:()=>{ B.meaning=t; B.meaningParts=m; save(); next(); }});
   });
 }
@@ -3570,7 +3819,7 @@ function bonAd(){
   btn('제출', ()=>{
     const t=ta.value.trim();
     if(!t) return flash('광고 문구를 적어 주세요');
-    reviewSend({title:'박물관 광고', who:'🎨 우리 모둠의 광고 문구', texts:[t], min:8, keywords:[],
+    reviewSend({title:'박물관 광고', who:'🎨 우리 모둠의 광고 문구', texts:[t], min:8, keywords:[], skip:true,
       onSend:()=>{ B.ad=t; save(); next(); }});
   });
 }
@@ -3740,7 +3989,7 @@ function screenEnd(){
     </div>
     <div class="card">
       <h3>처음 생각과 달라진 점</h3>
-      <p class="sub" style="margin:0 0 8px">처음: ${esc(S.prior.choice)} — ${esc(S.prior.reason)}</p>
+      <p class="sub" style="margin:0 0 8px">처음: ${esc(S.prior.choice)} — ${esc(S.prior.reason)}${S.final.now?` → 지금: ${esc(S.final.now)}`:''}</p>
       ${S.final.compare.length?`<ol class="goals">${S.final.compare.map(c=>`<li>${esc(c)}</li>`).join('')}</ol>`:'<p class="sub" style="margin:0">기록 없음</p>'}
     </div>
     <div class="card">
@@ -3762,6 +4011,12 @@ function maybeHandoff(step){
   const key = (step.t||'final') + ':' + step.v;
   if(S.seenHandoff[key]) return;
   const r=ROLES[step.role], w=whoIs(step.role, step.m);
+  /* 바로 앞 역할도 같은 아이였다면 태블릿을 넘길 필요가 없습니다 */
+  for(let i=S.stepIdx-1;i>=0;i--){
+    const pv=S.steps[i]; if(!pv.role) continue;
+    if(whoIs(pv.role, pv.m).name===w.name){ S.seenHandoff[key]=Date.now(); save({quiet:true}); return; }
+    break;
+  }
   const ho=document.getElementById('handoff');
   ho.style.setProperty('--role', r.raw);
   document.getElementById('hoIcon').textContent=r.icon;
