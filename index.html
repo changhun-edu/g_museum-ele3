@@ -826,6 +826,15 @@ button.ghost{
 .growin[data-game="chain"] .chain{flex:1;display:flex;flex-direction:column}
 .growin[data-game="chain"] .chain li[data-slot]{flex:1;min-height:52px}
 
+/* 순서 채우기: 번호 → 카드 → (처음·마지막) */
+[data-game="order"] .road li{gap:12px}
+[data-game="order"] .road .drop{flex:none;min-width:118px;text-align:center;font-size:17px}
+[data-game="order"] .road .use{flex:1;text-align:right;font-size:14px;font-weight:800;color:var(--muted)}
+[data-game="order"] .road li.given{border-style:solid;border-color:#9DBFAA;background:#EEF5F0;cursor:default}
+[data-game="order"] .road li.given .step{background:var(--ok);color:#fff}
+[data-game="order"] .road li.given .drop{background:#fff;color:#255C3E;border:1px solid #9DBFAA}
+[data-game="order"] .road li.given .use{color:#255C3E}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -1936,6 +1945,7 @@ function bindGames(){
         box.querySelectorAll('.pool .tcard').forEach(c=>c.classList.remove('sel'));
         if(!on) card.classList.add('sel'); return paintOrder(box); }
       const li=e.target.closest('.road li'); if(!li) return;
+      if(li.classList.contains('given')) return flash('이 칸은 동이가 기억해 낸 칸이에요');
       const hid=li.querySelector('[data-oi]'), sel=box.querySelector('.pool .tcard.sel');
       if(sel){ hid.value=sel.dataset.v; sel.classList.remove('sel'); }
       else hid.value='';
@@ -2203,32 +2213,45 @@ function paintSticker(box){
 }
 
 /* ⑫ 순서 전부 채우기 — 빈 칸만 있고, 함정 카드가 섞여 있습니다 */
+/* 모둠마다 다른 두 칸을 정답으로 미리 채워 둡니다 */
+function orderGiven(p){
+  const n=p.answer.split(' → ').length;
+  const rnd=seedRand('order-given|'+p.id+'|'+(S.groupNo||0)+'|'+(S.session||''));
+  const idx=[...Array(n).keys()];
+  for(let i=idx.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); const t=idx[i]; idx[i]=idx[j]; idx[j]=t; }
+  return idx.slice(0,2).sort((a,b)=>a-b);
+}
 function orderUI(p, sv){
   const seq=p.answer.split(' → ');
   const toks=[...new Set(p.options.join(' → ').split(' → '))];
+  const given=orderGiven(p);
   const got=sv[p.id] ? String(sv[p.id]).split(' → ') : [];
+  const pool=toks.filter(w=>!given.some(g=>seq[g]===w));
   return `<h3>쌀 한 톨은 어떤 순서로 밥상에 왔을까요?</h3>
     ${p.lookup?`<div class="lookup"><span class="ic">📋</span><span><b>화면이 아니라 전시실에서 찾아요</b>${esc(p.lookup)}</span></div>`:''}
-    <p class="gsub">카드를 톡 누른 다음 알맞은 칸을 누르세요. 놓인 카드를 누르면 다시 가져옵니다. 쓰지 않는 카드도 있어요.</p>
+    <p class="gsub">두 칸은 동이가 기억해 냈어요. 나머지 카드를 톡 누른 다음 알맞은 칸을 누르세요. 놓인 카드를 누르면 다시 가져옵니다. 쓰지 않는 카드도 있어요.</p>
     <div data-part="${p.id}" data-type="single" data-game="order" data-n="${seq.length}">
-      <div class="pool">${shuffled('order-'+p.id, toks).map(w=>
+      <div class="pool">${shuffled('order-'+p.id, pool).map(w=>
         `<button type="button" class="tcard" data-v="${esc(w)}">${esc(w)}</button>`).join('')}</div>
-      <ol class="road">${seq.map((_,i)=>
-        `<li data-slot="${i}"><span class="step">${i+1}</span><span class="use">${i===0?'처음':i===seq.length-1?'마지막':''}</span>
-          <span class="drop">놓기</span><input type="hidden" data-oi="${i}" value="${esc(got[i]||'')}"></li>`).join('')}</ol>
+      <ol class="road">${seq.map((w,i)=>{ const g=given.includes(i);
+        return `<li data-slot="${i}" class="${g?'given filled':''}"><span class="step">${i+1}</span>
+          <span class="drop">${g?esc(w):'놓기'}</span>
+          <span class="use">${g?'🧠 동이의 기억':i===0?'처음':i===seq.length-1?'마지막':''}</span>
+          <input type="hidden" data-oi="${i}" value="${esc(g?w:(got[i]||''))}"></li>`; }).join('')}</ol>
     </div>`;
 }
-/* 몇 칸이 맞았는지만 알려 줍니다 (어느 칸인지는 알려 주지 않음) */
 function orderScore(p, v){
-  const want=p.answer.split(' → '), got=String(v).split(' → ');
-  const n=want.filter((w,i)=>got[i]===w).length;
-  return `${want.length}칸 중 ${n}칸이 제자리에 있어요. 전시실에서 다시 확인해 보세요.`;
+  const want=p.answer.split(' → '), got=String(v).split(' → '), given=orderGiven(p);
+  const open=want.map((_,i)=>i).filter(i=>!given.includes(i));
+  const n=open.filter(i=>got[i]===want[i]).length;
+  return `비어 있던 ${open.length}칸 중 ${n}칸이 제자리에 있어요. 전시실에서 다시 확인해 보세요.`;
 }
 function paintOrder(box){
   const vals=[...box.querySelectorAll('[data-oi]')].map(i=>i.value);
   const sel=box.querySelector('.pool .tcard.sel');
   box.querySelectorAll('.pool .tcard').forEach(c=>{ c.hidden=vals.includes(c.dataset.v); });
   box.querySelectorAll('.road li').forEach((li,i)=>{
+    if(li.classList.contains('given')) return;
     li.classList.toggle('filled', !!vals[i]);
     li.classList.toggle('aim', !!sel && !vals[i]);
     li.querySelector('.drop').textContent = vals[i] || '놓기';
