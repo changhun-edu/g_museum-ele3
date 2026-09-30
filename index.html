@@ -655,6 +655,71 @@ button.ghost{
 .day .pool{margin:0}
 .speechp b.got{background:#FBF0D8;border-radius:6px;padding:2px 6px;font-weight:800}
 
+/* 하루 시계 · 장터 대화 · 인터뷰 */
+.times{margin:0 0 12px}
+.dongi-at{background:var(--paper-dim);border-radius:10px;padding:10px 12px;font-size:15px;font-weight:800;margin:0 0 6px}
+.chat{display:flex;flex-direction:column;gap:9px}
+.cb{max-width:92%;padding:10px 13px;border-radius:14px;font-size:16px;font-weight:700;line-height:1.9}
+.cb.l{align-self:flex-start;background:var(--paper-dim);border-radius:4px 14px 14px 14px}
+.cb.r{align-self:flex-end;background:#FBF0D8;border:1px solid rgba(217,164,65,.6);border-radius:14px 4px 14px 14px}
+.cb.wide{width:92%}
+.cb .who{display:block;font-size:13px;color:var(--muted);font-weight:800;line-height:1.4}
+.cb input{display:inline-block;width:10em;max-width:100%;min-height:42px;padding:5px 9px;margin:2px;font-size:16px}
+.cb textarea{min-height:84px;margin-top:4px;font-size:16px}
+/* 원인 → 결과 사슬 */
+.chain{list-style:none;margin:0 0 12px;padding:0}
+.chain li[data-slot]{display:flex;align-items:center;gap:10px;padding:10px;border:2px dashed var(--line);
+  border-radius:10px;background:#fff;cursor:pointer}
+.chain li.filled{border-style:solid;border-color:var(--gold);background:#FBF0D8}
+.chain li.aim{border-color:var(--gold);box-shadow:0 0 0 3px rgba(217,164,65,.3)}
+.chain .lab{flex:none;width:90px;font-size:14px;font-weight:800;color:var(--muted)}
+.chain .drop{flex:1;font-weight:800;color:var(--muted)}
+.chain li.filled .drop{color:var(--text)}
+.chain li.carr{text-align:center;color:var(--gold);font-weight:900;line-height:1.3}
+/* 계절 스위치 */
+.season{border-radius:12px;padding:12px;margin:0 0 12px;transition:background .3s}
+.season.summer{background:#FCEBC9}
+.season.winter{background:#DCE6F1}
+.swt{display:flex;gap:8px;margin:0 0 8px}
+.swt button{flex:1;min-height:50px;border-radius:10px;border:2px solid var(--line);background:#fff;
+  font:inherit;font-weight:800;font-size:16px;cursor:pointer;color:var(--text)}
+.swt button[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.sky{margin:0 0 8px;font-size:15px;font-weight:800;text-align:center}
+.season .hanok{margin:0 0 8px}
+.sline{font-size:17px;font-weight:700;line-height:2.2;margin:0 0 8px}
+.sline input{display:inline-block;width:11em;max-width:100%;min-height:44px;padding:6px 10px;margin:0 3px}
+.season .pool{margin:0}
+/* 사진 미션 */
+.preview.markable{cursor:crosshair}
+.pmark{position:absolute;width:58px;height:58px;margin:-29px 0 0 -29px;border:4px solid var(--gold);border-radius:50%;
+  box-shadow:0 0 0 3px rgba(0,0,0,.35);pointer-events:none;display:grid;place-items:center;font-size:20px;line-height:1}
+.ptitle{position:absolute;left:0;right:0;top:0;background:linear-gradient(rgba(14,27,42,.88),transparent);
+  color:#fff;font-weight:900;font-size:18px;padding:10px 12px 24px;line-height:1.35}
+.zoombox{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:4/3;background:#000}
+.zoombox img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(2.6)}
+.zoombox .q{position:absolute;right:8px;top:8px;background:var(--gold);color:#2A1D05;border-radius:999px;
+  padding:3px 11px;font-weight:900;font-size:14px}
+.pool .tcard.bad{border-color:var(--no);background:#F6E3DE;color:#8C2F1C;text-decoration:line-through}
+/* 저울 */
+.scale{position:relative;height:150px;margin:4px 0 14px}
+.post{position:absolute;left:50%;top:46px;width:8px;height:96px;margin-left:-4px;background:#6B5A3E;border-radius:4px}
+.post::after{content:'';position:absolute;left:-36px;bottom:-4px;width:80px;height:10px;background:#6B5A3E;border-radius:5px}
+.beam{position:absolute;left:6%;right:6%;top:40px;height:8px;background:#8A7550;border-radius:4px;transition:transform .5s}
+.pan{position:absolute;top:10px;width:46%;min-height:60px;background:#fff;border:2px solid var(--line);
+  border-radius:0 0 40px 40px;padding:8px;text-align:center;font-size:14px;font-weight:800;overflow:hidden}
+.pan.l{left:-3%}
+.pan.r{right:-3%;border-color:var(--gold);background:#FBF0D8}
+/* 광고 포스터 */
+.adpost{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:4/5;margin:0 0 12px;
+  background:linear-gradient(160deg,#16283C,#2F4A6B);color:#fff}
+.adpost img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.adpost .in{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:18px;
+  background:linear-gradient(transparent 30%,rgba(14,27,42,.92))}
+.adpost .k{font-size:13px;font-weight:800;color:var(--gold)}
+.adpost .nm{font-size:27px;font-weight:900;letter-spacing:-.03em;margin:4px 0 8px}
+.adpost .cp{font-size:18px;font-weight:800;line-height:1.45;min-height:1.45em}
+.adpost .ft{margin-top:10px;font-size:12px;opacity:.75}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -796,9 +861,16 @@ nature:{
     ok:'정답입니다! 남도는 따뜻하고 여름이 길어서, 시원하게 지낼 수 있는 마루가 발달했습니다.',
     no:'다시 생각해 봅시다. 자연환경이 집에 준 영향을 묻고 있습니다.'
   }],
-  photo:{prompt:'남도의 자연을 설명하는 전시물이나 설명판을 한 장 찍으세요.',
+  photo:{mode:'mark', prompt:'남도의 자연을 설명하는 전시물이나 설명판을 한 장 찍으세요.',
          examples:['남도의 자연 설명판','전라도 지도','전라도명 분청사기 항아리','대나무숲·동백꽃 전시']},
-  prep:{checks:['남도는 왜 따뜻했을까?','새롭게 알게 된 점'],
+  prep:{view:'chain',
+        chain:{slots:['까닭 ①','까닭 ②','그래서 날씨는','그래서 집은'],
+               cards:['바다','해류','봄이 일찍 오고 여름이 길다','마루가 발달했다','성벽이 높아졌다','겨울이 길고 춥다'],
+               say:{'봄이 일찍 오고 여름이 길다':'봄이 일찍 오고 여름이 깁니다','마루가 발달했다':'마루가 발달했습니다',
+                    '성벽이 높아졌다':'성벽이 높아졌습니다','겨울이 길고 춥다':'겨울이 길고 춥습니다'},
+               answer:[['바다','해류'],['바다','해류'],['봄이 일찍 오고 여름이 길다'],['마루가 발달했다']],
+               no:'사슬이 끊어졌어요. 까닭 두 개 → 날씨 → 집 순서로 다시 이어 보세요. 까닭은 설명판에서 형광펜으로 칠한 낱말입니다.'},
+        checks:['남도는 왜 따뜻했을까?','새롭게 알게 된 점'],
         label:'30초 동안 말할 내용을 적어 보세요',
         ph:'예) 남도는 바다와 따뜻한 해류 때문에 포근합니다. 그래서…',
         hint:'앞에서 찾은 낱말 두 개를 그대로 넣어 말해 보세요. 그리고 따뜻한 날씨가 집을 어떻게 바꾸었는지 떠올려 보세요.',
@@ -836,7 +908,7 @@ farm:{
     ok:'정답입니다! 도구마다 쓰이는 때가 달랐습니다.',
     no:'다시 생각해 봅시다. 자리를 눌러 카드를 도로 가져온 뒤, 땅을 갈 때 → 기를 때 → 거둘 때 → 찧을 때 순서로 다시 놓아 보세요.'
   }],
-  photo:{prompt:'남도의 농업을 설명하는 전시물이나 설명판을 한 장 찍으세요.',
+  photo:{mode:'riddle', prompt:'남도의 농업을 설명하는 전시물이나 설명판을 한 장 찍으세요.',
          examples:['남도의 농업 설명판','농사 도구','농사 짓는 모습']},
   prep:{question:{
     id:'seq', type:'single', view:'gap',
@@ -884,6 +956,7 @@ house:{
   }],
   record:[{
     id:'guess', type:'fill',
+    view:'clock', times:['☀️ 여름 한낮','🌧 장마철 오후','🌅 이른 아침','🍂 가을 저녁','❄️ 겨울밤'],
     prompt:'동이가 집에서 어떻게 지냈을지 추리해 보세요.',
     parts:['동이는 집에서 ','했을 것 같습니다. 그렇게 생각한 증거는 ','입니다.'],
     ph:['한 일','전시에서 본 것'],
@@ -891,9 +964,9 @@ house:{
     frame:'첫 칸에는 동이가 한 일, 둘째 칸에는 전시에서 읽은 설명을 씁니다. 둘째 칸은 “○○에 ○○가 있었다는 설명”처럼 쓰면 됩니다.',
     sample:'동이는 집에서 마루에 앉아 시원하게 지냈을 것 같습니다. 그렇게 생각한 증거는 남도의 집에는 더운 여름을 보내기 위해 마루가 있었다는 설명입니다.'
   }],
-  photo:{prompt:'공간의 쓰임이 드러나는 부분을 찍으세요.',
+  photo:{mode:'frame', prompt:'공간의 쓰임이 드러나는 부분을 찍으세요.',
          examples:['대청 또는 마루','온돌 구조 그림','부뚜막·아궁이','부엌 살림살이','사랑방 가구']},
-  prep:{checks:['더위와 추위를 어떻게 피했을까?','새롭게 알게 된 점'],
+  prep:{view:'season', checks:['더위와 추위를 어떻게 피했을까?','새롭게 알게 된 점'],
         label:'30초 동안 말할 내용을 적어 보세요',
         ph:'예) 더울 때는 마루에서, 추울 때는 온돌방에서…',
         hint:'여름에 쓰던 곳과 겨울에 쓰던 곳을 하나씩만 말해 보세요.',
@@ -934,6 +1007,7 @@ market:{
   ],
   record:[{
     id:'guess', type:'fill',
+    view:'talk',
     prompt:'동이가 시장에서 무엇을 했을지 추리해 보세요.',
     parts:['동이는 시장에서 ','했을 것 같습니다. 그렇게 생각한 증거는 ','입니다.'],
     ph:['한 일','전시에서 본 것'],
@@ -941,9 +1015,9 @@ market:{
     frame:'첫 칸에는 동이가 시장에서 한 일, 둘째 칸에는 전시에서 본 물건이나 설명을 씁니다.',
     sample:'동이는 시장에서 상평통보로 물건값을 냈을 것 같습니다. 그렇게 생각한 증거는 상평통보가 조선시대에 쓰인 돈으로 전시되어 있기 때문입니다.'
   }],
-  photo:{prompt:'시장이 어떤 곳이었는지 알 수 있는 전시물을 한 장 찍으세요.',
+  photo:{mode:'title', prompt:'시장이 어떤 곳이었는지 알 수 있는 전시물을 한 장 찍으세요.',
          examples:['상평통보','주판','목화','엿가위와 골패','장터 그림 또는 설명판']},
-  prep:{checks:['시장은 어떤 곳인가?','그렇게 생각한 이유는?'],
+  prep:{view:'interview', checks:['시장은 어떤 곳인가?','그렇게 생각한 이유는?'],
         label:'30초 동안 말할 내용을 적어 보세요',
         ph:'예) 시장은 물건을 사고팔고 소식도 나누는 곳이었습니다…',
         hint:'시장에서는 물건만 오갔을까요? 사람과 소식은 어땠는지도 생각해 보세요.',
@@ -1588,7 +1662,9 @@ function hotspotUI(p, sv){
 /* 두 놀이 화면을 다시 칠합니다 */
 function paintGame(box){
   const g0 = box.dataset.game;
-  if(g0==='gap') return;
+  if(g0==='gap' || g0==='clock' || g0==='talk') return;
+  if(g0==='chain') return paintChain(box);
+  if(g0==='season') return paintSeason(box);
   if(g0==='rice') return paintRice(box);
   if(g0==='highlight') return;
   if(g0==='sort'){
@@ -1642,9 +1718,52 @@ function paintGame(box){
 
 /* 톡-톡 조작 (끌지 않아도 됩니다) */
 function bindGames(){
+  view.addEventListener('input', e=>{
+    const ck=e.target.closest('[data-game="clock"]'); if(ck) composeClock(ck);
+    const tk=e.target.closest('[data-game="talk"]');
+    if(tk){ const v=tk.querySelector('input[data-i="1"]').value.trim();
+      tk.querySelector('[data-josa]').textContent=riceJosa(v,'을(를) 보았어요.'); }
+    const se=e.target.closest('[data-game="season"]'); if(se) paintSeason(se, true);
+  });
   view.addEventListener('click', e=>{
     const box = e.target.closest('[data-game]'); if(!box) return;
 
+    if(box.dataset.game==='clock'){
+      const tc=e.target.closest('.times .tcard');
+      if(tc){ box.querySelectorAll('.times .tcard').forEach(x=>x.setAttribute('aria-pressed','false'));
+        tc.setAttribute('aria-pressed','true'); return composeClock(box); }
+      const g=e.target.closest('.hanok .bay');
+      if(g){ box.dataset.space=g.dataset.place; return composeClock(box); }
+      return;
+    }
+    if(box.dataset.game==='talk'){
+      const c=e.target.closest('.tcard'); if(!c) return;
+      const inp=box.querySelector('input[data-i="1"]'), cur=inp.value.trim(), w=c.dataset.w;
+      inp.value = !cur ? w : (cur.includes(w) ? cur : cur+(hasBat(cur)?'과 ':'와 ')+w);
+      inp.dispatchEvent(new Event('input',{bubbles:true}));
+      return;
+    }
+    if(box.dataset.game==='chain'){
+      const card=e.target.closest('.tcard');
+      if(card){ const on=card.classList.contains('sel');
+        box.querySelectorAll('.tcard').forEach(c=>c.classList.remove('sel'));
+        if(!on) card.classList.add('sel'); return paintChain(box); }
+      const li=e.target.closest('li[data-slot]'); if(!li) return;
+      const hid=li.querySelector('input'), sel=box.querySelector('.tcard.sel');
+      if(sel){ hid.value=sel.dataset.c; sel.classList.remove('sel'); }
+      else hid.value='';
+      return paintChain(box);
+    }
+    if(box.dataset.game==='season'){
+      const sw=e.target.closest('.swt button');
+      if(sw){ box.dataset.cur=sw.dataset.s; return paintSeason(box); }
+      const src=e.target.closest('.tcard') || e.target.closest('.hanok .bay'); if(!src) return;
+      const w=src.dataset.w || src.dataset.place;
+      const inp=box.querySelector(`[data-sin="${box.dataset.cur}"]`);
+      inp.value = `${w}에서 ` + inp.value.trim().replace(/^\S+에서\s*/,'');
+      inp.focus(); inp.dispatchEvent(new Event('input',{bubbles:true}));
+      return paintSeason(box);
+    }
     if(box.dataset.game==='gap'){
       const c=e.target.closest('.tcard'); if(!c) return;
       box.querySelectorAll('.tcard').forEach(x=>x.setAttribute('aria-pressed','false'));
@@ -1815,6 +1934,58 @@ function paintRice(box){
       `<button type="button" class="tcard" data-w="${esc(w)}" aria-pressed="${hid[aim].value===w}">${esc(w)}</button>`).join('');
 }
 
+/* ⑧ 동이의 하루 시계 — 언제 + 어디(한옥) + 무엇을 → 첫 빈칸 하나로 합쳐 저장 */
+function clockUI(p, sv){
+  return `<h3>${esc(p.prompt)}</h3>
+    <p class="gsub">① 언제인지 고르고 ② 한옥 그림에서 동이가 있던 곳을 누른 뒤 ③ 무엇을 했을지 적으세요.</p>
+    <div data-game="clock" data-for="${p.id}">
+      <div class="pool times">${p.times.map(t=>
+        `<button type="button" class="tcard" data-time="${esc(t)}" aria-pressed="false">${esc(t)}</button>`).join('')}</div>
+      ${hanokSVG(p, {})}
+      <p class="dongi-at" data-at>🧒 동이가 언제, 어디에 있었는지 골라 주세요.</p>
+      <p class="fill">그곳에서 동이는 <input type="text" data-action placeholder="예) 낮잠을 자기도"> 했을 것 같습니다.</p>
+    </div>
+    <p class="fill" data-part="${p.id}" data-type="fill">그렇게 생각한 증거는
+      <input type="hidden" data-i="0" value="${esc(sv[0]||'')}"><input type="text" data-i="1" placeholder="${esc(p.ph[1])}" value="${esc(sv[1]||'')}"> 입니다.</p>
+    ${sv[0]?`<p class="gsub">앞에서 쓴 답: 동이는 ${esc(sv[0])} 했을 것 같습니다. 다시 고르면 바뀝니다.</p>`:''}
+    ${sendNote()}${helpBox('fill-'+p.id, p)}`;
+}
+function composeClock(box){
+  const t=box.querySelector('.times [aria-pressed="true"]'), sp=box.dataset.space||'';
+  const a=(box.querySelector('[data-action]').value||'').trim();
+  const tl=t ? t.dataset.time.replace(/^\S+\s/,'') : '';
+  box.querySelector('[data-at]').textContent = (tl||sp)
+    ? `🧒 동이는 ${tl||'○○'}에 ${sp||'○○'}에 있었어요.` : '🧒 동이가 언제, 어디에 있었는지 골라 주세요.';
+  box.querySelectorAll('.hanok .bay').forEach(g=>g.classList.toggle('on', g.dataset.place===sp));
+  const hid=view.querySelector(`[data-part="${box.dataset.for}"] input[data-i="0"]`);
+  if(tl && sp && a) hid.value=`${tl}에 ${sp}에서 ${a}`;
+  else if(t || sp || a) hid.value='';
+}
+
+/* ⑨ 장터 대화 — 장수의 물음에 동이가 대답합니다 (빈칸 두 개는 그대로) */
+function talkUI(p, sv){
+  const words=pickedList(S.topics.market.evidence, 'word');
+  return `<h3>${esc(p.prompt)}</h3>
+    <p class="gsub">장터 할아버지가 동이에게 묻습니다. 동이가 되어 대답을 채워 보세요.</p>
+    <div class="chat" data-part="${p.id}" data-type="fill" data-game="talk">
+      <div class="cb l"><span class="who">👨‍🌾 장터 할아버지</span>어서 오너라, 동이야! 오늘은 무슨 일로 장에 왔니?</div>
+      <div class="cb r"><span class="who">🧒 동이</span>오늘 장에 온 까닭은
+        <input type="text" data-i="0" placeholder="예) 곡식을 사기" value="${esc(sv[0]||'')}"> 위해서예요.</div>
+      <div class="cb l"><span class="who">👨‍🌾 장터 할아버지</span>허허, 옛날 일을 어찌 그리 잘 아니? 무엇을 보고 그렇게 생각했니?</div>
+      <div class="cb r"><span class="who">🔍 탐정단</span>박물관에서
+        <input type="text" data-i="1" placeholder="${esc(p.ph[1])}" value="${esc(sv[1]||'')}"><span data-josa>${esc(riceJosa(sv[1]||'','을(를) 보았어요.'))}</span></div>
+      ${words.length?`<div class="pool" style="margin:0"><span class="gsub" style="width:100%;margin:0">🧺 우리 장바구니 — 눌러서 넣기</span>${
+        words.map(w=>`<button type="button" class="tcard" data-w="${esc(w)}">${esc(w)}</button>`).join('')}</div>`:''}
+    </div>
+    ${sendNote()}${helpBox('fill-'+p.id, p)}`;
+}
+/* 화면·요약·미리보기에 쓸 문장 */
+function sayFill(p, v){
+  if(p.view==='clock') return `동이는 ${v[0]} 했을 것 같습니다. 그렇게 생각한 증거는 ${v[1]}입니다.`;
+  if(p.view==='talk')  return `동이는 ${v[0]} 위해 시장에 왔을 것 같습니다. 박물관에서 ${v[1]}${riceJosa(v[1],'을(를) 보았기 때문입니다.')}`;
+  return joinFill(p, v);
+}
+
 function renderPart(p, saved){
   if(p.type==='single' && p.view==='gap') return gapUI(p, saved||{});
   if(p.type==='multi' && p.view==='highlight') return highlightUI(p, saved||{});
@@ -1847,6 +2018,8 @@ function renderPart(p, saved){
           </select></div>`).join('')}
       </div>`;
   }
+  if(p.type==='fill' && p.view==='clock') return clockUI(p, saved && saved[p.id] || []);
+  if(p.type==='fill' && p.view==='talk')  return talkUI(p, saved && saved[p.id] || []);
   if(p.type==='fill'){
     const sv = saved && saved[p.id] || [];
     let html = `<h3>${esc(p.prompt||'')}</h3><p class="fill" data-part="${p.id}" data-type="fill">`;
@@ -2314,7 +2487,7 @@ function screenTask(step){
     if(!graded){
       const show=[], raw=[];
       parts.forEach(pp=>{ const v=ctx[pp.id];
-        if(pp.type==='fill'){ show.push(joinFill(pp, v)); raw.push(...v); }
+        if(pp.type==='fill'){ show.push(sayFill(pp, v)); raw.push(...v); }
         else if(typeof v==='string'){ show.push(v); raw.push(v); } });
       if(!show.length) return next();
       return reviewSend({title:'우리 모둠의 추리', who:`${r.icon} ${r.name} · ${esc(w.name)}`,
@@ -2383,6 +2556,7 @@ function screenPhoto(step){
     <div class="card">
       <h3>${esc(T.photo.prompt)}</h3>
       <p class="sub">플래시는 꺼 주세요. 전시물이 화면에 꽉 차게 찍으면 좋습니다.</p>
+      ${PHOTO_TASK[T.photo.mode]?`<div class="fb tip" style="margin:0 0 12px">${PHOTO_TASK[T.photo.mode]}</div>`:''}
       <ol class="goals">${T.photo.examples.map(e=>`<li>${esc(e)}</li>`).join('')}</ol>
     </div>
     <div class="card">
@@ -2391,20 +2565,98 @@ function screenPhoto(step){
     </div>`;
   drawShot(step.t);
   btn('사진 탐정 완료', ()=>{
-    if(!S.topics[step.t].photo) return flash('사진을 한 장 찍어 주세요');
-    next();
+    const p=S.topics[step.t].photo;
+    if(!p) return flash('사진을 한 장 찍어 주세요');
+    const mode=T.photo.mode;
+    if(mode==='mark' && !p.mark) return flash('사진에서 증거가 되는 곳을 톡 눌러 표시해 주세요');
+    if(mode==='frame' && !(p.inShot||[]).length) return flash('사진에 나온 공간을 골라 주세요');
+    if(mode==='title'){ const bad=weakText(p.title, 4); if(bad) return flash('사진 제목: '+bad); }
+    if(mode==='riddle' && !p.solved) return flash(p.riddle ? '친구들이 수수께끼를 맞혀야 넘어갈 수 있어요' : '사진 속 도구를 몰래 골라 주세요');
+    save(); next();
   }, {disabled:!d.photo});
+}
+
+/* 미션마다 다른 사진 과제 */
+const PHOTO_TASK = {
+  mark  :'📍 <b>증거 표시하기</b> — 찍은 사진에서 증거가 되는 곳을 톡 눌러 🔍 동그라미를 그리세요.',
+  riddle:'🧩 <b>확대 수수께끼</b> — 도구 하나를 가까이, 일부만 크게 찍으세요. 찍은 뒤 모둠 친구들이 무슨 도구인지 맞혀 봅니다.',
+  frame :'🖼 <b>구도 미션</b> — 두 공간 이상이 한 장에 함께 나오게 찍어 보세요. 예) 대청과 온돌방',
+  title :'📰 <b>사진 제목 붙이기</b> — 찍은 뒤 신문 기사 제목처럼 한 줄 제목을 붙이세요.'
+};
+const SPACES = ['대청','온돌방','부엌','사랑방','안방','마루','아궁이'];
+function photoExtra(p, mode){
+  if(mode==='mark') return `<p class="gsub" style="margin:10px 0 0">${p.mark
+    ? '🔍 표시했어요! 다른 곳을 누르면 옮겨집니다.' : '👆 사진에서 증거가 되는 곳을 톡 누르세요.'}</p>`;
+  if(mode==='frame') return `<p class="gsub" style="margin:12px 0 8px">이 사진에 나온 공간을 모두 고르세요. 두 곳 이상이면 구도 미션 성공!</p>
+    <div class="pool" id="inShot">${SPACES.map(w=>
+      `<button type="button" class="tcard" data-w="${w}" aria-pressed="${(p.inShot||[]).includes(w)}">${w}</button>`).join('')}</div>
+    <p class="gsub" id="frameOk" style="margin:0">${(p.inShot||[]).length>=2?'🎉 구도 미션 성공!':''}</p>`;
+  if(mode==='title') return `<label class="field" style="margin-top:12px" for="ptitleIn">📰 사진 제목</label>
+    <input type="text" id="ptitleIn" placeholder="예) 옛날 장터의 돈, 상평통보를 찾았다!" value="${esc(p.title||'')}">`;
+  if(mode==='riddle'){
+    const tools=TOPICS.farm.record[0].left;
+    if(!p.riddle) return `<p class="gsub" style="margin:12px 0 8px">🤫 사진을 찍은 사람만 보세요. 이 사진 속 도구는 무엇인가요?</p>
+      <div class="pool" id="rdSecret">${tools.map(w=>`<button type="button" class="tcard" data-w="${w}">${w}</button>`).join('')}</div>`;
+    if(!p.solved) return `<p class="gsub" style="margin:12px 0 8px">이제 태블릿을 모둠 친구들에게 보여 주세요. 확대된 사진을 보고 무슨 도구인지 맞혀요!</p>
+      <div class="pool" id="rdGuess">${shuffled('riddle',tools).map(w=>
+        `<button type="button" class="tcard ${(p.wrong||[]).includes(w)?'bad':''}" data-w="${w}">${w}</button>`).join('')}</div>`;
+    return `<div class="fb ok" style="margin:12px 0 0">🎉 정답은 <b>${esc(p.riddle)}</b>! ${p.guesses||1}번 만에 맞혔어요.</div>`;
+  }
+  return '';
+}
+function bindPhotoExtra(topic, p, mode){
+  if(mode==='mark'){
+    const pv=document.getElementById('pv');
+    pv.onclick=e=>{
+      const r=pv.getBoundingClientRect();
+      p.mark={x:Math.round((e.clientX-r.left)/r.width*100), y:Math.round((e.clientY-r.top)/r.height*100)};
+      save({quiet:true}); drawShot(topic);
+    };
+  }
+  if(mode==='frame'){
+    document.querySelectorAll('#inShot .tcard').forEach(b=>b.onclick=()=>{
+      const on=b.getAttribute('aria-pressed')!=='true';
+      b.setAttribute('aria-pressed', String(on));
+      p.inShot=[...document.querySelectorAll('#inShot [aria-pressed="true"]')].map(x=>x.dataset.w);
+      document.getElementById('frameOk').textContent = p.inShot.length>=2 ? '🎉 구도 미션 성공!' : '';
+      save({quiet:true});
+    });
+  }
+  if(mode==='title'){
+    const inp=document.getElementById('ptitleIn'), cap=document.querySelector('#pv .ptitle');
+    inp.oninput=()=>{ p.title=inp.value.trim(); cap.textContent=p.title; cap.hidden=!p.title; };
+    inp.onchange=()=>save({quiet:true});
+  }
+  if(mode==='riddle'){
+    document.querySelectorAll('#rdSecret .tcard').forEach(b=>b.onclick=()=>{
+      p.riddle=b.dataset.w; p.guesses=0; p.wrong=[]; save({quiet:true}); drawShot(topic);
+    });
+    document.querySelectorAll('#rdGuess .tcard').forEach(b=>b.onclick=()=>{
+      if(b.classList.contains('bad')) return;
+      p.guesses=(p.guesses||0)+1;
+      if(b.dataset.w===p.riddle){ p.solved=true; flash('정답!'); }
+      else { p.wrong=(p.wrong||[]).concat(b.dataset.w); flash('아니에요! 다시 맞혀 보세요'); }
+      save({quiet:true}); drawShot(topic);
+    });
+  }
 }
 
 function drawShot(topic){
   const box=document.getElementById('shotBox'), p=S.topics[topic].photo;
   const inp=document.getElementById('camIn');
   if(p){
+    const mode=(TOPICS[topic].photo||{}).mode;
+    const hide = mode==='riddle' && p.riddle && !p.solved;   // 수수께끼 중에는 원본을 감춥니다
     box.innerHTML = `
-      <div class="preview"><img src="${p.full}" alt="증거 사진">
-        <span class="meta">${p.w}×${p.h} · ${p.kb}KB</span></div>
+      ${hide ? `<div class="zoombox"><img src="${p.full}" alt="확대 사진"><span class="q">무슨 도구일까?</span></div>`
+        : `<div class="preview ${mode==='mark'?'markable':''}" id="pv"><img src="${p.full}" alt="증거 사진">
+        ${mode==='title'?`<span class="ptitle" ${p.title?'':'hidden'}>${esc(p.title||'')}</span>`:''}
+        ${mode==='mark'&&p.mark?`<span class="pmark" style="left:${p.mark.x}%;top:${p.mark.y}%">🔍</span>`:''}
+        <span class="meta">${p.w}×${p.h} · ${p.kb}KB</span></div>`}
+      ${photoExtra(p, mode)}
       <button class="opt wide" style="margin-top:12px" id="retake">다시 찍기</button>`;
     document.getElementById('retake').onclick=()=>inp.click();
+    bindPhotoExtra(topic, p, mode);
   } else {
     box.innerHTML = `<button class="shot" id="take">
         <span class="big">📷</span>증거 사진 찍기<small>카메라가 바로 열립니다</small></button>`;
@@ -2440,7 +2692,7 @@ function autoSummary(topicKey){
     const v=d.record[p.id]; if(!v) return;
     let txt;
     if(p.type==='match') txt = Object.keys(v).map(k=>`${k} → ${v[k]}`).join(' / ');
-    else if(Array.isArray(v)) txt = esc(joinFill(p, v));
+    else if(Array.isArray(v)) txt = esc(sayFill(p, v));
     else txt = esc(v);
     html += `<dt>기록 탐정이 적은 것</dt><dd>${txt}</dd>`;
   });
@@ -2450,6 +2702,131 @@ function autoSummary(topicKey){
 }
 function joinFill(p, vals){
   return p.parts.map((t,i)=> t + (i<p.parts.length-1 ? (vals[i]||'____') : '')).join('');
+}
+
+/* ── 발표 준비 세 가지 모양 ─────────
+   저장은 예전과 같이 prep.text(발표 내용)와 prep.checks,
+   그리고 다시 열었을 때 되살릴 조각만 덧붙입니다. */
+function prepUI(P, sv){
+  if(P.view==='chain')     return chainUI(P, sv);
+  if(P.view==='season')    return seasonUI(P, sv);
+  if(P.view==='interview') return interviewUI(P, sv);
+  return '';
+}
+function chainUI(P, sv){
+  const C=P.chain, got=sv.chain||[];
+  return `<h3>🔗 원인 → 결과 사슬 잇기</h3>
+    <p class="gsub">카드를 톡 누른 다음 알맞은 칸을 누르세요. 칸을 누르면 카드가 돌아옵니다. 완성한 사슬이 곧 30초 발표 대본이 됩니다.</p>
+    <div data-game="chain">
+      <div class="pool">${shuffled('chain',C.cards).map(c=>
+        `<button type="button" class="tcard" data-c="${esc(c)}">${esc(c)}</button>`).join('')}</div>
+      <ol class="chain">${C.slots.map((x,i)=>`${i?'<li class="carr" aria-hidden="true">⬇</li>':''}
+        <li data-slot="${i}"><span class="lab">${esc(x)}</span><span class="drop">놓기</span>
+          <input type="hidden" data-ci="${i}" value="${esc(got[i]||'')}"></li>`).join('')}</ol>
+    </div>
+    <div class="fbslot"></div>
+    <label class="field" style="margin-top:14px" for="prepNew">✨ 새롭게 알게 된 점 한 문장</label>
+    <textarea id="prepNew" placeholder="예) 바다와 해류가 날씨를 바꾼다는 것을 알게 되었습니다.">${esc(sv.new||'')}</textarea>
+    ${sendNote()}${helpBox('prep', P)}`;
+}
+function paintChain(box){
+  const used=new Set([...box.querySelectorAll('[data-ci]')].map(i=>i.value).filter(Boolean));
+  const sel=box.querySelector('.tcard.sel');
+  box.querySelectorAll('.pool .tcard').forEach(c=>{ c.hidden=used.has(c.dataset.c); });
+  box.querySelectorAll('li[data-slot]').forEach(li=>{
+    const v=li.querySelector('input').value;
+    li.classList.toggle('filled', !!v);
+    li.classList.toggle('aim', !!sel && !v);
+    li.querySelector('.drop').textContent = v || '놓기';
+  });
+}
+function seasonUI(P, sv){
+  const s=sv.season||{};
+  return `<h3>☀️❄️ 계절 스위치</h3>
+    <p class="gsub">스위치를 눌러 계절을 바꿔 보세요. 계절마다 동이네 식구가 어디서 어떻게 지냈는지 한 문장씩 적어요.
+      한옥 그림이나 아래 카드를 누르면 장소가 들어갑니다.</p>
+    <div class="season summer" data-game="season" data-cur="summer">
+      <div class="swt">
+        <button type="button" data-s="summer" aria-pressed="true">☀️ 무더운 여름</button>
+        <button type="button" data-s="winter" aria-pressed="false">❄️ 추운 겨울</button></div>
+      <p class="sky" data-sky></p>
+      ${hanokSVG({}, {})}
+      <p class="sline" data-sl="summer">더울 때는 <input type="text" data-sin="summer" placeholder="어디에서 어떻게" value="${esc(s.summer||'')}"> 지냈습니다.</p>
+      <p class="sline" data-sl="winter" hidden>추울 때는 <input type="text" data-sin="winter" placeholder="어디에서 어떻게" value="${esc(s.winter||'')}"> 지냈습니다.</p>
+      <div class="pool">${['대청','마루','온돌방','부엌','사랑방','안방'].map(w=>
+        `<button type="button" class="tcard" data-w="${w}">${w}에서</button>`).join('')}</div>
+    </div>
+    <label class="field" for="prepNew">✨ 새롭게 알게 된 점</label>
+    <textarea id="prepNew" placeholder="예) 집도 날씨에 맞게 만들어졌다는 점이 새로웠습니다.">${esc(sv.new||'')}</textarea>
+    ${sendNote()}${helpBox('prep', P)}`;
+}
+function paintSeason(box, typing){
+  const cur=box.dataset.cur||'summer';
+  if(!typing){
+    box.className='season '+cur;
+    box.querySelectorAll('[data-sl]').forEach(p=>{ p.hidden = p.dataset.sl!==cur; });
+    box.querySelector('[data-sky]').textContent = cur==='summer'
+      ? '☀️ 햇볕이 쨍쨍, 땀이 뻘뻘 — 어디가 시원했을까?' : '❄️ 찬 바람이 쌩쌩, 손이 꽁꽁 — 어디가 따뜻했을까?';
+  }
+  box.querySelectorAll('.swt button').forEach(b=>{
+    const filled=!!box.querySelector(`[data-sin="${b.dataset.s}"]`).value.trim();
+    b.setAttribute('aria-pressed', String(b.dataset.s===cur));
+    b.textContent=(b.dataset.s==='summer'?'☀️ 무더운 여름':'❄️ 추운 겨울')+(filled?' ✓':'');
+  });
+  const place=(box.querySelector(`[data-sin="${cur}"]`).value.match(/^(\S+)에서/)||[])[1]||'';
+  box.querySelectorAll('.hanok .bay').forEach(g=>g.classList.toggle('on', g.dataset.place===place));
+}
+function interviewUI(P, sv){
+  const a=sv.answers||[];
+  return `<h3>🎙 동이의 인터뷰</h3>
+    <p class="gsub">동이가 발표 탐정에게 두 가지를 묻습니다. 말하듯이 대답을 적어 보세요. 이 대답이 그대로 30초 발표가 됩니다.</p>
+    <div class="chat">
+      <div class="cb l"><span class="who">👦 동이</span>탐정님, 옛날 시장은 어떤 곳이었나요?</div>
+      <div class="cb r wide"><span class="who">🎤 발표 탐정</span><textarea data-ans="0" placeholder="시장은 …하는 곳이었어요.">${esc(a[0]||'')}</textarea></div>
+      <div class="cb l"><span class="who">👦 동이</span>우아! 어떻게 알았어요? 증거가 있나요?</div>
+      <div class="cb r wide"><span class="who">🎤 발표 탐정</span><textarea data-ans="1" placeholder="우리가 찾은 증거는 …예요.">${esc(a[1]||'')}</textarea></div>
+    </div>
+    ${sendNote()}${helpBox('prep', P)}`;
+}
+function prepSubmit(P, step, w){
+  const d=S.topics[step.t];
+  let text='', raw=[], extra={};
+  if(P.view==='chain'){
+    const C=P.chain, v=[...view.querySelectorAll('[data-ci]')].map(i=>i.value);
+    if(v.some(x=>!x)) return flash('사슬 네 칸을 모두 이어 주세요');
+    const ok = v.every((x,i)=>C.answer[i].includes(x)) && v[0]!==v[1];
+    d.tries.prepchain=(d.tries.prepchain||0)+1; save({quiet:true});
+    const slot=view.querySelector('.fbslot');
+    if(!ok && d.tries.prepchain<2){
+      slot.innerHTML=`<div class="fb no">${esc(C.no)}</div>`;
+      return slot.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+    slot.innerHTML='';
+    const nw=document.getElementById('prepNew').value.trim();
+    if(!nw) return flash('새롭게 알게 된 점을 한 문장 써 주세요');
+    const say=x=>C.say[x]||x;
+    text=`남도는 ${v[0]}${hasBat(v[0])?'과':'와'} ${v[1]} 때문에 따뜻합니다. 그래서 ${say(v[2])}. 그 덕분에 ${say(v[3])}. ${nw}`;
+    raw=[nw]; extra={chain:v, chainOk:ok, new:nw};
+  }
+  if(P.view==='season'){
+    const su=view.querySelector('[data-sin="summer"]').value.trim(), wi=view.querySelector('[data-sin="winter"]').value.trim();
+    if(!su) return flash('☀️ 여름 문장을 채워 주세요');
+    if(!wi) return flash('❄️ 스위치를 눌러 겨울 문장도 채워 주세요');
+    const nw=document.getElementById('prepNew').value.trim();
+    if(!nw) return flash('새롭게 알게 된 점을 적어 주세요');
+    text=`더울 때는 ${su} 지냈습니다. 추울 때는 ${wi} 지냈습니다. ${nw}`;
+    raw=[su,wi,nw]; extra={season:{summer:su, winter:wi}, new:nw};
+  }
+  if(P.view==='interview'){
+    const a=[...view.querySelectorAll('[data-ans]')].map(t=>t.value.trim());
+    if(a.some(x=>!x)) return flash('동이의 두 질문에 모두 대답해 주세요');
+    text=a.join(' '); raw=a; extra={answers:a};
+  }
+  reviewSend({title:'30초 발표 내용', who:`🎤 발표 탐정 · ${esc(w.name)}`,
+    texts:[text], raw, min:10, onSend:()=>{
+      d.prep=Object.assign({checks:{list:P.checks.slice(), other:''}, text}, extra);
+      save(); next();
+    }});
 }
 
 function screenPrep(step){
@@ -2464,7 +2841,7 @@ function screenPrep(step){
       ${autoSummary(step.t)}
     </div>
     <div class="card">
-      ${P.question ? renderPart(P.question, saved) + '<div class="fbslot"></div>' : `
+      ${P.question ? renderPart(P.question, saved) + '<div class="fbslot"></div>' : P.view ? prepUI(P, saved) : `
         <h3>30초 발표 준비</h3>
         <div class="opts" data-part="checks" data-type="multi">
           ${P.checks.map(c=>`<button class="opt wide" data-v="${esc(c)}" aria-pressed="${(saved.checks&&saved.checks.list||[]).includes(c)}"><span class="box"></span>${esc(c)}</button>`).join('')}
@@ -2498,6 +2875,7 @@ function screenPrep(step){
       }
       return;
     }
+    if(P.view) return prepSubmit(P, step, w);
     const txt=document.getElementById('prepText').value.trim();
     if(!txt) return flash('발표할 내용을 적어 주세요');
     const c=readPart({id:'checks',type:'multi',options:P.checks}, view);
@@ -3040,17 +3418,13 @@ function bonObserve(){
       <label class="field" style="margin-top:16px">설명판에서 찾은 중요한 낱말</label>
       <input type="text" id="bWord" placeholder="예) 상례 / 장식 / 예술 / 위로" value="${esc(S.bonus.word)}">
     </div>
-    <div class="card">
-      <h3>탐정단 승인</h3>
-      ${apprBox('observe',['evidence','photo','record'])}
-    </div>`;
+    `;
   drawBonusShot();
   bindOpts();
   btn('제출', ()=>{
     const n=document.getElementById('bName').value.trim();
     const w=document.getElementById('bWord').value.trim();
     if(!n||!w) return flash('전시물 이름과 낱말을 적어 주세요');
-    if(!readAppr('observe',3)) return;
     S.bonus.name=n; S.bonus.word=w; save(); next();
   });
 }
@@ -3095,21 +3469,111 @@ function bonStep(cfg){
       onSend:()=>{ S.bonus[cfg.key]=t; save(); next(); }});
   });
 }
-const bonWhy=()=>bonStep({eyebrow:'비교', title:'⚖ 왜 이 전시물일까?', id:'why', key:'why',
-  q:'다른 전시물과 비교했을 때 왜 더 중요할까요?', ph:'다른 전시물은 …지만, 이 전시물은 …',
-  hint:'다른 전시물과 다른 점을 딱 한 가지만 찾아보세요. 쓰임새인가요, 사람들의 마음인가요, 아름다움인가요?',
-  frame:'다른 전시물은 ○○을 보여 주지만, 이 전시물은 ○○까지 보여 줍니다. 그래서 더 중요합니다.',
-  sample:'이 상여는 죽은 사람을 보내고 남은 사람들을 위로하는 데 쓰였기 때문에 중요합니다. 다른 전시물은 생활 도구나 물건의 쓰임을 보여 주지만, 이 상여는 남도 사람들의 마음과 공동체 문화, 아름다운 장식까지 함께 보여 줍니다.'});
-const bonMeaning=()=>bonStep({eyebrow:'해석', title:'💡 이 전시물이 알려 주는 것', id:'meaning', key:'meaning',
-  q:'이 전시물은 옛날 광주 사람들의 어떤 생활을 알려 주나요?', ph:'옛날 사람들이 …하던 생활을 알려 줍니다.',
-  hint:'이 전시물을 쓰던 사람의 하루를 상상해 보세요. 언제, 왜, 누구와 함께 썼을까요?',
-  frame:'옛날 사람들이 ○○하던 생활을 알려 줍니다.',
-  sample:'옛날 사람들이 죽은 사람의 마지막 길을 정성스럽게 보내고, 남은 사람들을 위로하던 생활을 알려 줍니다.'});
-const bonAd=()=>bonStep({eyebrow:'창조', title:'🎨 박물관 광고 만들기', id:'ad', key:'ad',
-  q:'친구들이 꼭 보고 싶어지도록 한 문장 광고를 만들어 보세요.', ph:'예) 장승은 옛날 광주 사람들의 마음을 알려 주는 타임머신!',
-  hint:'친구가 “보러 가고 싶다”고 느끼려면 어떤 말이 좋을까요? 짧고 힘 있게 만들어 보세요.',
-  frame:'① 전시물 이름 + ② 가장 마음에 남는 점 + ③ 오라고 부르는 한마디, 세 부분으로 만들어 보세요.',
-  sample:'죽은 사람을 정성껏 보내고 남은 사람을 위로한 아름다운 상여, 놓치면 후회합니다!'});
+function eun(w){ return hasBat(w)?'은':'는'; }
+function eul(w){ return hasBat(w)?'을':'를'; }
+
+/* 비교 — 저울에 달아 보기 */
+function bonWhy(){
+  const B=S.bonus, W=B.whyParts||{};
+  view.innerHTML = `
+    <p class="eyebrow">보너스 · 비교</p>
+    <h1>⚖ 왜 이 전시물일까?</h1>
+    <div class="card">
+      <h3>다른 전시물과 저울에 달아 보세요</h3>
+      <p class="sub">다른 전시물 하나를 떠올리고 각각 무엇을 보여 주는지 적어 보세요. 더 많이 보여 주는 쪽으로 저울이 기웁니다.</p>
+      <div class="scale"><div class="post"></div>
+        <div class="beam" id="beam">
+          <div class="pan l" id="panL">${esc(W.other||'다른 전시물')}</div>
+          <div class="pan r">${esc(B.name||'우리 전시물')}</div></div></div>
+      <label class="field" for="wOther">비교할 다른 전시물</label>
+      <input type="text" id="wOther" placeholder="예) 호미" value="${esc(W.other||'')}">
+      <p class="fill">그 전시물은 <input type="text" id="wA" placeholder="보여 주는 것" value="${esc(W.a||'')}"><span id="wAj">${esc(riceJosa(W.a||'','을(를)'))}</span> 보여 주지만,</p>
+      <p class="fill">${esc(B.name)}${eun(B.name)} <input type="text" id="wB" placeholder="더 보여 주는 것" value="${esc(W.b||'')}"> 까지 보여 줍니다.</p>
+      ${sendNote()}
+      ${helpBox('bonus-why', {
+        hint:'다른 전시물과 다른 점을 딱 한 가지만 찾아보세요. 쓰임새인가요, 사람들의 마음인가요, 아름다움인가요?',
+        frame:'그 전시물은 ○○을 보여 주지만, 우리 전시물은 ○○까지 보여 줍니다.',
+        sample:'그 전시물은 농사짓는 방법을 보여 주지만, 상여는 남도 사람들의 마음과 공동체 문화, 아름다운 장식까지 보여 줍니다.'})}
+    </div>`;
+  const tilt=()=>{
+    const a=document.getElementById('wA').value.trim().length, b=document.getElementById('wB').value.trim().length;
+    const deg=Math.max(-9, Math.min(9, (b-a)*0.8));
+    document.getElementById('beam').style.transform=`rotate(${deg}deg)`;
+    document.getElementById('panL').textContent=document.getElementById('wOther').value.trim()||'다른 전시물';
+    document.getElementById('wAj').textContent=riceJosa(document.getElementById('wA').value.trim(),'을(를)');
+  };
+  ['wOther','wA','wB'].forEach(id=>document.getElementById(id).addEventListener('input', tilt));
+  tilt();
+  btn('제출', ()=>{
+    const o=document.getElementById('wOther').value.trim(), a=document.getElementById('wA').value.trim(), b=document.getElementById('wB').value.trim();
+    if(!o||!a||!b) return flash('세 칸을 모두 채워 주세요');
+    const why=`${o}${eun(o)} ${a}${riceJosa(a,'을(를)')} 보여 주지만, ${B.name}${eun(B.name)} ${b}까지 보여 줍니다. 그래서 우리는 ${B.name}${eul(B.name)} 골랐습니다.`;
+    reviewSend({title:'왜 이 전시물일까?', who:'🏛 탐정단의 생각', texts:[why], raw:[a,b], min:6, keywords:[],
+      onSend:()=>{ B.why=why; B.whyParts={other:o,a,b}; save(); next(); }});
+  });
+}
+
+/* 해석 — 전시물이 되어 자기소개 */
+function bonMeaning(){
+  const B=S.bonus, M=B.meaningParts||[];
+  const ya=hasBat(B.name)?'이야':'야';
+  view.innerHTML = `
+    <p class="eyebrow">보너스 · 해석</p>
+    <h1>💡 전시물이 되어 말하기</h1>
+    <div class="card">
+      <h3>이 전시물은 옛날 광주 사람들의 어떤 생활을 알려 주나요?</h3>
+      <p class="sub">전시물이 직접 자기소개를 한다고 생각하고 빈칸을 채우세요.</p>
+      <div class="speech" style="box-shadow:none;border:2px solid var(--line)">
+        <p class="fill" style="margin:0">“나는 <b>${esc(B.name)}</b>${ya}. 옛날 사람들은 나를
+          <input type="text" data-m="0" placeholder="언제·무엇을 할 때" value="${esc(M[0]||'')}"> 썼어.
+          나를 보면 옛날 사람들이 <input type="text" data-m="1" placeholder="어떤" value="${esc(M[1]||'')}"> 생활을 했다는 걸 알 수 있지.”</p>
+      </div>
+      ${sendNote()}
+      ${helpBox('bonus-meaning', {
+        hint:'이 전시물을 쓰던 사람의 하루를 상상해 보세요. 언제, 왜, 누구와 함께 썼을까요?',
+        frame:'첫 칸은 “○○할 때”, 둘째 칸은 “○○하던” 모양으로 써 보세요.',
+        sample:'나는 상여야. 옛날 사람들은 나를 죽은 사람의 마지막 길을 보낼 때 썼어. 나를 보면 옛날 사람들이 이웃과 함께 슬픔을 나누던 생활을 했다는 걸 알 수 있지.'})}
+    </div>`;
+  btn('제출', ()=>{
+    const m=[...view.querySelectorAll('[data-m]')].map(i=>i.value.trim());
+    if(m.some(x=>!x)) return flash('두 칸을 모두 채워 주세요');
+    const t=`나는 ${B.name}${ya}. 옛날 사람들은 나를 ${m[0]} 썼어. 나를 보면 옛날 사람들이 ${m[1]} 생활을 했다는 걸 알 수 있지.`;
+    reviewSend({title:'전시물이 되어 말하기', who:'🏛 탐정단의 해석', texts:[t], raw:m, min:6, keywords:[],
+      onSend:()=>{ B.meaning=t; B.meaningParts=m; save(); next(); }});
+  });
+}
+
+/* 창조 — 포스터 미리보기 */
+function bonAd(){
+  const B=S.bonus;
+  view.innerHTML = `
+    <p class="eyebrow">보너스 · 창조</p>
+    <h1>🎨 박물관 광고 만들기</h1>
+    <div class="card">
+      <h3>친구들이 꼭 보고 싶어지는 한 문장</h3>
+      <div class="adpost">${B.photo?`<img src="${B.photo.full}" alt="">`:''}
+        <div class="in"><span class="k">광주역사민속박물관 · ${S.groupNo}모둠 추천</span>
+          <div class="nm">${esc(B.name)}</div>
+          <div class="cp" id="adcp">${esc(B.ad||'여기에 광고 문구가 나타나요')}</div>
+          <div class="ft">어린이 큐레이터가 고른 단 하나의 전시물</div></div></div>
+      <label class="field" for="bText">한 문장 광고</label>
+      <textarea id="bText" placeholder="예) 장승은 옛날 광주 사람들의 마음을 알려 주는 타임머신!">${esc(B.ad||'')}</textarea>
+      <p class="sub" style="margin:6px 0 0">글자를 쓰면 포스터에 바로 나타납니다. 짧고 힘 있게!</p>
+      ${sendNote()}
+      ${helpBox('bonus-ad', {
+        hint:'친구가 “보러 가고 싶다”고 느끼려면 어떤 말이 좋을까요? 짧고 힘 있게 만들어 보세요.',
+        frame:'① 전시물 이름 + ② 가장 마음에 남는 점 + ③ 오라고 부르는 한마디, 세 부분으로 만들어 보세요.',
+        sample:'죽은 사람을 정성껏 보내고 남은 사람을 위로한 아름다운 상여, 놓치면 후회합니다!'})}
+    </div>`;
+  const ta=document.getElementById('bText');
+  ta.addEventListener('input', ()=>{ document.getElementById('adcp').textContent = ta.value.trim() || '여기에 광고 문구가 나타나요'; });
+  btn('제출', ()=>{
+    const t=ta.value.trim();
+    if(!t) return flash('광고 문구를 적어 주세요');
+    reviewSend({title:'박물관 광고', who:'🎨 우리 모둠의 광고 문구', texts:[t], min:8, keywords:[],
+      onSend:()=>{ B.ad=t; save(); next(); }});
+  });
+}
 
 function bonFinal(){
   view.innerHTML = `
@@ -3119,13 +3583,15 @@ function bonFinal(){
       <dl class="auto">
         <dt>우리가 선택한 전시물</dt><dd>${esc(S.bonus.name)}</dd>
         <dt>선택 이유</dt><dd>${esc(S.bonus.why)}</dd>
+        <dt>전시물의 자기소개</dt><dd>${esc(S.bonus.meaning)}</dd>
         <dt>광고 문구</dt><dd>${esc(S.bonus.ad)}</dd>
         ${S.bonus.photo?`<dt>사진</dt><dd><img class="shotthumb" src="${S.bonus.photo.thumb}" alt=""></dd>`:''}
       </dl>
     </div>
     <div class="card">
-      <h3>발표 탐정이 발표합니다</h3>
-      ${apprBox('bfinal',['present'])}
+      <h3>발표 탐정이 발표하고, 친구들이 한 번에 동의합니다</h3>
+      <p class="sub">보너스에서는 동의를 이번에 한 번만 받습니다.</p>
+      ${apprBox('bfinal',['evidence','photo','record'])}
     </div>`;
   bindOpts();
   btn('발표 완료', ()=>{
@@ -3429,7 +3895,9 @@ function mainPayload(){
     const d=S.topics[t];
     topics[t]={evidence:d.evidence, record:d.record, prep:d.prep, submit:d.submit,
                agree:d.agree, tries:d.tries, done:d.done,
-               photoTaken:!!d.photo, photoAt:d.photo?d.photo.at:null};
+               photoTaken:!!d.photo, photoAt:d.photo?d.photo.at:null,
+               photoNote:d.photo?{mark:d.photo.mark||null, inShot:d.photo.inShot||null, title:d.photo.title||'',
+                 riddle:d.photo.riddle||'', solved:!!d.photo.solved, guesses:d.photo.guesses||0}:null};
   });
   return {
     session:S.session, groupNo:S.groupNo, members:S.members, order:S.order, prior:S.prior,
