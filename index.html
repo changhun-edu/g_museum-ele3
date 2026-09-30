@@ -781,6 +781,12 @@ button.ghost{
 .opts.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .opts.grid2 .opt{width:100%}
 
+/* 정답 확정 후 잠금 */
+.locked{pointer-events:none}
+.locked button:disabled, .locked input:disabled, .locked select:disabled, input.locked:disabled{opacity:1;cursor:default}
+.locked [aria-pressed="false"], .locked button[aria-pressed="false"]:disabled{opacity:.4}
+.lockmsg{display:block;font-size:13px;font-weight:800;color:#255C3E;margin:0 0 6px}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -2588,6 +2594,20 @@ function myAnswer(p, val){
   return list.length ? `<span class="mine">우리가 고른 답 — <em>${list.map(esc).join(' · ')}</em></span>` : '';
 }
 /* 지금 차례인 아이가 모둠에게 읽어 주도록 */
+/* 정답을 맞히면 답을 잠급니다 — 친구들에게 읽어 주는 동안 바꿀 수 없도록 */
+function lockAnswers(){
+  view.querySelectorAll('[data-part], [data-game], [data-other]').forEach(el=>{
+    el.classList.add('locked');
+    el.setAttribute('aria-disabled','true');
+    el.querySelectorAll('button, input, select, textarea').forEach(x=>{ x.disabled=true; });
+    if(/^(INPUT|SELECT|TEXTAREA)$/.test(el.tagName)) el.disabled=true;
+  });
+  view.querySelectorAll('.help').forEach(h=>{ h.hidden=true; });
+  const first=view.querySelector('.fbslot .fb.ok');
+  if(first && !view.querySelector('.lockmsg'))
+    first.insertAdjacentHTML('afterbegin','<span class="lockmsg">🔒 정답이 확정되어 더 바꿀 수 없어요</span>');
+}
+
 function readAloud(step){
   if(!step || !step.role) return '';
   const w = whoIs(step.role, step.m);
@@ -2680,6 +2700,7 @@ function screenTask(step){
         texts:show, raw:raw, min:8, onSend:next});
     }
     if(allOk){
+      lockAnswers();
       slots[slots.length-1].insertAdjacentHTML('beforeend', readAloud(step));
       const b=document.getElementById('mainBtn');
       b.textContent='읽어 줬어요 · 다음으로'; b.onclick=next;
@@ -3070,6 +3091,7 @@ function screenPrep(step){
       view.querySelector('.fbslot').innerHTML=
         `<div class="fb ${g.ok?'ok':'no'}">${myAnswer(P.question, v)}${esc(g.ok?P.question.ok:P.question.no)}</div>`;
       if(g.ok){
+        lockAnswers();
         view.querySelector('.fbslot').insertAdjacentHTML('beforeend', readAloud(step));
         const b=document.getElementById('mainBtn');
         b.textContent='읽어 줬어요 · 다음으로'; b.onclick=next;
