@@ -2182,9 +2182,15 @@ function composeClock(box){
   else if(t || sp || a) hid.value='';
 }
 
+/* 장바구니에 담은 것 가운데 눈으로 본 '전시물'만 — 교환·소식·놀이·생필품 같은 생각 낱말은 빼고 */
+const MARKET_OBJECTS = ['상평통보','주판','목화','무명','명태','곡식'];
+function basketObjects(){
+  return pickedList(S.topics.market.evidence, 'word').filter(w=>MARKET_OBJECTS.includes(w));
+}
+
 /* ⑨ 장터 대화 — 장수의 물음에 동이가 대답합니다 (빈칸 두 개는 그대로) */
 function talkUI(p, sv){
-  const words=pickedList(S.topics.market.evidence, 'word');
+  const words=basketObjects();
   return `<h3>${esc(p.prompt)}</h3>
     <p class="gsub">장터 할아버지가 동이에게 묻습니다. 동이가 되어 대답을 채워 보세요.</p>
     <div class="chat" data-part="${p.id}" data-type="fill" data-game="talk">
@@ -2194,7 +2200,7 @@ function talkUI(p, sv){
       <div class="cb l"><span class="who">👨‍🌾 장터 할아버지</span>허허, 옛날 일을 어찌 그리 잘 아니? 무엇을 보고 그렇게 생각했니?</div>
       <div class="cb r"><span class="who">🔍 탐정단</span>박물관에서
         <input type="text" data-i="1" placeholder="${esc(p.ph[1])}" value="${esc(sv[1]||'')}"><span data-josa>${esc(riceJosa(sv[1]||'','을(를) 보았어요.'))}</span></div>
-      ${words.length?`<div class="pool" style="margin:0"><span class="gsub" style="width:100%;margin:0">🧺 우리 장바구니 — 눌러서 넣기</span>${
+      ${words.length?`<div class="pool" style="margin:0"><span class="gsub" style="width:100%;margin:0">🧺 우리가 담은 전시물 — 누르면 '보았어요' 칸에 들어가요</span>${
         words.map(w=>`<button type="button" class="tcard" data-w="${esc(w)}">${esc(w)}</button>`).join('')}</div>`:''}
     </div>
     ${sendNote()}${helpBox('fill-'+p.id, p)}`;
@@ -3156,7 +3162,7 @@ function paintSeason(box, typing){
 }
 function josaIo(w){ return w ? (hasBat(w)?'이오':'요') : '이오'; }
 function cryUI(P, sv){
-  const c=sv.cry||[], words=pickedList(S.topics.market.evidence, 'word');
+  const c=sv.cry||[], words=basketObjects();
   return `<h3>📣 장날 알림 외치기</h3>
     <p class="gsub">옛날 장터에서는 큰 소리로 소식을 알렸어요. 알림판을 완성하고, 발표 탐정이 장터 알림꾼처럼 크게 외쳐 보세요.</p>
     <div data-game="cry">
@@ -3167,7 +3173,7 @@ function cryUI(P, sv){
         <p class="cline">“그 증거는 바로
           <input type="text" data-cry="1" placeholder="우리가 찾은 증거" value="${esc(c[1]||'')}"><span data-cj>${josaIo(c[1]||'')}</span>!”</p>
       </div>
-      ${words.length?`<div class="pool" style="margin:10px 0 0"><span class="gsub" style="width:100%;margin:0">🧺 우리 장바구니 — 눌러서 증거 칸에 넣기</span>${
+      ${words.length?`<div class="pool" style="margin:10px 0 0"><span class="gsub" style="width:100%;margin:0">🧺 우리가 담은 전시물 — 누르면 '증거' 칸에 들어가요</span>${
         words.map(w=>`<button type="button" class="tcard" data-w="${esc(w)}">${esc(w)}</button>`).join('')}</div>`:''}
     </div>
     ${sendNote()}${helpBox('prep', P)}`;
