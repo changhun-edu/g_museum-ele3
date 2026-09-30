@@ -74,7 +74,8 @@ body{
 .dongimood.pop{animation:moodpop .5s ease-out}
 
 /* ── 본문 ─────────────────────────── */
-main{flex:1;padding:20px 16px 8px}
+main{flex:1;padding:20px 16px 8px;display:flex;flex-direction:column}
+main > *{flex:none}
 .eyebrow{font-size:14px;color:var(--gold);font-weight:700;margin:0 0 6px}
 h1{font-size:30px;line-height:1.25;letter-spacing:-.035em;font-weight:900;margin:0 0 14px}
 h2{font-size:21px;line-height:1.35;letter-spacing:-.03em;font-weight:800;margin:0 0 12px}
@@ -806,6 +807,25 @@ button.ghost{
 .card .dots i.ok{background:var(--gold)}
 .card .dots i.fix{background:var(--no)}
 
+/* 활동 칸 넓게 쓰기 */
+.card.grow{flex:1 0 auto;display:flex;flex-direction:column}
+.card.grow > .growin{flex:1;display:flex;flex-direction:column}
+.growin[data-game="sort"] .bins{flex:1;min-height:220px}
+.bin{display:flex;flex-direction:column;min-height:160px}
+.bin .in{flex:1;align-content:flex-start;gap:8px}
+.bin .tcard,.cart .tcard,.stall .tcard{background:var(--paper);color:var(--text);border:2px solid var(--line);border-radius:10px;
+  padding:10px 14px;font:inherit;font-size:17px;font-weight:800;cursor:pointer}
+.card .bin .tcard{background:#FBF0D8;border-color:#C9A96A}
+.pool .tcard{padding:11px 16px;font-size:17px}
+.growin[data-game="basket"] .cart{flex:1;min-height:150px;display:flex;flex-direction:column}
+.growin[data-game="basket"] .cart .in{flex:1}
+.growin[data-game="place"] .road{flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:8px}
+.growin[data-game="place"] .road li{flex:1;min-height:54px;margin:0}
+.growin[data-game="sticker"] .items{flex:1}
+.growin[data-game="sticker"] .items li{min-height:78px}
+.growin[data-game="chain"] .chain{flex:1;display:flex;flex-direction:column}
+.growin[data-game="chain"] .chain li[data-slot]{flex:1;min-height:52px}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -1346,11 +1366,22 @@ function render(){
     bad:bonAd, bfinal:bonFinal, bcomplete:bonComplete,
     end:screenEnd}[step.v])(step);
   refreshHelpLocks();
+  growWorkArea();
   view.querySelectorAll('[data-game]').forEach(paintGame);
   view.querySelectorAll('[data-vote]').forEach(paintVote);
   paintTalk();
   window.scrollTo(0,0);
   maybeHandoff(step);
+}
+
+/* 활동 칸이 남는 화면 높이를 채우도록 — 마지막 활동 카드를 늘립니다 */
+const GROW = ['sort','basket','place','sticker','chain'];
+function growWorkArea(){
+  const cards=[...view.querySelectorAll(':scope > .card')].filter(c=>
+    GROW.some(g=>c.querySelector(`[data-game="${g}"]`)));
+  const c=cards[cards.length-1]; if(!c) return;
+  c.classList.add('grow');
+  c.querySelector(GROW.map(g=>`[data-game="${g}"]`).join(',')).classList.add('growin');
 }
 
 function drawBar(step){
