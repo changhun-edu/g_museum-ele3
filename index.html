@@ -609,6 +609,52 @@ button.ghost{
 
 /* 결과 이미지 */
 #poster{width:100%;border-radius:12px;display:block;margin:0 0 14px;background:#fff}
+/* 빠진 한 칸 · 쌀 한 톨 */
+.pool .tcard[aria-pressed="true"]{border-color:var(--gold);background:#FBF0D8}
+.card .road .step{background:var(--paper-dim);color:var(--text)}
+.card .road li.filled .step{background:var(--gold);color:#2A1D05}
+.card .road li.aim .use{color:#7A5A16}
+.rice{font-size:17px;line-height:2.4;font-weight:600;margin:0 0 12px}
+.rslot{display:inline-block;min-width:64px;min-height:40px;margin:0 3px;padding:2px 10px;
+  border:2px dashed var(--line);border-radius:8px;background:#fff;color:var(--text);
+  font:inherit;font-weight:800;cursor:pointer;line-height:1.5}
+.rslot.fill{border-style:solid;border-color:var(--ok);background:#E2EFE6}
+.rslot.aim{border-style:solid;border-color:var(--gold);background:#FBF0D8;box-shadow:0 0 0 3px rgba(217,164,65,.35)}
+.rtray{background:var(--paper-dim);border-radius:10px;padding:10px;align-items:center}
+
+/* 듣고 맞히기 동의 */
+.card .vturn .ask{color:var(--muted)}
+.lq{margin:0 0 12px}
+.lqq{font-size:15px;font-weight:800;margin:0 0 8px}
+.lchips{display:flex;gap:8px;flex-wrap:wrap}
+.lchips button{flex:1;min-width:88px;min-height:50px;border-radius:10px;border:2px solid var(--gold);
+  background:#fff;color:var(--text);font:inherit;font-size:17px;font-weight:800;cursor:pointer}
+.lchips button.bad{border-color:var(--no);background:#F6E3DE;color:#8C2F1C;text-decoration:line-through;opacity:.75}
+.lq.okay{color:#7A5A16;font-weight:800;font-size:15px}
+.lq.wait{color:var(--muted);font-size:14px;font-weight:700}
+.stampbtn[disabled]{opacity:.45;border-color:var(--line)!important;cursor:not-allowed}
+
+/* 미션 5 — 고르기 · 시간표 */
+.fe{padding:12px 0;border-bottom:1px dashed var(--line)}
+.fe:last-child{border-bottom:0}
+.fehead{display:flex;align-items:center;gap:8px;font-weight:800;font-size:16px;margin:0 0 8px}
+.star{margin-left:auto;min-width:52px;min-height:42px;border:2px solid var(--line);border-radius:999px;
+  background:#fff;font-size:20px;cursor:pointer;color:var(--muted)}
+.star[aria-pressed="true"]{border-color:var(--gold);background:#FBF0D8;color:#7A5A16}
+.fe .pool{margin:0 0 8px}
+.fe .pool .tcard,.day .pool .tcard{font-size:15px;padding:6px 12px}
+.fe input{min-height:44px;font-size:16px}
+.daylist{list-style:none;margin:0;padding:0}
+.day{border:1px solid var(--line);border-left:5px solid var(--gold);border-radius:10px;
+  padding:12px;margin:0 0 10px;background:#fff}
+.dhead{display:flex;align-items:center;gap:8px;margin:0 0 4px;font-size:15px}
+.dico{font-size:24px;line-height:1}
+.dline{font-size:17px;line-height:2.2;margin:0 0 6px}
+.dline input{display:inline-block;width:9em;min-width:120px;max-width:100%;min-height:44px;
+  padding:6px 10px;margin:0 3px;text-align:center}
+.day .pool{margin:0}
+.speechp b.got{background:#FBF0D8;border-radius:6px;padding:2px 6px;font-weight:800}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -793,14 +839,22 @@ farm:{
   photo:{prompt:'남도의 농업을 설명하는 전시물이나 설명판을 한 장 찍으세요.',
          examples:['남도의 농업 설명판','농사 도구','농사 짓는 모습']},
   prep:{question:{
-    id:'seq', type:'single',
+    id:'seq', type:'single', view:'gap',
     prompt:'쌀 한 톨의 순서를 찾으세요.',
     options:['씨앗 → 농사도구 → 수확 → 도정 → 저장','도정 → 씨앗 → 수확 → 저장 → 농사도구','시장 → 저장 → 씨앗 → 도정 → 수확'],
     answer:'씨앗 → 농사도구 → 수확 → 도정 → 저장',
     ok:'정답입니다! 쌀은 씨앗에서 시작해 농사도구로 가꾸고, 수확한 뒤 도정하고 저장하는 과정을 거칩니다.',
     no:'다시 생각해 봅시다. 쌀은 먼저 씨앗을 심어야 자랍니다. 수확한 뒤에야 도정하고 저장할 수 있습니다.'
   }},
-  submit:{title:'쌀 한 톨의 여행', type:'fill',
+  submit:{title:'쌀 한 톨의 여행', type:'fill', view:'rice',
+    /* 쌀 한 톨이 되어 말하기 — 저장되는 빈칸 6개는 아래 parts와 같습니다 */
+    rice:{
+      parts:['나는 쌀 한 톨이야. 처음에 사람들은 ','(으)로 땅을 갈고 나를 씨앗으로 뿌렸어. 호미로 ','을(를) 매 주니 쑥쑥 자랐지. 가을이 되자 ','(으)로 베어져 수확되었고, ','(으)로 벼에서 낟알이 떨어졌어. 디딜방아로 ','되어 하얀 쌀이 되었고, 마지막에는 ','에 담겨 저장되었어.'],
+      from:['땅을 갈 때','','벼를 거둘 때','벼에서 낟알을 뗄 때','','저장할 때'],
+      choices:[['따비','호미','낫','홀태','디딜방아','매통'],['김','벼','씨앗'],
+               ['따비','호미','낫','홀태','디딜방아','매통'],['따비','호미','낫','홀태','디딜방아','매통'],
+               ['도정','수확','저장'],['따비','호미','낫','홀태','디딜방아','매통']]
+    },
     parts:['','(으)로 땅을 갈아 → 씨앗을 뿌리고 → 호미로 ','을 매고 → ','(으)로 수확하여 → ','(으)로 벼에서 낟알을 떼고 → 디딜방아로 ','하여 → ','에 저장한다.'],
     ph:['땅 가는 도구','호미로 매는 것','거두는 도구','낟알 떼는 도구','방아로 하는 일','저장하는 도구'],
     hint:'농사는 ① 땅을 갈고 ② 기르고 ③ 거두고 ④ 찧고 ⑤ 저장하는 순서로 이어집니다. 앞에서 도구와 쓰임을 연결한 화면을 떠올려 보세요.',
@@ -920,7 +974,7 @@ function blankTopic(){
 }
 function blankFinal(){
   return {evidence:['','','',''], pick:[], photoText:['',''], story:['','','',''],
-          speech:['','','','','',''], compare:[], agree:{}, done:false};
+          speech:['','','','','',''], compare:[], agree:{}, star:null, done:false};
 }
 function blankBonus(){
   return {roles:{evidence:'',photo:'',record:'',present:''}, photo:null,
@@ -1534,6 +1588,8 @@ function hotspotUI(p, sv){
 /* 두 놀이 화면을 다시 칠합니다 */
 function paintGame(box){
   const g0 = box.dataset.game;
+  if(g0==='gap') return;
+  if(g0==='rice') return paintRice(box);
   if(g0==='highlight') return;
   if(g0==='sort'){
     const left=[...box.querySelectorAll('.pool .tcard')].length;
@@ -1589,6 +1645,29 @@ function bindGames(){
   view.addEventListener('click', e=>{
     const box = e.target.closest('[data-game]'); if(!box) return;
 
+    if(box.dataset.game==='gap'){
+      const c=e.target.closest('.tcard'); if(!c) return;
+      box.querySelectorAll('.tcard').forEach(x=>x.setAttribute('aria-pressed','false'));
+      c.setAttribute('aria-pressed','true');
+      const seq=box.dataset.seq.split('|'), m=+box.dataset.miss;
+      const li=box.querySelector('[data-gapslot]');
+      li.classList.remove('aim'); li.classList.add('filled');
+      li.querySelector('.use').textContent=c.dataset.v;
+      box.querySelector('[data-gapval]').value=seq.map((w,i)=>i===m?c.dataset.v:w).join(' → ');
+      return;
+    }
+    if(box.dataset.game==='rice'){
+      const sl=e.target.closest('.rslot');
+      if(sl){ box.dataset.aim=sl.dataset.i; return paintRice(box); }
+      const c=e.target.closest('.rtray .tcard'); if(!c) return;
+      const hid=[...box.querySelectorAll('input[type=hidden]')], a=+box.dataset.aim;
+      if(!(a>=0)) return;
+      hid[a].value=c.dataset.w;
+      const nx=hid.findIndex(h=>!h.value);
+      box.dataset.aim = nx>=0 ? nx : '';
+      paintRice(box); refreshVotes();
+      return;
+    }
     if(box.dataset.game==='highlight'){
       const b=e.target.closest('.hl'); if(!b) return;
       b.setAttribute('aria-pressed', b.getAttribute('aria-pressed')==='true' ? 'false' : 'true');
@@ -1666,7 +1745,78 @@ function bindGames(){
   });
 }
 
+/* ⑥ 빠진 한 칸 찾기 — 순서 문항(보기·정답)은 그대로 쓰고, 한 칸만 비웁니다 */
+function gapUI(p, sv){
+  const seq=p.answer.split(' → ');
+  const toks=[...new Set(p.options.join(' → ').split(' → '))];
+  const rnd=seedRand('gap-'+p.id+'|'+(S.groupNo||0)+'|'+(S.session||''));
+  const miss=1+Math.floor(rnd()*(seq.length-2));
+  let got='';
+  if(sv[p.id]){ const s2=String(sv[p.id]).split(' → '); if(s2.length===seq.length) got=s2[miss]; }
+  return `<h3>쌀의 여행에서 한 칸이 사라졌어요!</h3>
+    <p class="gsub">${esc(p.prompt)} 비어 있는 ❓ 자리에 들어갈 카드를 톡 누르세요.</p>
+    <div data-part="${p.id}" data-type="single" data-game="gap" data-miss="${miss}" data-seq="${esc(seq.join('|'))}">
+      <ol class="road">${seq.map((w,i)=> i===miss
+        ? `<li class="${got?'filled':'aim'}" data-gapslot><span class="step">${i+1}</span><span class="use">${got?esc(got):'❓ 무엇이 빠졌을까?'}</span></li>`
+        : `<li class="filled"><span class="step">${i+1}</span><span class="use">${esc(w)}</span></li>`).join('')}</ol>
+      <div class="pool">${shuffled('gap-'+p.id, toks).map(w=>
+        `<button type="button" class="tcard" data-v="${esc(w)}" aria-pressed="${got===w}">${esc(w)}</button>`).join('')}</div>
+      <input type="hidden" data-gapval value="${got?esc(seq.map((w,i)=>i===miss?got:w).join(' → ')):''}">
+    </div>`;
+}
+
+/* ⑦ 쌀 한 톨이 되어 말하기 — 앞에서 놓은 도구를 미리 채우고, 빈칸은 골라 넣습니다 */
+function riceVals(SB, t){
+  const d=S.topics[t], use=(d.record||{}).use||{}, saved=(d.submit||{}).final||[];
+  return SB.rice.from.map((f,i)=> saved[i] || (f ? (Object.keys(use).find(k=>use[k]===f)||'') : ''));
+}
+/* 빈칸 뒤 조사를 고른 낱말에 맞춥니다 — (으)로 · 을(를) */
+function riceJosa(w, part){
+  const c=(w||'').charCodeAt((w||'').length-1)-0xAC00;
+  if(!(c>=0 && c<11172)) return part;
+  const jong=c%28;
+  if(part.startsWith('(으)로')) return ((jong && jong!==8) ? '으로' : '로') + part.slice(4);
+  if(part.startsWith('을(를)')) return (jong ? '을' : '를') + part.slice(4);
+  return part;
+}
+function riceText(SB, v){
+  const P=SB.rice.parts;
+  return P.map((x,i)=>(i ? riceJosa(v[i-1], x) : x)+(i<P.length-1?(v[i]||'____'):'')).join('');
+}
+function riceUI(SB, t){
+  const v=riceVals(SB,t), P=SB.rice.parts;
+  let story='';
+  P.forEach((x,i)=>{ story+= i ? `<span class="rpost" data-i="${i-1}">${esc(riceJosa(v[i-1], x))}</span>` : esc(x);
+    if(i<P.length-1) story+=`<button type="button" class="rslot" data-i="${i}">${v[i]?esc(v[i]):'❓'}</button>`; });
+  return `<h3>🌾 나는 쌀 한 톨이야</h3>
+    <p class="gsub">앞에서 놓은 도구가 미리 들어가 있어요. ❓ 칸을 톡 누르고 아래에서 알맞은 낱말을 고르세요. 채워진 칸도 눌러서 바꿀 수 있어요.</p>
+    <div data-part="final" data-type="fill" data-game="rice" data-t="${t}">
+      <p class="rice">${story}</p>
+      <div class="pool rtray"></div>
+      ${v.map((x,i)=>`<input type="hidden" data-i="${i}" value="${esc(x)}">`).join('')}
+    </div>`;
+}
+function paintRice(box){
+  const R=TOPICS[box.dataset.t].submit.rice;
+  const hid=[...box.querySelectorAll('input[type=hidden]')];
+  let aim = (box.dataset.aim!=null && box.dataset.aim!=='') ? +box.dataset.aim : hid.findIndex(h=>!h.value);
+  box.dataset.aim = aim>=0 ? aim : '';
+  box.querySelectorAll('.rslot').forEach(b=>{
+    const i=+b.dataset.i, v=hid[i].value;
+    b.textContent = v || '❓';
+    b.classList.toggle('fill', !!v); b.classList.toggle('aim', i===aim);
+  });
+  box.querySelectorAll('.rpost').forEach(sp=>{ const i=+sp.dataset.i;
+    sp.textContent=riceJosa(hid[i].value, R.parts[i+1]); });
+  const tray=box.querySelector('.rtray');
+  if(aim<0){ tray.innerHTML='<span class="empty">모든 칸을 채웠어요. 바꾸고 싶은 칸이 있으면 눌러 주세요.</span>'; return; }
+  tray.innerHTML = `<p class="gsub" style="width:100%;margin:0">${aim+1}번째 칸에 들어갈 낱말</p>`
+    + shuffled('rice-'+aim, R.choices[aim]).map(w=>
+      `<button type="button" class="tcard" data-w="${esc(w)}" aria-pressed="${hid[aim].value===w}">${esc(w)}</button>`).join('');
+}
+
 function renderPart(p, saved){
+  if(p.type==='single' && p.view==='gap') return gapUI(p, saved||{});
   if(p.type==='multi' && p.view==='highlight') return highlightUI(p, saved||{});
   if(p.type==='multi' && p.view==='sort')      return sortUI(p, saved||{});
   if(p.type==='multi' && p.view==='basket')    return basketUI(p, saved||{});
@@ -1792,6 +1942,34 @@ function checkCopy(){
 const HOLD_MS = 1500;   // 도장을 찍는 데 걸리는 시간
 const RUSH_MS = 3000;   // 이 안에 다 눌리면 한 사람이 몰아서 눌렀을 수 있습니다
 
+/* 듣고 맞히기 — 도장을 찍기 전에, 발표에서 들은 낱말을 먼저 고릅니다.
+   QUIZ[동의 id] = 발표 글을 돌려주는 함수 (아직 다 안 채웠으면 null)
+   정답 낱말은 발표 글 속 전시 낱말, 나머지 둘은 글에 없는 전시 낱말입니다. */
+const QUIZ = {};
+const GENERIC = ['남도','자연','시장','물건','따뜻','사고','바꾸','계절','농사','집'];
+function listenPool(){
+  const s=new Set(); Object.values(KEYWORDS).forEach(a=>a.forEach(w=>s.add(w))); return [...s];
+}
+function listenQuiz(id, role){
+  const f=QUIZ[id]; if(!f) return null;
+  const text=f(); if(text==null) return {wait:true};
+  const pool=listenPool();
+  let right=pool.filter(w=>text.includes(w) && !GENERIC.includes(w));
+  if(!right.length) right=pool.filter(w=>text.includes(w));
+  if(!right.length) return null;                      // 전시 낱말이 없으면 확인 없이 진행
+  const wrong=pool.filter(w=>!text.includes(w) && !GENERIC.includes(w));
+  if(wrong.length<2) return null;
+  const rnd=seedRand(id+'|'+role+'|'+text);
+  const ans=right[Math.floor(rnd()*right.length)];
+  const ws=wrong.slice(), chips=[ans];
+  while(chips.length<3 && ws.length) chips.push(ws.splice(Math.floor(rnd()*ws.length),1)[0]);
+  for(let i=chips.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); const t=chips[i]; chips[i]=chips[j]; chips[j]=t; }
+  return {ans, chips};
+}
+function refreshVotes(){
+  view.querySelectorAll('[data-vote]').forEach(b=>{ if(!b.dataset.fix && !b.dataset.heard) paintVote(b); });
+}
+
 function votesOf(id){ if(!S.votes) S.votes={}; return S.votes[id] || (S.votes[id]={}); }
 
 function voteBox(id, roles, nameOf){
@@ -1807,6 +1985,7 @@ function paintVote(box){
   const v=votesOf(id);
   const nameOf=k=>names[roles.indexOf(k)]||k;
   const turn = roles.find(k=>!v[k]);
+  box.dataset.turn = turn || '';
   const fixed = roles.filter(k=>v[k] && v[k].v==='fix');
 
   const dots=`<div class="dots">${roles.map(k=>
@@ -1833,13 +2012,22 @@ function paintVote(box){
         </div>
       </div></div>`;
   } else if(turn){
+    const q=listenQuiz(id, turn), heard=box.dataset.heard===turn, locked=!!q && !heard;
+    const wrong=(box.dataset.wrong||'').split('|');
+    const lq = !q ? '' : q.wait
+      ? `<p class="lq wait">👂 발표 내용을 모두 채우면 듣기 확인 문제가 나옵니다.</p>`
+      : heard ? `<p class="lq okay">👂 잘 들었어요! 이제 도장을 찍을 수 있어요.</p>`
+      : `<div class="lq"><p class="lqq">👂 발표에서 들은 낱말을 골라 주세요</p>
+          <div class="lchips">${q.chips.map(c=>`<button type="button" data-act="hear" data-w="${esc(c)}"
+            ${wrong.includes(c)?'class="bad" disabled':''}>${esc(c)}</button>`).join('')}</div></div>`;
     mid=`<div class="vturn">
       <p class="who">${ROLES[turn].icon} ${esc(nameOf(turn))}</p>
       <p class="ask">발표를 듣고 어떻게 생각하나요?</p>
+      ${lq}
       <div class="vbtns">
-        <button class="stampbtn" data-act="ok" data-role="${turn}">
+        <button class="stampbtn" data-act="ok" data-role="${turn}" ${locked?'disabled':''}>
           <span class="fill"></span>
-          <span class="lab">좋아요<span class="sub2">1.5초 꾹 누르면 도장이 찍힙니다</span></span></button>
+          <span class="lab">좋아요<span class="sub2">${locked?'먼저 들은 낱말을 골라 주세요':'1.5초 꾹 누르면 도장이 찍힙니다'}</span></span></button>
         <button data-act="fix" data-role="${turn}">한 가지 고칠 게 있어요</button>
         <button data-act="again" data-role="${turn}">잘 모르겠어요<span class="sub2">한 번 더 들려 달라고 하세요</span></button>
       </div></div>`;
@@ -1854,8 +2042,9 @@ function paintVote(box){
 
 function castVote(box, role, v, note){
   const id=box.dataset.vote;
-  votesOf(id)[role]={v, note:note||'', at:Date.now()};
-  delete box.dataset.fix;
+  votesOf(id)[role]={v, note:note||'', at:Date.now(),
+    miss:+box.dataset.miss||0, heard:box.dataset.heard===role};
+  delete box.dataset.fix; delete box.dataset.heard; delete box.dataset.miss; delete box.dataset.wrong;
   save({quiet:true});
   paintVote(box);
 }
@@ -1875,11 +2064,13 @@ function readVote(id){
 /* 꾹 누르기 + 선택 */
 let holdT=null;
 function bindVotes(){
+  /* 빈칸을 채우는 동안 듣기 확인 문제도 따라 바뀝니다 */
+  view.addEventListener('input', e=>{ if(!e.target.closest('[data-vote]')) refreshVotes(); });
   const stop=()=>{ clearTimeout(holdT); holdT=null;
     view.querySelectorAll('.stampbtn.pressing').forEach(b=>b.classList.remove('pressing')); };
 
   view.addEventListener('pointerdown', e=>{
-    const b=e.target.closest('.stampbtn'); if(!b) return;
+    const b=e.target.closest('.stampbtn'); if(!b || b.disabled) return;
     const box=b.closest('[data-vote]'); if(!box) return;
     b.classList.add('pressing');
     holdT=setTimeout(()=>{ stop(); castVote(box, b.dataset.role, 'ok'); }, HOLD_MS);
@@ -1891,6 +2082,17 @@ function bindVotes(){
     const b=e.target.closest('[data-act]'); if(!b) return;
     const box=b.closest('[data-vote]'); if(!box) return;
     const act=b.dataset.act;
+    if(act==='hear'){
+      const role=box.dataset.turn, q=listenQuiz(box.dataset.vote, role);
+      if(!q || q.wait) return;
+      if(b.dataset.w===q.ans){ box.dataset.heard=role; flash('잘 들었어요!'); }
+      else{
+        box.dataset.miss=(+box.dataset.miss||0)+1;
+        box.dataset.wrong=(box.dataset.wrong||'')+'|'+b.dataset.w;
+        flash('발표 탐정에게 한 번 더 들려 달라고 하세요');
+      }
+      return paintVote(box);
+    }
     if(act==='ok') return flash('꾹 눌러야 도장이 찍힙니다');
     if(act==='fix'){ box.dataset.fix=b.dataset.role; return paintVote(box); }
     if(act==='again'){ delete box.dataset.fix; paintVote(box);
@@ -2009,6 +2211,7 @@ function readPart(p, root){
     const vals=[...box.querySelectorAll('input')].map(i=>i.value.trim());
     return vals.every(v=>v) ? vals : null;
   }
+  if(box.dataset.game==='gap'){ const h=box.querySelector('[data-gapval]'); return h && h.value ? h.value : null; }
   const sel=[...box.querySelectorAll('[aria-pressed="true"]')].map(b=>b.dataset.v);
   const other = root.querySelector(`[data-other="${p.id}"]`);
   const otherVal = other ? other.value.trim() : '';
@@ -2310,9 +2513,17 @@ function screenPrep(step){
 function screenSubmit(step){
   const T=TOPICS[step.t], SB=T.submit, d=S.topics[step.t];
   const others=['evidence','photo','record'];
-  const body = SB.type==='fill'
+  const body = SB.view==='rice' ? riceUI(SB, step.t)
+    : SB.type==='fill'
     ? renderPart({...SB, id:'final', type:'fill', prompt:''}, {final:d.submit.final})
     : `<div class="auto"><dt>발표 탐정이 준비한 내용</dt><dd>${esc(d.prep.text||'')}</dd></div>`;
+  /* 듣기 확인에 쓸 발표 글 — 빈칸은 아이가 넣은 값만 봅니다 */
+  QUIZ['submit-'+step.t] = ()=>{
+    if(SB.type!=='fill') return d.prep.text||'';
+    const box=view.querySelector('[data-part="final"]'); if(!box) return null;
+    const v=[...box.querySelectorAll('input')].map(i=>i.value.trim());
+    return v.some(x=>!x) ? null : v.join(' ');
+  };
   view.innerHTML = `
     <p class="eyebrow">미션 ${step.m} · ${T.title}</p>
     <h1>${esc(SB.title)}</h1>
@@ -2320,7 +2531,7 @@ function screenSubmit(step){
     <div class="card">${body}</div>
     <div class="card">
       <h3>발표 내용에 동의하나요?</h3>
-      <p class="sub">한 사람씩 차례로 묻습니다. 이름이 뜬 사람이 직접 눌러 주세요.</p>
+      <p class="sub">한 사람씩 차례로 묻습니다. 발표를 잘 듣고, <b>들은 낱말을 먼저 고른 뒤</b> 도장을 찍어 주세요.</p>
       ${voteBox('submit-'+step.t, others, k=>whoIs(k, step.m).name)}
     </div>`;
   bindOpts();
@@ -2335,6 +2546,11 @@ function screenSubmit(step){
     if(SB.type==='fill'){
       const v=readPart({...SB, id:'final', type:'fill'}, view);
       if(v===null) return flash('빈칸을 모두 채워 주세요');
+      if(SB.view==='rice'){
+        const txt=riceText(SB, v);
+        return reviewSend({title:esc(SB.title), who:'🌾 쌀 한 톨의 이야기 · 모둠 전체가 동의',
+          texts:[txt], raw:[txt], min:8, onSend:()=>finish(v)});
+      }
       return reviewSend({title:esc(SB.title), who:'모둠 전체가 동의한 문장',
         texts:[joinFill(SB, v)], raw:v, min:8, onSend:()=>finish(v)});
     }
@@ -2487,23 +2703,58 @@ function finIntro(){
   btn('동이의 하루 복원 시작', next);
 }
 
+/* 앞 미션에서 우리 모둠이 모은 낱말 — 새로 쓰지 않고 고르도록 */
+function topicWords(t, evidenceOnly){
+  const d=S.topics[t], out=[];
+  const add=w=>{ w=String(w||'').trim(); if(w && !out.includes(w)) out.push(w); };
+  const take=(p,v)=>{ if(!v) return;
+    if(p.type==='match') Object.keys(v).forEach(add);
+    else if(v.list){ v.list.forEach(add); add(v.other); }
+    else if(typeof v==='string') add(v); };
+  TOPICS[t].evidence.forEach((p,i)=>{ if(evidenceOnly && i>0) return; take(p, d.evidence[p.id]); });
+  if(!evidenceOnly) TOPICS[t].record.forEach(p=>take(p, d.record[p.id]));
+  return out.slice(0,8);
+}
+
 function finEvidence(){
   const w=whoIs('evidence',5);
   view.innerHTML = `
     <p class="eyebrow">미션 5 · 핵심 증거 고르기</p>
     <h1>🔍 증거 탐정</h1>
-    <p class="lede">${esc(w.name)} 차례입니다. 여러 증거 중 무엇이 더 중요한지 판단하세요.</p>
-    <div class="card"><h3>지금까지 찾은 증거</h3>${autoEvidence()}</div>
+    <p class="lede">${esc(w.name)} 차례입니다. 우리 모둠이 모은 증거 가운데서 고르세요.</p>
     <div class="card">
-      <h3>동이의 생활을 설명하는 가장 중요한 증거</h3>
-      <p class="sub">전시마다 하나씩 골라 적으세요.</p>
-      ${S.order.map((t,i)=>`<div class="pair"><span class="k">${TOPICS[t].emoji} ${TOPICS[t].title.replace('남도의 ','')}</span>
-        <input type="text" data-key="${i}" placeholder="예) 바다와 해류" value="${esc(S.final.evidence[i]||'')}"></div>`).join('')}
+      <h3>전시마다 핵심 증거 하나씩</h3>
+      <p class="sub">낱말 카드를 톡 누르면 칸에 들어갑니다. 원하는 말이 없으면 직접 써도 됩니다.
+        그리고 넷 가운데 <b>가장 중요한 증거 하나</b>에 ⭐를 붙이세요.</p>
+      ${S.order.map((t,i)=>{
+        const words=topicWords(t), cur=S.final.evidence[i]||'', on=S.final.star===i;
+        return `<div class="fe" data-row="${i}">
+          <div class="fehead">${TOPICS[t].emoji} ${esc(TOPICS[t].title.replace('남도의 ',''))}
+            <button type="button" class="star" data-star="${i}" aria-pressed="${on}" aria-label="가장 중요한 증거">${on?'⭐':'☆'}</button></div>
+          ${words.length?`<div class="pool">${words.map(x=>
+            `<button type="button" class="tcard" data-w="${esc(x)}" aria-pressed="${cur===x}">${esc(x)}</button>`).join('')}</div>`:''}
+          <input type="text" data-key="${i}" placeholder="고르거나 직접 쓰기" value="${esc(cur)}">
+        </div>`; }).join('')}
     </div>`;
+  view.querySelectorAll('.fe').forEach(row=>{
+    const inp=row.querySelector('input');
+    row.querySelectorAll('.tcard').forEach(b=>b.onclick=()=>{
+      row.querySelectorAll('.tcard').forEach(x=>x.setAttribute('aria-pressed','false'));
+      b.setAttribute('aria-pressed','true'); inp.value=b.dataset.w;
+    });
+    inp.oninput=()=>row.querySelectorAll('.tcard').forEach(x=>
+      x.setAttribute('aria-pressed', String(x.dataset.w===inp.value.trim())));
+  });
+  view.querySelectorAll('.star').forEach(b=>b.onclick=()=>{
+    view.querySelectorAll('.star').forEach(x=>{ x.setAttribute('aria-pressed','false'); x.textContent='☆'; });
+    b.setAttribute('aria-pressed','true'); b.textContent='⭐';
+  });
   btn('증거 판정 완료', ()=>{
     const v=[...view.querySelectorAll('[data-key]')].map(i=>i.value.trim());
     if(v.some(x=>!x)) return flash('네 칸을 모두 채워 주세요');
-    S.final.evidence=v; save(); next();
+    const st=view.querySelector('.star[aria-pressed="true"]');
+    if(!st) return flash('가장 중요한 증거에 ⭐를 붙여 주세요');
+    S.final.evidence=v; S.final.star=+st.dataset.star; save(); next();
   });
 }
 
@@ -2552,17 +2803,41 @@ function finPhoto(){
   });
 }
 
+/* 동이의 하루 시간표 — 저장되는 네 칸(story)은 예전과 같습니다 */
+const DAY=[
+  {ico:'🌅', when:'동이가 사는 곳', pre:'동이는 ',          post:' 자연환경 속에서 살았습니다.', ph:'남도의 자연은?',   t:'nature'},
+  {ico:'🌾', when:'낮 · 들판',      pre:'동이의 가족은 ',   post:'을 통해 먹을 것을 얻었습니다.', ph:'먹을 것을 얻은 방법', t:'farm'},
+  {ico:'🏠', when:'저녁 · 집',      pre:'동이는 집에서 ',   post:'을 이용해 생활했습니다.',      ph:'집에서 이용한 것',   t:'house'},
+  {ico:'🛒', when:'장날 · 시장',    pre:'시장에서는 ',      post:'을 얻거나 나눌 수 있었습니다.', ph:'시장에서 얻은 것',   t:'market'}
+];
+function hasBat(w){ const c=(w||'').charCodeAt(w.length-1)-0xAC00; return c>=0 && c<11172 && c%28>0; }
+/* 빈칸 뒤 '을'을 앞 낱말에 맞춰 을/를로 — 한글로 끝나지 않으면 그대로 둡니다 */
+function josaFix(w, post){
+  if(!/^을/.test(post)) return post;
+  const c=(w||'').charCodeAt(w.length-1)-0xAC00;
+  if(!(c>=0 && c<11172)) return post;
+  return (c%28 ? '을' : '를') + post.slice(1);
+}
+function dayChips(t){
+  if(t==='nature') return ['따뜻한','추운','바다와 맞닿은'];
+  if(t==='farm')   return ['농사','고기잡이','사냥'];
+  const w=topicWords(t, true);
+  if(t==='house')  return w.length ? w : ['마루','온돌','부엌'];
+  return (w.length ? w : ['물건','곡식']).concat(w.includes('소식')?[]:['소식']);
+}
+
 function finRecord(){
   const w=whoIs('record',5);
+  const star=S.final.star;
   view.innerHTML = `
     <p class="eyebrow">미션 5 · 글로 완성하기</p>
     <h1>✏️ 기록 탐정</h1>
-    <p class="lede">${esc(w.name)} 차례입니다. 흩어진 기억 조각을 하나의 이야기로 이으세요.</p>
+    <p class="lede">${esc(w.name)} 차례입니다. 흩어진 기억 조각을 동이의 하루 시간표로 이으세요.</p>
     <div class="card">
       <h3>앞 탐정들이 고른 것</h3>
       <dl class="auto">
         <dt>증거 탐정이 고른 핵심 증거</dt>
-        <dd><span class="tagline">${S.final.evidence.map(x=>`<span class="tag">${esc(x)}</span>`).join('')}</span></dd>
+        <dd><span class="tagline">${S.final.evidence.map((x,i)=>`<span class="tag">${i===star?'⭐ ':''}${esc(x)}</span>`).join('')}</span></dd>
         <dt>사진 탐정이 고른 대표 사진</dt>
         <dd>${S.final.pick.length
           ? S.final.pick.map(t=>`<img class="shotthumb" style="display:inline-block;margin-right:6px" src="${S.topics[t].photo.thumb}" alt="">`).join('')
@@ -2570,53 +2845,69 @@ function finRecord(){
       </dl>
     </div>
     <div class="card">
-      <h3>동이의 하루</h3>
-      ${fillRow('story',
-        ['동이는 ',' 자연환경 속에서 살았습니다. 동이의 가족은 ','을 통해 먹을 것을 얻었습니다. 동이는 집에서 ','을 이용해 생활했습니다. 시장에서는 ','을 얻거나 나눌 수 있었습니다.'],
-        ['남도의 자연은?','먹을 것을 얻은 방법','집에서 이용한 것','시장에서 얻은 것'], S.final.story)}
+      <h3>🕰 동이의 하루 시간표</h3>
+      <p class="sub">카드마다 낱말을 톡 누르거나 직접 쓰세요. 집·시장 카드는 두 개를 누르면 '와/과'로 이어집니다. 칸 안의 글은 고칠 수 있어요.</p>
+      <ol class="daylist">${DAY.map((c,i)=>`<li class="day" ${c.t==='nature'||c.t==='farm'?'data-one="1"':''}>
+        <div class="dhead"><span class="dico">${c.ico}</span><b>${esc(c.when)}</b></div>
+        <p class="dline">${esc(c.pre)}<input type="text" data-i="${i}" placeholder="${esc(c.ph)}" value="${esc(S.final.story[i]||'')}"><span class="dpost">${esc(josaFix(S.final.story[i]||'', c.post))}</span></p>
+        <div class="pool">${dayChips(c.t).map(x=>`<button type="button" class="tcard" data-w="${esc(x)}">${esc(x)}</button>`).join('')}</div>
+      </li>`).join('')}</ol>
       ${sendNote()}
       ${helpBox('story', {
         hint:'미션 1~4에서 되찾은 기억 카드를 하나씩 떠올려 보세요. 자연 → 농사 → 집 → 시장 순서입니다.',
-        frame:'빈칸은 ① 남도의 자연은 어땠는지 ② 먹을 것은 무엇으로 얻었는지 ③ 집에서 무엇을 이용했는지 ④ 시장에서 무엇을 얻었는지입니다.',
+        frame:'카드는 ① 남도의 자연은 어땠는지 ② 먹을 것은 무엇으로 얻었는지 ③ 집에서 무엇을 이용했는지 ④ 시장에서 무엇을 얻었는지입니다.',
         sample:'동이는 따뜻한 남도 자연환경 속에서 살았습니다. 동이의 가족은 농사를 통해 먹을 것을 얻었습니다. 동이는 집에서 마루와 온돌을 이용해 생활했습니다. 시장에서는 물건과 소식을 얻거나 나눌 수 있었습니다.'})}
     </div>`;
+  view.querySelectorAll('.day').forEach((li,i)=>{
+    const inp=li.querySelector('input');
+    inp.addEventListener('input',()=>{ li.querySelector('.dpost').textContent=josaFix(inp.value.trim(), DAY[i].post); });
+    li.querySelectorAll('.tcard').forEach(b=>b.onclick=()=>{
+      const cur=inp.value.trim(), x=b.dataset.w;
+      if(!cur || li.dataset.one) inp.value=x;             // 자연·농사 카드는 하나만
+      else if(!cur.includes(x)) inp.value=cur+(hasBat(cur)?'과 ':'와 ')+x;
+      inp.dispatchEvent(new Event('input',{bubbles:true}));
+    });
+  });
   btn('생활 이야기 완성', ()=>{
-    const v=readFill('story');
-    if(v.some(x=>!x)) return flash('빈칸을 모두 채워 주세요');
+    const v=[...view.querySelectorAll('.day input')].map(i=>i.value.trim());
+    if(v.some(x=>!x)) return flash('네 카드를 모두 채워 주세요');
     reviewSend({title:'동이의 하루', who:'✏️ 기록 탐정이 완성한 이야기',
-      texts:[`동이는 ${v[0]} 자연환경 속에서 살았습니다. 동이의 가족은 ${v[1]}을 통해 먹을 것을 얻었습니다. 동이는 집에서 ${v[2]}을 이용해 생활했습니다. 시장에서는 ${v[3]}을 얻거나 나눌 수 있었습니다.`],
+      texts:[DAY.map((c,i)=>c.pre+v[i]+josaFix(v[i],c.post)).join(' ')],
       raw:v, min:8, onSend:()=>{ S.final.story=v; save(); next(); }});
   });
 }
 
+/* 앞에서 쓴 이야기와 ⭐ 증거가 발표문에 그대로 들어오고, 마지막 한 칸만 새로 생각합니다 */
 function finPresent(){
   const w=whoIs('present',5);
+  const st=S.final.story, ev=S.final.evidence[S.final.star!=null ? S.final.star : 0]||'';
+  const g=x=>`<b class="got">${esc(x)}</b>`;
+  const J=(w,p)=>josaFix(w,p), ya=w=>hasBat(w)?'이야':'야';
+  const say=kid=>`동이야, 너는 ${st[0]} 자연환경 속에서 살았어. 가족은 ${st[1]}${J(st[1],'을 통해')} 먹을 것을 얻었고, 집에서는 ${st[2]}${J(st[2],'을 이용해')} 생활했어. 시장에서는 ${st[3]}${J(st[3],'을 얻거나')} 소식을 나누었어. 우리가 찾은 가장 중요한 증거는 ${ev}${ya(ev)}. 그래서 우리는 네가 ${kid} 어린이였다고 생각해.`;
   view.innerHTML = `
     <p class="eyebrow">미션 5 · 최종 발표 준비</p>
     <h1>🎤 발표 탐정</h1>
-    <p class="lede">${esc(w.name)} 차례입니다. 모둠이 모은 것을 30초 발표로 바꾸세요.</p>
-    <div class="card">
-      <h3>기록 탐정이 완성한 이야기</h3>
-      <div class="auto"><dd>${esc(S.final.story.join(' / '))}</dd></div>
-    </div>
+    <p class="lede">${esc(w.name)} 차례입니다. 모둠이 모은 것이 발표문에 벌써 들어왔어요. 마지막 한 칸만 채우세요.</p>
     <div class="card">
       <h3>동이에게 하는 말</h3>
-      ${fillRow('speech',
-        ['동이야, 너는 ',' 자연환경 속에서 살았어. 가족은 ','을 통해 먹을 것을 얻었고, 집에서는 ','을 이용해 생활했어. 시장에서는 ','을 얻거나 소식을 나누었어. 우리가 찾은 가장 중요한 증거는 ','이야. 그래서 우리는 네가 ',' 어린이였다고 생각해.'],
-        ['남도의 자연은?','먹을 것을 얻은 방법','집에서 이용한 것','시장에서 얻은 것','가장 중요한 증거','어떤 어린이였는지'],
-        S.final.speech.some(Boolean)?S.final.speech:[S.final.story[0],S.final.story[1],S.final.story[2],S.final.story[3],S.final.evidence[0],''])}
+      <p class="fill speechp">동이야, 너는 ${g(st[0])} 자연환경 속에서 살았어.
+        가족은 ${g(st[1])}${J(st[1],'을 통해')} 먹을 것을 얻었고, 집에서는 ${g(st[2])}${J(st[2],'을 이용해')} 생활했어.
+        시장에서는 ${g(st[3])}${J(st[3],'을 얻거나')} 소식을 나누었어.
+        우리가 찾은 가장 중요한 증거는 ⭐${g(ev)}${ya(ev)}.
+        그래서 우리는 네가 <input type="text" id="kid" placeholder="어떤 어린이였는지" value="${esc(S.final.speech[5]||'')}"> 어린이였다고 생각해.</p>
+      <p class="sub" style="margin:0">색칠된 낱말은 앞에서 우리 모둠이 고른 것입니다.</p>
       ${sendNote()}
       ${helpBox('speech', {
-        hint:'앞 화면에서 완성한 「동이의 하루」를 그대로 옮기고, 마지막 두 칸만 새로 생각하면 됩니다.',
-        frame:'다섯째 칸은 우리가 찾은 증거 중 가장 중요한 것 하나, 여섯째 칸은 동이가 어떤 어린이였는지입니다.',
-        sample:'동이야, 너는 따뜻한 남도 자연환경 속에서 살았어. 가족은 농사를 통해 먹을 것을 얻었고, 집에서는 마루와 온돌을 이용해 생활했어. 시장에서는 물건을 얻거나 소식을 나누었어. 우리가 찾은 가장 중요한 증거는 마루와 온돌이야. 그래서 우리는 네가 자연과 계절에 맞춰 가족, 이웃과 함께 살아간 어린이였다고 생각해.'})}
+        hint:'동이가 어떤 자연에서, 누구와, 어떻게 살았는지 떠올려 보세요. 그런 동이는 어떤 어린이였을까요?',
+        frame:'“○○에 맞춰 ○○와 함께 살아간”처럼, 동이가 한 일과 함께한 사람을 넣어 보세요.',
+        sample:'자연과 계절에 맞춰 가족, 이웃과 함께 살아간'})}
     </div>`;
   btn('최종 발표 준비 완료', ()=>{
-    const v=readFill('speech');
-    if(v.some(x=>!x)) return flash('빈칸을 모두 채워 주세요');
+    const kid=document.getElementById('kid').value.trim();
+    if(!kid) return flash('마지막 빈칸을 채워 주세요');
     reviewSend({title:'동이에게 하는 말', who:`🎤 발표 탐정 · ${esc(w.name)}`,
-      texts:[`동이야, 너는 ${v[0]} 자연환경 속에서 살았어. 가족은 ${v[1]}을 통해 먹을 것을 얻었고, 집에서는 ${v[2]}을 이용해 생활했어. 시장에서는 ${v[3]}을 얻거나 소식을 나누었어. 우리가 찾은 가장 중요한 증거는 ${v[4]}이야. 그래서 우리는 네가 ${v[5]} 어린이였다고 생각해.`],
-      raw:v, min:8, onSend:()=>{ S.final.speech=v; save(); next(); }});
+      texts:[say(kid)], raw:[kid], min:4, keywords:[],
+      onSend:()=>{ S.final.speech=[st[0],st[1],st[2],st[3],ev,kid]; save(); next(); }});
   });
 }
 
@@ -2648,6 +2939,7 @@ function finCompare(){
 
 function finSubmit(){
   const others=['evidence','photo','record'];
+  QUIZ['final'] = ()=>S.final.speech.join(' ');
   view.innerHTML = `
     <p class="eyebrow">미션 5 · 동이의 하루 발표</p>
     <h1>발표 탐정 설명하기</h1>
@@ -2658,7 +2950,7 @@ function finSubmit(){
     </div>
     <div class="card">
       <h3>발표 내용에 동의하나요?</h3>
-      <p class="sub">한 사람씩 차례로 묻습니다. 이름이 뜬 사람이 직접 눌러 주세요.</p>
+      <p class="sub">한 사람씩 차례로 묻습니다. 발표를 잘 듣고, <b>들은 낱말을 먼저 고른 뒤</b> 도장을 찍어 주세요.</p>
       ${voteBox('final', others, k=>whoIs(k,5).name)}
     </div>`;
   bindOpts();
