@@ -789,6 +789,23 @@ button.ghost{
 .locked [aria-pressed="false"], .locked button[aria-pressed="false"]:disabled{opacity:.4}
 .lockmsg{display:block;font-size:13px;font-weight:800;color:#255C3E;margin:0 0 6px}
 
+/* 한지 카드 위에서는 글씨를 진하게 — 어두운 배경용 색이 그대로 쓰이던 곳 */
+.card .bin h4{color:var(--text)}
+.card .bin{background:#fff}
+.card .cart{background:#FBF0D8}
+.card .cart h4{color:#7A5A16}
+.card .cart .in:empty::after{color:var(--muted)}
+.card .road li{background:#fff}
+.card .road .drop{background:var(--paper-dim);color:var(--muted)}
+.card .road li.filled .drop{background:#FBF0D8;color:var(--text)}
+.card .qline{color:var(--text)}
+.card .qline b,.card .qline .done{color:#7A5A16}
+.card .chain li.carr{color:#A87D2C}
+.card .tarrow{color:#A87D2C}
+.card .dots i{background:var(--line)}
+.card .dots i.ok{background:var(--gold)}
+.card .dots i.fix{background:var(--no)}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
