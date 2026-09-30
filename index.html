@@ -994,7 +994,7 @@ nature:{
                no:'사슬이 끊어졌어요. 위의 두 칸에는 남도가 따뜻한 까닭을, 아래 두 칸에는 따뜻해서 생긴 일을 놓아 보세요. 따뜻한 까닭은 설명판에서 찾은 낱말입니다.'},
         checks:['남도는 왜 따뜻했을까?','새롭게 알게 된 점'],
         label:'30초 동안 말할 내용을 적어 보세요',
-        ph:'예) 남도는 바다와 따뜻한 해류 때문에 포근합니다. 그래서…',
+        ph:'남도가 따뜻한 까닭과, 그래서 생긴 일을 말해 보세요.',
         hint:'앞에서 찾은 낱말 두 개를 그대로 넣어 말해 보세요. 그리고 따뜻한 날씨가 집을 어떻게 바꾸었는지 떠올려 보세요.',
         frame:'남도는 ○○과 ○○ 때문에 따뜻합니다. 그래서 ○○○을(를) 새롭게 알게 되었습니다.',
         sample:'설명판을 읽기 전에는 남쪽에 있어서 따뜻한 줄로만 알았는데, 날씨가 사람들의 집 모양까지 바꾼다는 것을 새롭게 알게 되었습니다.'},
@@ -1097,7 +1097,7 @@ house:{
          examples:['대청 또는 마루','온돌 구조 그림','부뚜막·아궁이','부엌 살림살이','사랑방 가구']},
   prep:{view:'season', checks:['더위와 추위를 어떻게 피했을까?','새롭게 알게 된 점'],
         label:'30초 동안 말할 내용을 적어 보세요',
-        ph:'예) 더울 때는 마루에서, 추울 때는 온돌방에서…',
+        ph:'더울 때와 추울 때 어디에서 지냈는지 말해 보세요.',
         hint:'여름에 쓰던 곳과 겨울에 쓰던 곳을 하나씩만 말해 보세요.',
         frame:'더울 때는 ○○에서, 추울 때는 ○○에서 지냈습니다. 새롭게 알게 된 점은 ○○○입니다.',
         sample:'더울 때는 마루에서 시원하게 지내고, 추울 때는 온돌방에서 따뜻하게 지냈다는 것을 알게 되었습니다. 집도 날씨와 계절에 맞게 만들어졌다는 점이 새로웠습니다.'},
@@ -1149,7 +1149,7 @@ market:{
          examples:['상평통보','주판','목화','엿가위와 골패','장터 그림 또는 설명판']},
   prep:{view:'cry', checks:['시장은 어떤 곳인가?','그렇게 생각한 이유는?'],
         label:'30초 동안 말할 내용을 적어 보세요',
-        ph:'예) 시장은 물건을 사고팔고 소식도 나누는 곳이었습니다…',
+        ph:'시장이 어떤 곳이었는지, 그렇게 생각한 증거와 함께 말해 보세요.',
         hint:'시장에서는 물건만 오갔을까요? 사람과 소식은 어땠는지도 생각해 보세요.',
         frame:'시장은 ○○하는 곳이었습니다. 우리가 찾은 증거는 ○○○입니다.',
         sample:'시장은 물건을 사고팔고 소식을 나누는 곳이었습니다. 우리가 찾은 증거는 상평통보와 주판입니다.'},
@@ -2163,7 +2163,7 @@ function clockUI(p, sv){
         `<button type="button" class="tcard" data-time="${esc(t)}" aria-pressed="false">${esc(t)}</button>`).join('')}</div>
       ${hanokSVG(p, {})}
       <p class="dongi-at" data-at>🧒 동이가 언제, 어디에 있었는지 골라 주세요.</p>
-      <p class="fill">그곳에서 동이는 <input type="text" data-action placeholder="예) 낮잠을 자기도"> 했을 것 같습니다.</p>
+      <p class="fill">그곳에서 동이는 <input type="text" data-action placeholder="동이가 한 일"> 했을 것 같습니다.</p>
     </div>
     <p class="fill" data-part="${p.id}" data-type="fill">그렇게 생각한 증거는
       <input type="hidden" data-i="0" value="${esc(sv[0]||'')}"><input type="text" data-i="1" placeholder="${esc(p.ph[1])}" value="${esc(sv[1]||'')}"> 입니다.</p>
@@ -2190,7 +2190,7 @@ function talkUI(p, sv){
     <div class="chat" data-part="${p.id}" data-type="fill" data-game="talk">
       <div class="cb l"><span class="who">👨‍🌾 장터 할아버지</span>어서 오너라, 동이야! 오늘은 무슨 일로 장에 왔니?</div>
       <div class="cb r"><span class="who">🧒 동이</span>오늘 장에 온 까닭은
-        <input type="text" data-i="0" placeholder="예) 곡식을 사기" value="${esc(sv[0]||'')}"> 위해서예요.</div>
+        <input type="text" data-i="0" placeholder="장에서 할 일" value="${esc(sv[0]||'')}"> 위해서예요.</div>
       <div class="cb l"><span class="who">👨‍🌾 장터 할아버지</span>허허, 옛날 일을 어찌 그리 잘 아니? 무엇을 보고 그렇게 생각했니?</div>
       <div class="cb r"><span class="who">🔍 탐정단</span>박물관에서
         <input type="text" data-i="1" placeholder="${esc(p.ph[1])}" value="${esc(sv[1]||'')}"><span data-josa>${esc(riceJosa(sv[1]||'','을(를) 보았어요.'))}</span></div>
@@ -3863,9 +3863,9 @@ function bonObserve(){
     </div>
     <div class="card">
       <label class="field">전시물 이름</label>
-      <input type="text" id="bName" placeholder="예) 강진 김해김씨가 상여" value="${esc(S.bonus.name)}">
+      <input type="text" id="bName" placeholder="이름표에 적힌 이름 그대로" value="${esc(S.bonus.name)}">
       <label class="field" style="margin-top:16px">설명판에서 찾은 중요한 낱말</label>
-      <input type="text" id="bWord" placeholder="예) 상례 / 장식 / 예술 / 위로" value="${esc(S.bonus.word)}">
+      <input type="text" id="bWord" placeholder="설명판에서 찾은 낱말 한두 개" value="${esc(S.bonus.word)}">
     </div>
     `;
   drawBonusShot();
@@ -3935,7 +3935,7 @@ function bonWhy(){
           <div class="pan l" id="panL">${esc(W.other||'다른 전시물')}</div>
           <div class="pan r">${esc(B.name||'우리 전시물')}</div></div></div>
       <label class="field" for="wOther">비교할 다른 전시물</label>
-      <input type="text" id="wOther" placeholder="예) 호미" value="${esc(W.other||'')}">
+      <input type="text" id="wOther" placeholder="비교할 다른 전시물 이름" value="${esc(W.other||'')}">
       <p class="fill">그 전시물은 <input type="text" id="wA" placeholder="보여 주는 것" value="${esc(W.a||'')}"><span id="wAj">${esc(riceJosa(W.a||'','을(를)'))}</span> 보여 주지만,</p>
       <p class="fill">${esc(B.name)}${eun(B.name)} <input type="text" id="wB" placeholder="더 보여 주는 것" value="${esc(W.b||'')}"> 까지 보여 줍니다.</p>
       ${sendNote()}
@@ -4006,7 +4006,7 @@ function bonAd(){
           <div class="cp" id="adcp">${esc(B.ad||'여기에 광고 문구가 나타나요')}</div>
           <div class="ft">어린이 큐레이터가 고른 단 하나의 전시물</div></div></div>
       <label class="field" for="bText">한 문장 광고</label>
-      <textarea id="bText" placeholder="예) 장승은 옛날 광주 사람들의 마음을 알려 주는 타임머신!">${esc(B.ad||'')}</textarea>
+      <textarea id="bText" placeholder="친구가 꼭 보러 가고 싶어지는 한 문장">${esc(B.ad||'')}</textarea>
       <p class="sub" style="margin:6px 0 0">글자를 쓰면 포스터에 바로 나타납니다. 짧고 힘 있게!</p>
       ${sendNote()}
       ${helpBox('bonus-ad', {
