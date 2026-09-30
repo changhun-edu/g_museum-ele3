@@ -2228,7 +2228,8 @@ function orderUI(p, sv){
   const seq=p.answer.split(' → ');
   const toks=[...new Set(p.options.join(' → ').split(' → '))];
   const given=orderGiven(p);
-  const got=sv[p.id] ? String(sv[p.id]).split(' → ') : [];
+  /* 예전에 풀었던 답은 되살리지 않습니다 — 언제나 동이의 기억 두 칸만 채워진 채로 시작 */
+  const got=[];
   const pool=toks.filter(w=>!given.some(g=>seq[g]===w));
   return `<h3>쌀 한 톨은 어떤 순서로 밥상에 왔을까요?</h3>
     ${p.lookup?`<div class="lookup"><span class="ic">📋</span><span><b>화면이 아니라 전시실에서 찾아요</b>${esc(p.lookup)}</span></div>`:''}
