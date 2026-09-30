@@ -837,6 +837,11 @@ button.ghost{
 
 .ricecheck{margin-top:12px;justify-content:center;border-color:var(--gold);background:#FBF0D8;font-weight:900}
 
+.phrow{display:flex;align-items:center;gap:10px;margin:14px 0 0;font-size:14px;font-weight:800;color:#7A5A16}
+.phrow img{width:54px;height:40px;object-fit:cover;border-radius:6px;border:2px solid var(--gold)}
+.phrow .none{color:var(--muted)}
+.phrow + .fill{margin-top:2px}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -3605,30 +3610,46 @@ function finPhoto(){
     </div>
     <div class="card">
       <h3>고른 사진으로 설명하기</h3>
-      ${fillRow('p1',['이 사진은 동이가 ','하며 살았다는 것을 보여 줍니다.'],['한 일'],[S.final.photoText[0]])}
-      ${fillRow('p2',['이 사진은 남도 사람들이 ','했다는 증거입니다.'],['남도 사람들이 한 일'],[S.final.photoText[1]])}
+      <p class="sub">사진마다 한 문장씩 써요. 사진 속 전시물을 동이가, 남도 사람들이 어떻게 썼을지 떠올려 보세요.</p>
+      <div class="phrow" data-phrow="0"></div>
+      ${fillRow('p1',['이 사진은 동이가 ',' 모습을 보여 줍니다.'],['무엇을 하는 (…하는)'],[S.final.photoText[0]])}
+      <div class="phrow" data-phrow="1"></div>
+      ${fillRow('p2',['이 사진은 남도 사람들이 ',' 살았다는 증거입니다.'],['어떻게 (…하며)'],[S.final.photoText[1]])}
       ${sendNote()}
       ${helpBox('photo', {
-        hint:'고른 사진 속 전시물이 언제, 무엇을 할 때 쓰였는지 먼저 말로 해 보세요.',
-        frame:'첫 칸은 동이가 한 일, 둘째 칸은 남도 사람들이 한 일입니다. 두 칸에 똑같은 말을 쓰지 않도록 해 보세요.',
-        sample:'이 사진은 동이가 자연과 계절에 맞춰 생활하며 살았다는 것을 보여 줍니다. 이 사진은 남도 사람들이 자연환경에 맞게 집을 짓고 생활했다는 증거입니다.'})}
+        hint:'사진 속 전시물이 언제, 누가, 무엇을 할 때 쓰였는지 먼저 말로 해 보세요.',
+        frame:'첫 칸은 동이가 “…하는” 모습, 둘째 칸은 남도 사람들이 “…하며” 또는 “…에 맞춰” 산 방법입니다.',
+        sample:'이 사진은 동이가 디딜방아로 곡식을 찧는 어른을 돕는 모습을 보여 줍니다. 이 사진은 남도 사람들이 계절에 맞춰 농사를 지으며 살았다는 증거입니다.'})}
     </div>`;
+  /* 문장마다 어느 사진인지 보여 줍니다 — 먼저 고른 사진이 첫 번째 */
+  let order=S.final.pick.filter(t=>have.includes(t));
+  const paintRows=()=>{
+    [0,1].forEach(i=>{
+      const row=view.querySelector(`[data-phrow="${i}"]`), t=order[i];
+      row.innerHTML = t
+        ? `<img src="${S.topics[t].photo.thumb}" alt=""><span>📷 ${i?'두':'첫'} 번째 사진 · ${TOPICS[t].emoji} ${esc(TOPICS[t].title)}</span>`
+        : `<span class="none">📷 ${i?'두':'첫'} 번째 사진${have.length?' — 위에서 골라 주세요':''}</span>`;
+    });
+  };
   if(have.length){
     view.querySelectorAll('#pick button').forEach(b=>b.onclick=()=>{
       const on=b.getAttribute('aria-pressed')==='true';
-      if(!on && view.querySelectorAll('#pick [aria-pressed="true"]').length>=2)
-        return flash('2장까지 고를 수 있어요');
+      if(!on && order.length>=2) return flash('2장까지 고를 수 있어요');
       b.setAttribute('aria-pressed', on?'false':'true');
+      order = on ? order.filter(x=>x!==b.dataset.t) : order.concat(b.dataset.t);
+      paintRows();
     });
   }
+  paintRows();
   btn('대표 사진 선정 완료', ()=>{
-    const pick=[...view.querySelectorAll('#pick [aria-pressed="true"]')].map(b=>b.dataset.t);
-    if(have.length && pick.length!==2) return flash('사진 2장을 골라 주세요');
+    const pick=order.slice();
+    if(have.length>=2 && pick.length!==2) return flash('사진 2장을 골라 주세요');
+    if(have.length===1 && pick.length!==1) return flash('사진을 골라 주세요');
     const a=readFill('p1')[0], b2=readFill('p2')[0];
     if(!a||!b2) return flash('빈칸을 채워 주세요');
     reviewSend({title:'고른 사진 설명', who:`📷 사진 탐정 · ${esc(w.name)}`,
-      texts:[`이 사진은 동이가 ${a}하며 살았다는 것을 보여 줍니다.`,
-             `이 사진은 남도 사람들이 ${b2}했다는 증거입니다.`], raw:[a,b2], min:6,
+      texts:[`이 사진은 동이가 ${a} 모습을 보여 줍니다.`,
+             `이 사진은 남도 사람들이 ${b2} 살았다는 증거입니다.`], raw:[a,b2], min:6,
       onSend:()=>{ S.final.pick=pick; S.final.photoText=[a,b2]; save(); next(); }});
   });
 }
