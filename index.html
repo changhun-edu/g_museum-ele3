@@ -1154,11 +1154,12 @@ market:{
         frame:'시장은 ○○하는 곳이었습니다. 우리가 찾은 증거는 ○○○입니다.',
         sample:'시장은 물건을 사고팔고 소식을 나누는 곳이었습니다. 우리가 찾은 증거는 상평통보와 주판입니다.'},
   submit:{title:'남도의 시장', type:'fill',
-    parts:['시장은 ','하는 곳이었습니다. 우리가 찾은 증거는 ','입니다. 이 증거를 보고 ','라고 생각했습니다.'],
-    ph:['시장에서 한 일','찾은 증거','우리 모둠의 생각'],
-    hint:'앞에서 고른 낱말과 그 낱말이 알려 주는 시장의 모습을 그대로 이어 쓰면 됩니다.',
-    frame:'빈칸 순서는 ① 시장에서 한 일 ② 우리가 찾은 증거(전시물 이름) ③ 그 증거를 보고 우리 모둠이 한 생각입니다.',
-    sample:'시장은 물건을 사고팔고 소식을 나누는 곳이었습니다. 우리가 찾은 증거는 상평통보와 주판입니다. 이 증거를 보고 시장에서는 돈을 쓰고 물건값을 계산하며 거래했다고 생각했습니다.'},
+    parts:['시장은 ',' 곳이었습니다. 우리가 찾은 증거는 ','입니다. 이 증거를 보고 ','고 생각했습니다.'],
+    ph:['어떤 곳이었는지 (…하는)','찾은 전시물','우리 모둠의 생각 (…했다)'],
+    prefill:true,     // 장날 알림에서 쓴 두 칸을 미리 채워 둡니다 (고칠 수 있음)
+    hint:'장날 알림에서 외친 말을 떠올려 보세요. 마지막 칸에는 그 전시물을 보고 옛날 시장이 어땠을지 짐작한 것을 쓰면 됩니다.',
+    frame:'빈칸은 ① 시장이 어떤 곳이었는지(…하는) ② 우리가 찾은 전시물 이름 ③ 그 전시물을 보고 짐작한 옛날 모습(…했다)입니다.',
+    sample:'시장은 물건을 사고팔고 소식을 나누는 곳이었습니다. 우리가 찾은 증거는 상평통보와 주판입니다. 이 증거를 보고 옛날 시장에서도 돈으로 물건값을 치르고 값을 계산했다고 생각했습니다.'},
   done:{mood:'🤗 시장의 소리가 들려', badge:'시장 배지',
         cardTitle:'장터의 기억 카드가 열렸습니다.',
         cardText:'동이는 시장에서 사람들과 물건, 소식이 오가던 기억을 찾았습니다.',
@@ -1384,6 +1385,7 @@ function render(){
     end:screenEnd}[step.v])(step);
   refreshHelpLocks();
   growWorkArea();
+  fitInputs();
   view.querySelectorAll('[data-game]').forEach(paintGame);
   view.querySelectorAll('[data-vote]').forEach(paintVote);
   paintTalk();
@@ -1400,6 +1402,18 @@ function growWorkArea(){
   c.classList.add('grow');
   c.querySelector(GROW.map(g=>`[data-game="${g}"]`).join(',')).classList.add('growin');
 }
+
+/* 빈칸이 쓴 글 길이만큼 늘어나 글자가 잘리지 않게 합니다 */
+const _mc=document.createElement('canvas').getContext('2d');
+const FIT_SEL='p.fill input[type=text], .dline input, .cb input[type=text], .cline input, .sline input';
+function fitInput(el){
+  const cs=getComputedStyle(el);
+  _mc.font=`${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+  const t=el.value || el.placeholder || '';
+  const pad=parseFloat(cs.paddingLeft)+parseFloat(cs.paddingRight)+parseFloat(cs.borderLeftWidth)+parseFloat(cs.borderRightWidth);
+  el.style.width=Math.max(96, Math.ceil(_mc.measureText(t).width + pad + 10))+'px';
+}
+function fitInputs(){ view.querySelectorAll(FIT_SEL).forEach(fitInput); }
 
 function drawBar(step){
   bar.classList.remove('hidden');
@@ -1862,6 +1876,7 @@ function paintGame(box){
 
 /* 톡-톡 조작 (끌지 않아도 됩니다) */
 function bindGames(){
+  view.addEventListener('input', e=>{ if(e.target.matches && e.target.matches(FIT_SEL)) fitInput(e.target); });
   view.addEventListener('input', e=>{
     const ck=e.target.closest('[data-game="clock"]'); if(ck) composeClock(ck);
     const tk=e.target.closest('[data-game="talk"]');
@@ -3325,7 +3340,7 @@ function screenSubmit(step){
   const others=['evidence','photo','record'];
   const body = SB.view==='rice' ? riceUI(SB, step.t)
     : SB.type==='fill'
-    ? renderPart({...SB, id:'final', type:'fill', prompt:''}, {final:d.submit.final})
+    ? renderPart({...SB, id:'final', type:'fill', prompt:''}, {final: d.submit.final || (SB.prefill && d.prep.cry ? [d.prep.cry[0], d.prep.cry[1], ''] : undefined)})
     : rehearseUI(d);
   /* 듣기 확인에 쓸 발표 글 — 빈칸은 아이가 넣은 값만 봅니다 */
   QUIZ['submit-'+step.t] = ()=>{
