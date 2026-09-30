@@ -842,6 +842,9 @@ button.ghost{
 .phrow .none{color:var(--muted)}
 .phrow + .fill{margin-top:2px}
 
+.day.bad{border-color:var(--no);border-left-color:var(--no);background:#FDF1EE}
+.dfb{margin-top:8px;padding:9px 11px;border-radius:8px;background:#F6E3DE;color:#8C2F1C;font-size:14px;font-weight:700;line-height:1.5}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -3656,8 +3659,12 @@ function finPhoto(){
 
 /* 동이의 하루 시간표 — 저장되는 네 칸(story)은 예전과 같습니다 */
 const DAY=[
-  {ico:'🌅', when:'동이가 사는 곳', pre:'동이는 ',          post:' 자연환경 속에서 살았습니다.', ph:'남도의 자연은?',   t:'nature'},
-  {ico:'🌾', when:'낮 · 들판',      pre:'동이의 가족은 ',   post:'을 통해 먹을 것을 얻었습니다.', ph:'먹을 것을 얻은 방법', t:'farm'},
+  {ico:'🌅', when:'동이가 사는 곳', pre:'동이는 ',          post:' 자연환경 속에서 살았습니다.', ph:'남도의 자연은?',   t:'nature',
+   traps:['추운','춥','추웠','얼어','눈이 많'],
+   no:'남도의 자연은 정말 그랬을까요? 자연 전시에서 찾은 증거(바다·해류)를 떠올려 보세요.'},
+  {ico:'🌾', when:'낮 · 들판',      pre:'동이의 가족은 ',   post:'을 통해 먹을 것을 얻었습니다.', ph:'먹을 것을 얻은 방법', t:'farm',
+   traps:['고기잡이','사냥','물고기','낚시'],
+   no:'동이의 가족은 들판에서 무엇을 했을까요? 농업 전시에서 본 도구들을 떠올려 보세요.'},
   {ico:'🏠', when:'저녁 · 집',      pre:'동이는 집에서 ',   post:'을 이용해 생활했습니다.',      ph:'집에서 이용한 것',   t:'house'},
   {ico:'🛒', when:'장날 · 시장',    pre:'시장에서는 ',      post:'을 얻거나 나눌 수 있었습니다.', ph:'시장에서 얻은 것',   t:'market'}
 ];
@@ -3719,9 +3726,26 @@ function finRecord(){
       inp.dispatchEvent(new Event('input',{bubbles:true}));
     });
   });
+  /* 고치기 시작하면 빨간 표시를 지웁니다 */
+  view.querySelectorAll('.day input').forEach(inp=>inp.addEventListener('input',()=>{
+    const li=inp.closest('.day'); li.classList.remove('bad'); const f=li.querySelector('.dfb'); if(f) f.remove(); }));
   btn('생활 이야기 완성', ()=>{
     const v=[...view.querySelectorAll('.day input')].map(i=>i.value.trim());
     if(v.some(x=>!x)) return flash('네 카드를 모두 채워 주세요');
+    /* 함정 낱말이 들어간 카드는 넘어가지 못합니다 */
+    const lis=[...view.querySelectorAll('.day')];
+    let wrong=0;
+    DAY.forEach((c,i)=>{
+      const li=lis[i], old=li.querySelector('.dfb'); if(old) old.remove();
+      const hit=(c.traps||[]).some(t=>v[i].includes(t));
+      li.classList.toggle('bad', hit);
+      if(hit){ wrong++; li.insertAdjacentHTML('beforeend', `<div class="dfb">🤔 ${esc(c.no)}</div>`); }
+    });
+    if(wrong){
+      S.final.trapTries=(S.final.trapTries||0)+1; save({quiet:true});
+      lis.find(l=>l.classList.contains('bad')).scrollIntoView({behavior:'smooth', block:'center'});
+      return flash('빨간 카드를 다시 살펴보세요');
+    }
     reviewSend({title:'동이의 하루', who:'✏️ 기록 탐정이 완성한 이야기',
       texts:[DAY.map((c,i)=>c.pre+v[i]+josaFix(v[i],c.post)).join(' ')],
       raw:v, min:8, onSend:()=>{ S.final.story=v; save(); next(); }});
