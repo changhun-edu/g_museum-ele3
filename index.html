@@ -1032,6 +1032,8 @@ farm:{
          examples:['남도의 농업 설명판','농사 도구','농사 짓는 모습']},
   prep:{question:{
     id:'seq', type:'single', view:'order',
+    given:[2,4],                                   // 미리 채워 둘 칸 (0부터: 3번 수확, 5번 저장)
+    poolOrder:['씨앗','도정','시장','농사도구'],     // 위 카드 줄 순서
     lookup:'농업 전시의 설명판과 도구가 놓인 순서를 보고 채우세요. 화면에는 힌트가 없어요.',
     prompt:'쌀 한 톨의 순서를 찾으세요.',
     options:['씨앗 → 농사도구 → 수확 → 도정 → 저장','도정 → 씨앗 → 수확 → 저장 → 농사도구','시장 → 저장 → 씨앗 → 도정 → 수확'],
@@ -2215,6 +2217,7 @@ function paintSticker(box){
 /* ⑫ 순서 전부 채우기 — 빈 칸만 있고, 함정 카드가 섞여 있습니다 */
 /* 모둠마다 다른 두 칸을 정답으로 미리 채워 둡니다 */
 function orderGiven(p){
+  if(Array.isArray(p.given)) return p.given.slice().sort((a,b)=>a-b);
   const n=p.answer.split(' → ').length;
   const rnd=seedRand('order-given|'+p.id+'|'+(S.groupNo||0)+'|'+(S.session||''));
   const idx=[...Array(n).keys()];
@@ -2229,9 +2232,9 @@ function orderUI(p, sv){
   const pool=toks.filter(w=>!given.some(g=>seq[g]===w));
   return `<h3>쌀 한 톨은 어떤 순서로 밥상에 왔을까요?</h3>
     ${p.lookup?`<div class="lookup"><span class="ic">📋</span><span><b>화면이 아니라 전시실에서 찾아요</b>${esc(p.lookup)}</span></div>`:''}
-    <p class="gsub">두 칸은 동이가 기억해 냈어요. 나머지 카드를 톡 누른 다음 알맞은 칸을 누르세요. 놓인 카드를 누르면 다시 가져옵니다. 쓰지 않는 카드도 있어요.</p>
+    <p class="gsub">3번과 5번 칸은 동이가 기억해 냈어요. 나머지 카드를 톡 누른 다음 알맞은 칸을 누르세요. 놓인 카드를 누르면 다시 가져옵니다. 쓰지 않는 카드도 있어요.</p>
     <div data-part="${p.id}" data-type="single" data-game="order" data-n="${seq.length}">
-      <div class="pool">${shuffled('order-'+p.id, pool).map(w=>
+      <div class="pool">${(p.poolOrder ? p.poolOrder.filter(w=>pool.includes(w)) : shuffled('order-'+p.id, pool)).map(w=>
         `<button type="button" class="tcard" data-v="${esc(w)}">${esc(w)}</button>`).join('')}</div>
       <ol class="road">${seq.map((w,i)=>{ const g=given.includes(i);
         return `<li data-slot="${i}" class="${g?'given filled':''}"><span class="step">${i+1}</span>
