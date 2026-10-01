@@ -2151,8 +2151,7 @@ function bindRiceCheck(SB, d){
   const R=SB.rice, fb=view.querySelector('[data-ricefb]');
   const done=()=>{ lockAnswers(); b.hidden=true; refreshVotes(); };
   if(d.submit.riceOk){ fb.innerHTML=`<div class="fb ok">${esc(R.ok)}</div>`; return done(); }
-  if(d.submit.ricePass){ b.hidden=true; }
-  b.onclick=()=>{
+    b.onclick=()=>{
     const v=[...view.querySelectorAll('[data-game="rice"] input[type=hidden]')].map(i=>i.value);
     if(v.some(x=>!x)) return flash('빈칸을 모두 채워 주세요');
     d.tries.rice=(d.tries.rice||0)+1;
@@ -2165,9 +2164,7 @@ function bindRiceCheck(SB, d){
     }
     save({quiet:true});
     fb.innerHTML=`<div class="fb no"><b style="display:block;margin:0 0 4px">${R.answer.length}칸 중 ${n}칸이 맞았어요.</b>${esc(R.no)}
-      ${d.tries.rice>=2?'<button type="button" class="linkbtn" data-rice-pass style="display:block;margin-top:6px">한 번 더 확인하고 그래도 넘어가기</button>':''}</div>`;
-    const ps=fb.querySelector('[data-rice-pass]');
-    if(ps) ps.onclick=()=>{ d.submit.ricePass=true; save({quiet:true}); b.hidden=true; fb.innerHTML=''; refreshVotes(); };
+      ${d.tries.rice>=2?'<span style="display:block;margin-top:6px">🔎 전시실로 가서 설명판과 전시물을 다시 꼼꼼히 살펴보세요. 정답을 찾아야 다음으로 갈 수 있어요.</span>':''}</div>`;
   };
 }
 function paintRice(box){
@@ -2933,9 +2930,7 @@ function screenTask(step){
     }
     if(t.tries[key]>=2){
       view.querySelector('.fbslot').insertAdjacentHTML('beforeend',
-        `<div class="fb tip">한 번 더 확인하고 넘어가도 좋습니다. 버튼을 다시 누르면 다음으로 갑니다.</div>`);
-      document.getElementById('mainBtn').textContent='그래도 넘어가기';
-      document.getElementById('mainBtn').onclick=next;
+        `<div class="fb tip">🔎 전시실로 가서 설명판과 전시물을 다시 꼼꼼히 살펴보세요. 정답을 찾아야 다음으로 갈 수 있어요.</div>`);
     }
     window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
   });
@@ -3249,8 +3244,8 @@ function prepSubmit(P, step, w){
     trackGrowth(`${step.t}-prep-chain`, growLabel(step.t,'prep')+' (원인→결과 사슬)', {}, v.join(' → '), ok);
     d.tries.prepchain=(d.tries.prepchain||0)+1; save({quiet:true});
     const slot=view.querySelector('.fbslot');
-    if(!ok && d.tries.prepchain<2){
-      slot.innerHTML=`<div class="fb no">${esc(C.no)}</div>`;
+    if(!ok){
+      slot.innerHTML=`<div class="fb no">${esc(C.no)}${d.tries.prepchain>=2?'<span style="display:block;margin-top:6px">🔎 전시실로 가서 설명판과 전시물을 다시 꼼꼼히 살펴보세요. 정답을 찾아야 다음으로 갈 수 있어요.</span>':''}</div>`;
       return slot.scrollIntoView({behavior:'smooth', block:'center'});
     }
     slot.innerHTML='';
@@ -3327,10 +3322,8 @@ function screenPrep(step){
         window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
         return;
       }
-      if(S.topics[step.t].tries.prep>=2){
-        document.getElementById('mainBtn').textContent='그래도 넘어가기';
-        document.getElementById('mainBtn').onclick=next;
-      }
+      if(S.topics[step.t].tries.prep>=2)
+        view.querySelector('.fbslot').insertAdjacentHTML('beforeend', `<div class="fb tip">🔎 전시실로 가서 설명판과 전시물을 다시 꼼꼼히 살펴보세요. 정답을 찾아야 다음으로 갈 수 있어요.</div>`);
       return;
     }
     if(P.view) return prepSubmit(P, step, w);
@@ -3393,7 +3386,7 @@ function screenSubmit(step){
   /* 듣기 확인에 쓸 발표 글 — 빈칸은 아이가 넣은 값만 봅니다 */
   QUIZ['submit-'+step.t] = ()=>{
     if(SB.type!=='fill') return (d.submit||{}).rehearsal ? (d.prep.text||'') : null;
-    if(SB.view==='rice' && !(d.submit.riceOk || d.submit.ricePass)) return null;   // 쌀의 여행 확인 먼저
+    if(SB.view==='rice' && !d.submit.riceOk) return null;   // 쌀의 여행 확인 먼저
     const box=view.querySelector('[data-part="final"]'); if(!box) return null;
     const v=[...box.querySelectorAll('input')].map(i=>i.value.trim());
     return v.some(x=>!x) ? null : v.join(' ');
@@ -3413,7 +3406,7 @@ function screenSubmit(step){
   if(SB.view==='rice') bindRiceCheck(SB, d);
   btn('제출', ()=>{
     if(SB.type!=='fill' && !(d.submit||{}).rehearsal) return flash('먼저 30초 발표를 해 주세요');
-    if(SB.view==='rice' && !(d.submit.riceOk || d.submit.ricePass)) return flash('먼저 ✔ 쌀의 여행 확인하기를 눌러 주세요');
+    if(SB.view==='rice' && !d.submit.riceOk) return flash('먼저 ✔ 쌀의 여행 확인하기를 눌러 주세요');
     const a=readVote('submit-'+step.t);
     if(!a) return;
     const finish=(v)=>{
