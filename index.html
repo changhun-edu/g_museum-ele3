@@ -532,6 +532,20 @@ button.ghost{
 .row{display:flex;gap:10px}
 .row>*{flex:1}
 .note{font-size:14px;color:var(--muted)}
+#tmsg{position:fixed;inset:0;z-index:95;background:rgba(14,27,42,.88);display:none;align-items:center;justify-content:center;padding:20px}
+#tmsg.show{display:flex;animation:slidein .25s ease-out}
+#tmsg .box{background:var(--paper);color:var(--ink);border-radius:18px;max-width:460px;width:100%;padding:24px 22px 20px;border-top:9px solid #D9A441;box-shadow:0 18px 50px rgba(0,0,0,.35)}
+#tmsg[data-kind="good"] .box{border-top-color:#3E7C59}
+#tmsg[data-kind="again"] .box{border-top-color:#D9873A}
+#tmsg[data-kind="all"] .box{border-top-color:#2F6FA8}
+#tmsg .who{font-weight:900;font-size:16px;color:#6B5A3A}
+#tmsg .txt{font-size:25px;font-weight:900;letter-spacing:-.03em;margin:10px 0 8px;line-height:1.4;white-space:pre-wrap}
+#tmsg .ref{font-size:15px;color:#5B6576;margin-bottom:18px}
+#tmsg .go{width:100%}
+.hero{position:relative}
+.hero .tlink{position:absolute;top:16px;right:0;font-size:12px;font-weight:600;color:rgba(245,239,225,.28);
+  text-decoration:none;padding:4px 6px;border-radius:6px;letter-spacing:.02em}
+.hero .tlink:hover,.hero .tlink:focus-visible{color:rgba(245,239,225,.75);outline:1px solid rgba(245,239,225,.3)}
 .status{
   position:fixed;right:10px;bottom:calc(env(safe-area-inset-bottom) + 84px);z-index:30;
   font-size:12px;font-weight:700;color:rgba(245,239,225,.55);
@@ -903,9 +917,11 @@ button.ghost{
     <p class="sub">학생에게는 보이지 않는 화면입니다.</p>
     <label class="field">탐정 회의(중간 점검)</label>
     <div class="opts" id="tConf"></div>
-    <label class="field" style="margin-top:16px">통과 암호</label>
+    <label class="field" style="margin-top:16px">공용 예비 암호</label>
     <input type="text" id="tPw">
-    <p class="note" style="margin-top:8px">세 번째 미션이 끝나면 교사에게 30초 발표를 하고 이 암호를 받습니다.</p>
+    <p class="note" style="margin-top:8px">세 번째 미션이 끝나면 교사에게 30초 발표를 하고 암호를 받습니다.
+      현황판에 연결되어 있으면 <b>모둠마다 다른 암호</b>(현황판 「회의 암호」)만 통과되고,
+      인터넷 없이 쓸 때만 이 공용 암호가 쓰입니다. 현황판의 「통과 승인」을 누르면 암호 없이도 넘어갑니다.</p>
     <p class="note" style="margin-top:14px">세션 코드는 <b>학교-학년반-날짜</b>로 정합니다. 예) 운남초-3학년2반-1128<br>
       반이나 날짜가 다르면 코드도 달라야 기록이 섞이지 않습니다.</p>
   </div>
@@ -933,6 +949,12 @@ button.ghost{
   <button class="go" onclick="closeTeacher()">닫기</button>
 </div>
 
+<div id="tmsg" role="dialog" aria-modal="true"><div class="box">
+  <div class="who" id="tmWho"></div>
+  <div class="txt" id="tmTxt"></div>
+  <div class="ref" id="tmRef"></div>
+  <button class="go" id="tmOk" type="button">확인했어요</button>
+</div></div>
 <div class="status" id="status"></div>
 
 <script>
@@ -1210,6 +1232,7 @@ function migrate(){
   if(!S.weak)  S.weak={};
   if(!S.votes) S.votes={};
   if(!S.growth) S.growth={};
+  ['stuck','acks','times','unlock'].forEach(k=>{ if(!S[k]) S[k]={}; });
   if(S.phase==='run'){
     const here=S.steps && S.steps[S.stepIdx];
     if(!S.steps || !S.steps.some(s=>s.v==='fintro') || !S.steps.some(s=>s.v==='report')){
@@ -1229,6 +1252,7 @@ function newState(){
     topics:{nature:blankTopic(),farm:blankTopic(),house:blankTopic(),market:blankTopic()},
     conference:{text:'',passed:false},
     final:blankFinal(), bonus:blankBonus(), help:{}, weak:{}, votes:{}, growth:{},
+    stuck:{}, acks:{}, times:{}, unlock:{}, codeHash:'',
     settings:{useConference:true, password:'마루', dbUrl:'', apiKey:''},
     phase:'story', stepIdx:0, steps:[], seenHandoff:{},
     startedAt:Date.now(), updatedAt:Date.now()
@@ -1393,6 +1417,7 @@ function render(){
   const step = S.steps[S.stepIdx];
   if(!step) return screenEnd();
   drawBar(step);
+  stampTime(step);
   ({map:screenMap, intro:screenIntro, evidence:screenTask, record:screenTask,
     photo:screenPhoto, prep:screenPrep, submit:screenSubmit,
     complete:screenComplete, conference:screenConference,
@@ -1470,6 +1495,7 @@ function screenStory(){
   const resumable = prev && prev.phase==='run' && prev.groupNo;
   view.innerHTML = `
     <div class="hero">
+      <a class="tlink" href="gyosa-9k3f.html" target="_blank" rel="noopener" aria-label="교사용 현황판">교사용</a>
       <div class="kicker">광주역사민속박물관 · 3학년 탐험</div>
       <h1>동이의<br>사라진 생활 기억</h1>
     </div>
@@ -2163,8 +2189,18 @@ function bindRiceCheck(SB, d){
       return done();
     }
     save({quiet:true});
+    if(unlocked('farm-rice')){
+      fb.innerHTML=T_OPEN+'<button type="button" class="opt wide" data-rice-open style="margin-top:8px">👩‍🏫 정답 보고 계속하기</button>';
+      fb.querySelector('[data-rice-open]').onclick=()=>{
+        const box=view.querySelector('[data-game="rice"]');
+        [...box.querySelectorAll('input[type=hidden]')].forEach((h,i)=>{ if(R.answer[i]!=null) h.value=R.answer[i]; });
+        box.dataset.aim=''; paintGame(box);
+        d.submit.riceOk=true; d.submit.riceOpened=true; save({quiet:true});
+        fb.innerHTML=`<div class="fb ok">${esc(R.ok)}</div>`; done(); };
+      return;
+    }
     fb.innerHTML=`<div class="fb no"><b style="display:block;margin:0 0 4px">${R.answer.length}칸 중 ${n}칸이 맞았어요.</b>${esc(R.no)}
-      ${d.tries.rice>=2?'<span style="display:block;margin-top:6px">🔎 전시실로 가서 설명판과 전시물을 다시 꼼꼼히 살펴보세요. 정답을 찾아야 다음으로 갈 수 있어요.</span>':''}</div>`;
+      ${d.tries.rice>=2?'<span style="display:block;margin-top:6px">🔎 전시실로 가서 설명판과 전시물을 다시 꼼꼼히 살펴보세요. 정답을 찾아야 다음으로 갈 수 있어요. 그래도 어렵다면 선생님께 도움을 요청하세요.</span>':''}</div>`;
   };
 }
 function paintRice(box){
@@ -2691,7 +2727,8 @@ function markWeak(key, patch){
 
 /* 입력창 아래에 붙는 안내 */
 function sendNote(){
-  return '<p class="sendnote">✎ 여기에 쓴 글은 저장되어 담임 선생님께 전달됩니다.</p>';
+  return syncReady() ? '<p class="sendnote">✎ 여기에 쓴 글은 선생님 현황판으로 전송됩니다.</p>'
+    : '<p class="sendnote">✎ 여기에 쓴 글은 이 태블릿에 저장되고, 선생님이 나중에 모아 봅니다.</p>';
 }
 
 /* o = {title, who, texts:[], min, keywords, onSend} */
@@ -2821,7 +2858,52 @@ function describeAns(p, val, key){
   }
   return {text:String(val)};
 }
+/* 모둠별 암호 — 태블릿에는 암호가 아니라 확인용 값만 남습니다 (현황판과 같은 식) */
+function codeHash(sess, g, code){
+  const str=String(sess)+'|'+String(g)+'|'+String(code).replace(/[\s\-·.]/g,'');
+  let h1=0xdeadbeef, h2=0x41c6ce57;
+  for(let i=0;i<str.length;i++){ const ch=str.charCodeAt(i);
+    h1=Math.imul(h1^ch, 2654435761); h2=Math.imul(h2^ch, 1597334677); }
+  h1=Math.imul(h1^(h1>>>16), 2246822507)^Math.imul(h2^(h2>>>13), 3266489909);
+  h2=Math.imul(h2^(h2>>>16), 2246822507)^Math.imul(h1^(h1>>>13), 3266489909);
+  return (h2>>>0).toString(16).padStart(8,'0')+(h1>>>0).toString(16).padStart(8,'0');
+}
+function pwOk(pw){
+  if(S.codeHash) return codeHash(S.session, S.groupNo, pw)===S.codeHash;
+  return pw===S.settings.password;          // 인터넷 연결 없이 쓸 때의 공용 예비 암호
+}
+/* 어느 전시실에 있는지 · 얼마나 머물렀는지 — 현황판 지도에 씁니다 */
+function zoneOf(step){
+  if(!step) return 'lobby';
+  if(step.t) return step.t;
+  if(step.v==='conference') return 'meet';
+  if(step.v==='map') return 'lobby';
+  if(step.v==='end') return 'end';
+  if(step.v[0]==='b') return 'bonus';
+  return 'final';
+}
+function stampTime(step){
+  if(!S.times) S.times={};
+  const now=Date.now(), z=zoneOf(step), here=step.v+(step.t?'-'+step.t:'');
+  let ch=false;
+  if(S.here!==here){ S.here=here; S.stepAt=now; ch=true; }
+  if(!S.times[z]){ S.times[z]={start:now}; ch=true; }
+  if(step.v==='complete' && step.t && !S.times[step.t].end){ S.times[step.t].end=now; ch=true; }
+  if(step.v==='conference' && S.conference.passed && !S.times.meet.end){ S.times.meet.end=now; ch=true; }
+  if(step.v==='report' && !S.times.final.end){ S.times.final.end=now; ch=true; }
+  if(ch) save({quiet:true});
+}
+function unlocked(key){ return !!(S.unlock||{})[key]; }
+function teacherPassBtn(label, fn){
+  const b=document.getElementById('mainBtn');
+  b.textContent=label||'👩‍🏫 선생님 확인 · 다음으로'; b.onclick=fn||next; b.disabled=false;
+}
+const T_OPEN='<div class="fb tip" style="border-color:var(--gold)">👩‍🏫 선생님이 이 문제를 열어 주셨어요. 선생님과 함께 정답을 확인한 뒤 다음으로 가세요.</div>';
 function trackGrowth(key, label, p, val, ok){
+  if(!S.stuck) S.stuck={};
+  { const K=S.stuck[key]||(S.stuck[key]={label, n:0});
+    if(ok){ K.ok=true; K.okAt=Date.now(); }
+    else { K.n=(K.n||0)+1; K.last=describeAns(p||{}, val).text; K.at=Date.now(); K.ok=false; } }
   if(!S.growth) S.growth={};
   const G=S.growth[key];
   if(!ok){ if(!G){ const d=describeAns(p||{}, val); S.growth[key]={label, wrong:d.text, key:d.key||'', at:Date.now()}; } }
@@ -2928,9 +3010,13 @@ function screenTask(step){
       window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
       return;
     }
+    if(parts.some(pp=>unlocked(`${step.t}-${step.v}-${pp.id}`))){
+      view.querySelector('.fbslot').insertAdjacentHTML('beforeend', T_OPEN);
+      teacherPassBtn(); window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'}); return;
+    }
     if(t.tries[key]>=2){
       view.querySelector('.fbslot').insertAdjacentHTML('beforeend',
-        `<div class="fb tip">🔎 전시실로 가서 설명판과 전시물을 다시 꼼꼼히 살펴보세요. 정답을 찾아야 다음으로 갈 수 있어요.</div>`);
+        `<div class="fb tip">🔎 전시실로 가서 설명판과 전시물을 다시 꼼꼼히 살펴보세요. 정답을 찾아야 다음으로 갈 수 있어요. 그래도 어렵다면 선생님께 도움을 요청하세요.</div>`);
     }
     window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
   });
@@ -3244,8 +3330,8 @@ function prepSubmit(P, step, w){
     trackGrowth(`${step.t}-prep-chain`, growLabel(step.t,'prep')+' (원인→결과 사슬)', {}, v.join(' → '), ok);
     d.tries.prepchain=(d.tries.prepchain||0)+1; save({quiet:true});
     const slot=view.querySelector('.fbslot');
-    if(!ok){
-      slot.innerHTML=`<div class="fb no">${esc(C.no)}${d.tries.prepchain>=2?'<span style="display:block;margin-top:6px">🔎 전시실로 가서 설명판과 전시물을 다시 꼼꼼히 살펴보세요. 정답을 찾아야 다음으로 갈 수 있어요.</span>':''}</div>`;
+    if(!ok && !unlocked(`${step.t}-prep-chain`)){
+      slot.innerHTML=`<div class="fb no">${esc(C.no)}${d.tries.prepchain>=2?'<span style="display:block;margin-top:6px">🔎 전시실로 가서 설명판과 전시물을 다시 꼼꼼히 살펴보세요. 정답을 찾아야 다음으로 갈 수 있어요. 그래도 어렵다면 선생님께 도움을 요청하세요.</span>':''}</div>`;
       return slot.scrollIntoView({behavior:'smooth', block:'center'});
     }
     slot.innerHTML='';
@@ -3322,8 +3408,11 @@ function screenPrep(step){
         window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
         return;
       }
+      if(unlocked(`${step.t}-prep-${P.question.id}`)){
+        view.querySelector('.fbslot').insertAdjacentHTML('beforeend', T_OPEN); teacherPassBtn(); return;
+      }
       if(S.topics[step.t].tries.prep>=2)
-        view.querySelector('.fbslot').insertAdjacentHTML('beforeend', `<div class="fb tip">🔎 전시실로 가서 설명판과 전시물을 다시 꼼꼼히 살펴보세요. 정답을 찾아야 다음으로 갈 수 있어요.</div>`);
+        view.querySelector('.fbslot').insertAdjacentHTML('beforeend', `<div class="fb tip">🔎 전시실로 가서 설명판과 전시물을 다시 꼼꼼히 살펴보세요. 정답을 찾아야 다음으로 갈 수 있어요. 그래도 어렵다면 선생님께 도움을 요청하세요.</div>`);
       return;
     }
     if(P.view) return prepSubmit(P, step, w);
@@ -3492,7 +3581,7 @@ function screenConference(){
       <p class="sub">선생님께 30초 동안 발표하세요.</p>
       <textarea id="confText" placeholder="그렇게 생각한 증거는 …입니다.">${esc(S.conference.text)}</textarea>
       ${sendNote()}
-      <label class="field" style="margin-top:16px">선생님께 받은 암호</label>
+      <label class="field" style="margin-top:16px">선생님께 받은 우리 모둠 암호</label>
       <input type="text" id="confPw" placeholder="암호">
       <p class="sub" style="margin:8px 0 0">선생님이 현황판에서 승인하면 암호 없이도 열립니다.</p>
       <div class="fbslot"></div>
@@ -3518,7 +3607,7 @@ function screenConference(){
     if(!S.conference.text) return flash('먼저 생각을 적어 주세요');
     const bad=weakText(S.conference.text, 10);
     if(bad) return flash(bad);
-    if(pw !== S.settings.password){
+    if(!pwOk(pw)){
       view.querySelector('.fbslot').innerHTML='<div class="fb no">암호가 다릅니다. 선생님께 발표하고 다시 받으세요.</div>';
       save(); return;
     }
@@ -3776,7 +3865,7 @@ function finRecord(){
       if(hit){ wrong++; li.insertAdjacentHTML('beforeend', `<div class="dfb">🤔 ${esc(c.no)}</div>`); }
       trackGrowth('day-'+i, `⏰ 동이의 하루 · ${c.when}`, {}, v[i], !hit);
     });
-    if(wrong){
+    if(wrong && !DAY.some((c,i)=>unlocked('day-'+i))){
       S.final.trapTries=(S.final.trapTries||0)+1; save({quiet:true});
       lis.find(l=>l.classList.contains('bad')).scrollIntoView({behavior:'smooth', block:'center'});
       return flash('빨간 카드를 다시 살펴보세요');
@@ -4512,6 +4601,18 @@ async function buildReport(){
   return c.toDataURL('image/jpeg', 0.9);
 }
 let REPORT_URL='';
+const RKEY='gjhfm-report';
+function queueReport(url){
+  const im=new Image();
+  im.onload=()=>{
+    const w=540, h=Math.round(im.height*w/im.width), c=document.createElement('canvas');
+    c.width=w; c.height=h; c.getContext('2d').drawImage(im,0,0,w,h);
+    const thumb=c.toDataURL('image/jpeg',0.62);
+    try{ localStorage.setItem(RKEY, JSON.stringify({img:thumb, w, h, at:Date.now()})); }catch(e){}
+    SY.photos.report=true; saveSync(); clearTimeout(flushT); flushT=setTimeout(()=>flushNow(), 1500); showStatus();
+  };
+  im.src=url;
+}
 async function downloadDataUrl(url, name){
   const blob=await (await fetch(url)).blob();
   const href=URL.createObjectURL(blob);
@@ -4576,7 +4677,7 @@ function screenReport(){
   const make=()=>{
     const out=document.getElementById('rOut'), img=document.getElementById('reportImg'), w=document.getElementById('rwait');
     out.hidden=false; w.hidden=false; w.textContent='보고서를 만드는 중…'; img.removeAttribute('src');
-    buildReport().then(u=>{ REPORT_URL=u; img.src=u; w.hidden=true; out.scrollIntoView({behavior:'smooth'}); })
+    buildReport().then(u=>{ REPORT_URL=u; img.src=u; queueReport(u); w.hidden=true; out.scrollIntoView({behavior:'smooth'}); })
       .catch(()=>{ w.textContent='보고서를 만들지 못했습니다'; });
   };
   document.getElementById('rMake').onclick=()=>{
@@ -4680,8 +4781,8 @@ function wipe(){
 /* 배포 전에 여기를 채우면 모든 태블릿의 기본값이 됩니다.
    비워 두면 교사 설정 화면에서 넣을 수 있습니다. */
 const FB = {
-  dbUrl : '',   // 예) https://gjhfm-default-rtdb.asia-southeast1.firebasedatabase.app
-  apiKey: ''    // 예) AIzaSy...
+  dbUrl : 'https://museum-ele3-default-rtdb.firebaseio.com',
+  apiKey: 'AIzaSyCWgWV6V_1tislMZq2xQIwMdHQ9Z3FjHHg'
 };
 
 const SKEY='gjhfm-sync';
@@ -4755,9 +4856,11 @@ function mainPayload(){
       view:step.v||'', mission:step.m||0, topic:step.t||'',
       role:step.role||'', roleName:step.role?whoIs(step.role, step.m).name:'',
       missionsDone:doneCount(), level:levelName(),
-      finalDone:!!S.final.done, bonusDone:!!S.bonus.done
+      finalDone:!!S.final.done, bonusDone:!!S.bonus.done,
+      zone:zoneOf(step), stepAt:S.stepAt||null, codeReady:!!S.codeHash
     },
     help:S.help||{}, weak:S.weak||{}, votes:S.votes||{}, growth:S.growth||{},
+    stuck:S.stuck||{}, acks:S.acks||{}, times:S.times||{},
     topics, startedAt:S.startedAt, updatedAt:S.updatedAt
   };
 }
@@ -4786,6 +4889,12 @@ async function flushNow(manual){
       SY.mainDirty=false; saveSync();
     }
     for(const t of Object.keys(SY.photos)){
+      if(t==='report'){
+        let r=null; try{ r=JSON.parse(localStorage.getItem(RKEY)); }catch(e){}
+        if(r) await put(`${c.dbUrl}/sessions/${encodeURIComponent(S.session)}/reports/g${S.groupNo}`,
+          {img:r.img, w:r.w, h:r.h, at:r.at, groupNo:S.groupNo, members:S.members}, token);
+        delete SY.photos.report; saveSync(); continue;
+      }
       const p = t==='bonus' ? S.bonus.photo : (S.topics[t] && S.topics[t].photo);
       if(!p){ delete SY.photos[t]; continue; }
       await put(`${base()}/photos/${t}`, {thumb:p.thumb, at:p.at, w:p.w, h:p.h}, token);
@@ -4797,6 +4906,54 @@ async function flushNow(manual){
   }
   busy=false; showStatus();
 }
+
+/* 10초마다 선생님 쪽 신호를 확인합니다 */
+let tpBusy=false, MQ=[];
+const MSG_KIND={good:'👍 선생님 칭찬', again:'🔁 다시 생각해 보기', memo:'✎ 선생님 한마디', all:'📣 안내 방송', open:'👩‍🏫 선생님이 문제를 열어 주셨어요'};
+async function pollTeacher(){
+  if(tpBusy || !syncReady() || !navigator.onLine || S.phase==='story' || S.phase==='start') return;
+  tpBusy=true;
+  try{
+    const tk=await getToken(), c=cfg();
+    const [a,b]=await Promise.all([
+      fetch(`${base()}/teacher.json?auth=${tk}`),
+      fetch(`${c.dbUrl}/sessions/${encodeURIComponent(S.session)}/broadcast.json?auth=${tk}`)]);
+    const T=(a.ok && await a.json())||{}, B=(b.ok && await b.json())||{};
+    let ch=false;
+    if(T.code && T.code.h && T.code.h!==S.codeHash){ S.codeHash=T.code.h; ch=true; }
+    if(!S.unlock) S.unlock={};
+    Object.keys(T.unlock||{}).forEach(k=>{ if(!S.unlock[k]){ S.unlock[k]=T.unlock[k]; ch=true;
+      const lb=((S.stuck||{})[k]||{}).label||'막힌 문제';
+      MQ.push({id:'u-'+k, kind:'open', text:`「${lb}」 문제를 선생님이 열어 주셨어요.`, ref:'확인 버튼을 한 번 더 누르면 다음으로 갈 수 있어요.', local:true}); } });
+    const since=(S.startedAt||0)-5*60000;
+    Object.keys(T.notes||{}).forEach(id=>{ const n=T.notes[id]; if(n && !S.acks['n'+id] && (n.at||0)>=since) MQ.push(Object.assign({id:'n'+id}, n)); });
+    Object.keys(B).forEach(id=>{ const m=B[id]; if(!m || S.acks['b'+id] || (m.at||0)<since) return;
+      const to=m.to==null||m.to==='all' ? null : [].concat(m.to).map(String);
+      if(to && !to.includes(String(S.groupNo))) return;
+      MQ.push(Object.assign({id:'b'+id, kind:'all'}, m)); });
+    if(ch) save({quiet:true});
+    showMsg();
+  }catch(e){}
+  tpBusy=false;
+}
+function showMsg(){
+  const box=document.getElementById('tmsg'); if(!box || box.classList.contains('show')) return;
+  const seen=new Set();
+  MQ=MQ.filter(m=>!S.acks[m.id] && !seen.has(m.id) && seen.add(m.id));
+  const m=MQ.shift(); if(!m) return;
+  document.getElementById('tmWho').textContent=MSG_KIND[m.kind]||MSG_KIND.memo;
+  document.getElementById('tmTxt').textContent=m.text||'';
+  document.getElementById('tmRef').textContent=m.ref?('· '+m.ref):'';
+  box.dataset.kind=m.kind||'memo';
+  box.classList.add('show');
+  try{ navigator.vibrate && navigator.vibrate([120,60,120]); }catch(e){}
+  document.getElementById('tmOk').onclick=()=>{
+    S.acks[m.id]=Date.now(); save({quiet:true});
+    box.classList.remove('show'); setTimeout(showMsg, 250);
+  };
+}
+setInterval(()=>pollTeacher(), 10000);
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') pollTeacher(); });
 
 window.addEventListener('online', ()=>flushNow());
 window.addEventListener('offline', showStatus);
@@ -4838,6 +4995,7 @@ if(FRESH){
 render();
 keepAwake();
 showStatus();
+setTimeout(pollTeacher, 1500);
 flushNow();
 </script>
 </body>
