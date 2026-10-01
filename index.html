@@ -4324,7 +4324,11 @@ function addBack(fn){
   document.getElementById('backBtn').onclick = fn || goBack;
 }
 function goBack(){
-  const tgt=S.stepIdx-1; if(tgt<0) return;
+  const here=S.steps[S.stepIdx]||{};
+  let tgt=S.stepIdx-1;
+  /* 보너스 없이 마쳤다면 끝 화면에서는 보고서로 돌아갑니다 */
+  if(here.v==='end' && !(S.bonus&&S.bonus.done)) tgt=S.steps.findIndex(s=>s.v==='report');
+  if(tgt<0) return;
   const st=S.steps[tgt];
   /* 발표 글을 고칠 수 있으니 그 화면의 동의는 새로 받습니다 */
   const vid = st.v==='submit' ? 'submit-'+st.t : st.v==='fsubmit' ? 'final' : st.v==='bfinal' ? 'bfinal' : '';
