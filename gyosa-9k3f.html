@@ -32,7 +32,7 @@ h1{font-size:29px;font-weight:900;letter-spacing:-.035em;margin:0}
 
 button{font:inherit;cursor:pointer}
 .b{background:var(--gold);color:#2A1D05;border:0;border-radius:10px;padding:11px 18px;font-weight:800}
-.b.g{background:none;color:var(--paper);border:1px solid rgba(245,239,225,.32)}
+.b.g{background:none;color:var(--paper);border:1px solid rgba(245,239,225,.32);width:auto;padding:11px 18px;border-radius:10px;cursor:pointer}
 .b:active{transform:translateY(1px)}
 
 /* 요약 띠 */
@@ -91,6 +91,116 @@ dl.rec dd{margin:2px 0 0;font-size:16px;font-weight:600}
 .shots figcaption{font-size:13px;color:var(--muted);font-weight:700;text-align:center;margin-top:4px}
 .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:22px}
 code{background:var(--paper-dim);border-radius:5px;padding:1px 6px;font-size:14px}
+
+/* 탭 */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px;border-bottom:1px solid rgba(245,239,225,.16);padding-bottom:10px}
+.tabs button{background:none;border:1px solid transparent;color:rgba(245,239,225,.72);border-radius:999px;padding:8px 15px;font-weight:800;font-size:15px}
+.tabs button[aria-selected="true"]{background:var(--paper);color:var(--ink)}
+.tabs button .n{display:inline-block;min-width:20px;border-radius:99px;background:var(--stop);color:#fff;font-size:12px;padding:0 6px;margin-left:5px}
+.pane[hidden]{display:none}
+
+/* 알림 띠 */
+.alerts{display:grid;gap:8px;margin:0 0 16px}
+.al{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;border-radius:12px;padding:11px 14px;
+  background:rgba(245,239,225,.07);border-left:6px solid var(--gold)}
+.al.stuck{border-left-color:#E0663F;background:rgba(224,102,63,.13)}
+.al.stop{border-left-color:var(--stop)}
+.al b.gn{font-size:17px;font-weight:900;min-width:52px}
+.al .msg{flex:1 1 260px;font-size:15px}
+.al .msg small{display:block;color:rgba(245,239,225,.6);font-size:13px}
+.sb{background:var(--gold);color:#2A1D05;border:0;border-radius:8px;padding:7px 12px;font-weight:800;font-size:14px}
+.sb.g{background:none;color:inherit;border:1px solid currentColor;opacity:.85;width:auto;padding:7px 12px;border-radius:8px}
+.sb.ok{background:var(--ok);color:#fff}
+.code{font-family:ui-monospace,Menlo,monospace;font-weight:900;letter-spacing:.04em}
+
+/* 박물관 지도 */
+.maptools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 10px}
+.maptools .note{color:rgba(245,239,225,.6)}
+.museum{position:relative;height:600px;border-radius:16px;background:
+  repeating-linear-gradient(0deg,rgba(245,239,225,.035) 0 1px,transparent 1px 28px),
+  repeating-linear-gradient(90deg,rgba(245,239,225,.035) 0 1px,transparent 1px 28px),#132436;
+  border:1px solid rgba(245,239,225,.14);overflow:hidden;touch-action:none}
+.zone{position:absolute;border-radius:12px;background:rgba(245,239,225,.94);color:var(--text);
+  padding:10px 10px 8px;display:flex;flex-direction:column;gap:6px;overflow:auto;border:3px solid transparent}
+.zone.minor{background:rgba(245,239,225,.78)}
+.zone.busy{border-color:#E0A43F}
+.zone .zh{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.zone .zh b{font-size:17px;font-weight:900;letter-spacing:-.03em}
+.zone .zh small{color:var(--muted);font-weight:700;font-size:12.5px}
+.zone .zh .cnt{margin-left:auto;font-weight:900;font-size:13px;background:var(--ink);color:var(--paper);border-radius:99px;padding:1px 9px}
+.zone .busytag{font-size:12.5px;font-weight:800;color:#9A5B10}
+.museum.edit .zone{cursor:move;outline:2px dashed var(--gold);outline-offset:-6px}
+.zone input.zname{font-size:14px;padding:4px 7px;border-width:1px}
+.zone .rs{position:absolute;right:2px;bottom:2px;width:18px;height:18px;cursor:nwse-resize;
+  background:linear-gradient(135deg,transparent 50%,var(--gold) 50%);border-radius:0 0 8px 0}
+.tok{display:flex;align-items:center;gap:7px;width:100%;text-align:left;border:0;border-radius:9px;
+  padding:6px 9px;color:#fff;background:var(--ok);font-size:13.5px;font-weight:700;line-height:1.3}
+.tok b{font-size:16px;font-weight:900;white-space:nowrap}
+.tok span{opacity:.92}
+.tok.wait{background:var(--gold);color:#2A1D05}
+.tok.stuck{background:#D4562F}
+.tok.stop{background:#7A7F88}
+.tok.end{background:var(--ink)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:13px;color:rgba(245,239,225,.75);margin:10px 0 0}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+
+.routes{margin-top:18px;display:grid;gap:8px}
+.route{display:flex;align-items:center;gap:6px;flex-wrap:wrap;background:rgba(245,239,225,.06);border-radius:10px;padding:9px 12px;cursor:pointer;border:0;color:inherit;text-align:left;width:100%}
+.route > b{min-width:56px;font-size:16px;font-weight:900}
+.route .st{border-radius:8px;padding:4px 9px;font-size:13px;font-weight:700;background:rgba(245,239,225,.08);color:rgba(245,239,225,.55)}
+.route .st.done{background:rgba(62,124,89,.55);color:#E6F4EC}
+.route .st.now{background:var(--paper);color:var(--ink);box-shadow:0 0 0 2px var(--gold)}
+.route .ar{opacity:.35}
+
+/* 제출함 · 갤러리 · 안내 */
+.bar2{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0 0 14px}
+select{font:inherit;padding:9px 12px;border-radius:9px;border:2px solid var(--line);background:#fff;color:var(--text);max-width:100%}
+.subs{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.subc{background:var(--paper);color:var(--text);border-radius:12px;padding:14px 15px;display:flex;flex-direction:column;gap:8px}
+.subc h4{margin:0;font-size:17px;font-weight:900}
+.subc .ans{font-size:15.5px;line-height:1.55}
+.subc .ans dt{font-size:12.5px;color:var(--muted);font-weight:800;margin-top:6px}
+.subc .ans dd{margin:0}
+.subc .ans img{width:100%;border-radius:8px}
+.subc .grow{font-size:13.5px;color:#5B4A7A;background:#EFE8F7;border-radius:8px;padding:6px 9px}
+.subc .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+.subc .acts .sb.g{color:var(--ink)}
+.sent{font-size:13px;color:var(--muted)}
+.sent .rd{color:var(--ok);font-weight:800}
+.sent .ur{color:#B8442C;font-weight:800}
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.gal figure{margin:0;background:var(--paper);color:var(--text);border-radius:12px;overflow:hidden}
+.gal img{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:top;display:block;cursor:zoom-in;background:#ddd}
+.gal figcaption{padding:9px 11px;font-size:14px;font-weight:700;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.gal figcaption .sb{margin-left:auto}
+.ctab{width:100%;border-collapse:collapse;background:var(--paper);color:var(--text);border-radius:12px;overflow:hidden}
+.ctab th,.ctab td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:left;font-size:15px}
+.ctab th{background:var(--paper-dim);font-size:13px}
+.ctab .code{font-size:21px}
+.cast{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+@media (max-width:820px){.cast{grid-template-columns:1fr}
+  .museum{height:auto;display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px}
+  .zone{position:static!important;width:auto!important;height:auto!important;min-height:96px}
+  #editMap,#resetMap,#mapNote{display:none}
+  .wrap{padding:16px 12px 50px} h1{font-size:24px}
+  .top .right{margin-left:0} .tabs button{padding:7px 11px;font-size:14px}
+  .route .st{font-size:12px;padding:3px 7px}}
+.cast .panel{max-width:none;margin:0}
+.panel .route .st{background:#fff;color:var(--muted)}
+.panel .route .st.done{background:#DDEFE3;color:#1F4D33}
+.panel .route > b{color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chip{border:1px solid var(--line);background:#fff;color:var(--text);border-radius:99px;padding:6px 11px;font-size:14px;font-weight:700}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+textarea{width:100%;font:inherit;padding:11px 12px;border:2px solid var(--line);border-radius:9px;min-height:90px;resize:vertical;color:var(--text)}
+.hist{display:grid;gap:9px}
+.hist div{background:var(--paper-dim);border-radius:10px;padding:10px 12px;font-size:15px}
+.hist small{display:block;color:var(--muted);font-size:13px;margin-top:3px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--paper);color:var(--ink);
+  font-weight:800;border-radius:99px;padding:11px 20px;box-shadow:0 10px 30px rgba(0,0,0,.35);z-index:99;display:none}
+#toast.show{display:block}
+.imgfull{width:100%;border-radius:10px;display:block}
+@media print{body{background:#fff}}
 </style>
 </head>
 <body>
@@ -108,8 +218,78 @@ code{background:var(--paper-dim);border-radius:5px;padding:1px 6px;font-size:14p
     </div>
   </header>
 
+  <div class="alerts" id="alerts"></div>
   <div class="summary" id="summary"></div>
-  <div class="grid" id="grid"></div>
+  <nav class="tabs" id="tabs" role="tablist">
+    <button data-tab="map">🗺 박물관 지도</button>
+    <button data-tab="cards">🗂 모둠 카드</button>
+    <button data-tab="subs">📥 제출함</button>
+    <button data-tab="gallery">🖼 보고서</button>
+    <button data-tab="codes">🔑 회의 암호</button>
+    <button data-tab="cast">📣 안내 방송</button>
+  </nav>
+
+  <section class="pane" id="p-map">
+    <div class="maptools">
+      <button class="sb g" id="editMap" onclick="toggleEdit()">배치 바꾸기</button>
+      <button class="sb g" id="resetMap" onclick="resetLayout()" hidden>처음 배치로</button>
+      <span class="note" id="mapNote">전시실 상자를 실제 박물관 배치에 맞게 옮길 수 있습니다.</span>
+    </div>
+    <div class="museum" id="museum"></div>
+    <div class="legend">
+      <span><i style="background:var(--ok)"></i>진행 중</span>
+      <span><i style="background:var(--gold)"></i>회의 승인 기다림</span>
+      <span><i style="background:#D4562F"></i>같은 문제 3번 넘게 틀림</span>
+      <span><i style="background:#7A7F88"></i>오래 멈춤</span>
+      <span><i style="background:var(--ink);border:1px solid #fff"></i>탐험 마침</span>
+    </div>
+    <div class="routes" id="routes"></div>
+  </section>
+  <section class="pane" id="p-cards" hidden><div class="grid" id="grid"></div></section>
+  <section class="pane" id="p-subs" hidden>
+    <div class="bar2">
+      <select id="subSel" onchange="SUBSEL=this.value;renderSubs()"></select>
+      <button class="sb g" onclick="subCsv()">이 항목 내려받기(CSV)</button>
+    </div>
+    <div class="subs" id="subs"></div>
+  </section>
+  <section class="pane" id="p-gallery" hidden>
+    <div class="bar2">
+      <button class="sb" onclick="loadReports(true)">보고서 새로 불러오기</button>
+      <button class="sb g" onclick="downloadAllReports()">모두 내려받기</button>
+      <span class="note" style="color:rgba(245,239,225,.65)" id="galNote"></span>
+    </div>
+    <div class="gal" id="gal"></div>
+  </section>
+  <section class="pane" id="p-codes" hidden>
+    <div class="bar2">
+      <button class="sb" onclick="makeCodes()">모든 모둠 암호 새로 만들기</button>
+      <button class="sb g" onclick="SHOWCODE=!SHOWCODE;renderCodes()">암호 보이기 / 가리기</button>
+      <button class="sb g" onclick="printCodes()">암호 쪽지 인쇄</button>
+    </div>
+    <p class="sub" style="margin:0 0 12px">모둠마다 암호가 다릅니다. 다른 모둠 암호로는 통과되지 않으니 암호가 퍼져도 괜찮습니다.
+      발표를 들은 뒤 <b>「통과 승인」</b>을 누르면 암호 없이도 넘어갑니다. 암호는 인터넷이 약할 때 쓰는 예비 수단입니다.</p>
+    <div id="codes"></div>
+  </section>
+  <section class="pane" id="p-cast" hidden>
+    <div class="cast">
+      <div class="panel">
+        <h2>안내 방송 보내기</h2>
+        <p class="note">학생 태블릿에 큰 글씨 알림으로 뜨고, 학생이 「확인했어요」를 누르면 읽음으로 바뀝니다.</p>
+        <label>자주 쓰는 말</label>
+        <div class="chips" id="presets"></div>
+        <label for="castText">보낼 말</label>
+        <textarea id="castText" maxlength="120" placeholder="예) 10분 남았어요. 지금 하는 미션을 마무리해요."></textarea>
+        <label>받을 모둠</label>
+        <div class="chips" id="castTo"></div>
+        <div class="actions"><button class="b" onclick="sendCast()">📣 보내기</button></div>
+      </div>
+      <div class="panel">
+        <h2>보낸 안내</h2>
+        <div class="hist" id="castHist"><p class="note">아직 보낸 안내가 없습니다.</p></div>
+      </div>
+    </div>
+  </section>
 </div>
 
 <div class="sheet" id="cfg">
@@ -121,8 +301,13 @@ code{background:var(--paper-dim);border-radius:5px;padding:1px 6px;font-size:14p
     <p class="note" style="margin:6px 0 0"><b>학교-학년반-날짜</b> 순서로 정합니다.
       예) 운남초-3학년2반-1128 · 운남초-3-2-1128<br>
       반이나 날짜가 다르면 코드도 다르게 하세요. 같으면 앞 반 기록을 덮어씁니다.</p>
-    <label for="cPw">탐정 회의 통과 암호</label>
+    <label for="cPw">공용 예비 암호</label>
     <input id="cPw" placeholder="마루">
+    <p class="note" style="margin:6px 0 0">인터넷 없이 쓰는 태블릿에서만 통하는 암호입니다. 학생 태블릿 교사 설정의 암호와 같게 두세요.
+      연결된 태블릿은 「회의 암호」 탭의 모둠별 암호만 받습니다.</p>
+    <label for="cCount">모둠 수</label>
+    <input id="cCount" type="number" min="1" max="12" value="6" style="max-width:120px">
+    <p class="note" style="margin:6px 0 0">회의 암호와 안내 방송을 받을 모둠 수입니다.</p>
     <h3>멈춘 모둠 기준</h3>
     <p class="note">마지막 입력 후 이 시간이 지나면 카드가 붉게 바뀝니다.</p>
     <input id="cStale" type="number" min="1" max="30" value="5" style="max-width:120px">
@@ -134,6 +319,28 @@ code{background:var(--paper-dim);border-radius:5px;padding:1px 6px;font-size:14p
 </div>
 
 <div class="sheet" id="detail"><div class="panel" id="detailBody"></div></div>
+
+<div class="sheet" id="note"><div class="panel">
+  <h2 id="nTitle">한마디 보내기</h2>
+  <p class="note" id="nRef"></p>
+  <label>종류</label>
+  <div class="chips" id="nKind">
+    <button class="chip" data-k="good">👍 칭찬</button>
+    <button class="chip" data-k="again">🔁 다시 생각해 보기</button>
+    <button class="chip" data-k="memo">✎ 한마디</button>
+  </div>
+  <label>자주 쓰는 말</label>
+  <div class="chips" id="nPre"></div>
+  <label for="nText">보낼 말</label>
+  <textarea id="nText" maxlength="120"></textarea>
+  <div class="actions">
+    <button class="b" onclick="sendNote()">보내기</button>
+    <button class="b g" style="color:var(--ink);border-color:var(--line)" onclick="closeSheet('note')">닫기</button>
+  </div>
+</div></div>
+
+<div class="sheet" id="imgv"><div class="panel" id="imgvBody"></div></div>
+<div id="toast"></div>
 
 <script>
 /* ── 표시용 이름표 ─────────────────── */
@@ -160,14 +367,14 @@ const FIELD={w:'찾은 낱말',tools:'농사 도구',space:'공간과 쓰임',wo
    학생 앱(index.html) 아래쪽의 FB 값과 똑같이 채워 넣으세요.
    여기에 넣어 두면 선생님이 현황판에서 따로 입력할 필요가 없습니다. */
 const FB = {
-  dbUrl : '',   // 예) https://gjhfm-default-rtdb.asia-southeast1.firebasedatabase.app
-  apiKey: ''    // 예) AIzaSy...
+  dbUrl : 'https://museum-ele3-default-rtdb.firebaseio.com',
+  apiKey: 'AIzaSyCWgWV6V_1tislMZq2xQIwMdHQ9Z3FjHHg'
 };
 
 /* ── 설정 ─────────────────────────── */
 const CK='gjhfm-teacher';
 let C = (()=>{try{return JSON.parse(localStorage.getItem(CK))||null}catch(e){return null}})()
-     || {session:'', password:'마루', stale:5};
+     || {session:'', password:'마루', stale:5, count:6};
 C.dbUrl = FB.dbUrl; C.apiKey = FB.apiKey;
 let AUTH={idToken:'',refreshToken:'',exp:0};
 let DATA={}, lastPull=0, timer=null;
@@ -178,7 +385,7 @@ const ready=()=>!!(C.dbUrl&&C.apiKey&&C.session);
 
 function openCfg(){
   $('cSess').value=C.session;
-  $('cPw').value=C.password; $('cStale').value=C.stale;
+  $('cPw').value=C.password; $('cStale').value=C.stale; $('cCount').value=C.count||6;
   $('cConn').textContent = (FB.dbUrl && FB.apiKey)
     ? '연결 정보가 이 파일에 들어 있습니다. 세션 코드만 맞추면 됩니다.'
     : '연결 정보가 비어 있습니다. gyosa 파일 위쪽의 FB 값을 채워 주세요.';
@@ -187,7 +394,8 @@ function openCfg(){
 function closeSheet(id){ $(id).classList.remove('show'); }
 function saveCfg(){
   C={session:$('cSess').value.trim(), password:$('cPw').value.trim()||'마루',
-     stale:Math.max(1,+$('cStale').value||5)};
+     stale:Math.max(1,+$('cStale').value||5), count:Math.min(12,Math.max(1,+$('cCount').value||6)),
+     layout:C.layout, names:C.names, tab:C.tab};
   localStorage.setItem(CK, JSON.stringify(C));
   C.dbUrl=FB.dbUrl; C.apiKey=FB.apiKey;
   AUTH={idToken:'',refreshToken:'',exp:0};
@@ -213,10 +421,8 @@ async function pull(manual){
   if(!ready()){ $('live').className='pill off'; $('live').textContent='설정 필요'; renderEmpty(); return; }
   try{
     const t=await token();
-    const url=`${C.dbUrl}/sessions/${encodeURIComponent(C.session)}/groups.json?auth=${t}`;
-    const r=await fetch(url);
-    if(!r.ok) throw new Error('읽기 실패 ('+r.status+')');
-    DATA = (await r.json()) || {};
+    const [g,bc,cd]=await Promise.all([rq('groups'), rq('broadcast').catch(()=>null), rq('teacherCodes').catch(()=>null)]);
+    DATA = g || {}; BC = bc || {}; CODES = cd || {};
     lastPull=Date.now();
     $('live').className='pill live';
     render();
@@ -305,76 +511,477 @@ function helpLabel(g){
   return bits.join(' · ');
 }
 
+/* ══════════ 공통 ══════════ */
+let BC={}, CODES={}, REPORTS=null, TAB=C.tab||'map', SUBSEL='', SHOWCODE=false, EDIT=false, NOTE=null;
+const SP=()=>`${C.dbUrl}/sessions/${encodeURIComponent(C.session)}`;
+async function rq(path, method, body){
+  const t=await token();
+  const r=await fetch(`${SP()}/${path}.json?auth=${t}`, {method:method||'GET',
+    headers:{'Content-Type':'application/json'}, body: body===undefined?undefined:JSON.stringify(body)});
+  if(!r.ok) throw new Error(((method||'GET')==='GET'?'읽기':'쓰기')+' 실패 ('+r.status+')');
+  return r.json();
+}
+function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toast.t); toast.t=setTimeout(()=>t.classList.remove('show'),2600); }
+const gkeys=()=>Object.keys(DATA).filter(k=>DATA[k] && DATA[k].groupNo).sort((a,b)=>(DATA[a].groupNo||0)-(DATA[b].groupNo||0));
+const mins=ms=>Math.max(0,Math.round(ms/60000));
+function groupNos(){
+  const seen=gkeys().map(k=>+DATA[k].groupNo);
+  const n=Math.max(C.count||6, ...seen, 0);
+  return Array.from({length:n},(_,i)=>i+1);
+}
+
+/* 막힌 문제 — 3번 넘게 틀렸고, 아직 맞히지도 열어 주지도 않은 것 */
+function stuckList(g){
+  const S=g.stuck||{}, U=((g.teacher||{}).unlock)||{};
+  return Object.keys(S).filter(k=>S[k] && !S[k].ok && (S[k].n||0)>=3 && !U[k])
+    .map(k=>Object.assign({key:k}, S[k])).sort((a,b)=>(b.at||0)-(a.at||0));
+}
+const ZONE={lobby:{t:'출발 · 안내',e:'🚩'}, nature:{t:'남도의 자연',e:'🌿'}, farm:{t:'남도의 농업',e:'🌾'},
+  house:{t:'남도의 집',e:'🏠'}, market:{t:'남도의 시장',e:'🛒'}, meet:{t:'탐정 회의',e:'👩‍🏫'},
+  final:{t:'동이의 하루 정리',e:'⏰'}, bonus:{t:'보너스 관람',e:'🏛'}, end:{t:'탐험 마침',e:'🏁'}};
+const MINOR=['lobby','meet','final','bonus','end'];
+const LAYOUT0={nature:{x:1.5,y:3,w:23.5,h:52}, farm:{x:26,y:3,w:23.5,h:52}, house:{x:50.5,y:3,w:23.5,h:52}, market:{x:75,y:3,w:23.5,h:52},
+  lobby:{x:1.5,y:58,w:15,h:39}, meet:{x:17.5,y:58,w:22,h:39}, final:{x:40.5,y:58,w:22,h:39}, bonus:{x:63.5,y:58,w:19,h:39}, end:{x:83.5,y:58,w:15,h:39}};
+function zoneOfG(g){
+  const pr=g.progress||{};
+  if(pr.zone) return pr.zone;
+  if(pr.topic) return pr.topic;
+  const v=pr.view||'';
+  if(v==='conference') return 'meet'; if(v==='end') return 'end'; if(!v||v==='map') return 'lobby';
+  return v[0]==='b' && v!=='bad' ? 'bonus' : (v==='bad'?'bonus':'final');
+}
+function gstate(g){
+  const pr=g.progress||{}, idle=Date.now()-(g.updatedAt||0), staleMs=C.stale*60000;
+  const stuck=stuckList(g);
+  const waiting = pr.view==='conference' && !(g.conference||{}).passed;
+  const ended = pr.view==='end';
+  const stop = !ended && idle>staleMs, warn = !ended && idle>staleMs/2;
+  return {pr, idle, stuck, waiting, ended, stop, warn,
+    key: stuck.length?'stuck' : waiting?'wait' : stop?'stop' : ended?'end' : 'ok'};
+}
+
 function render(){
-  const keys=Object.keys(DATA).sort((a,b)=>(DATA[a].groupNo||0)-(DATA[b].groupNo||0));
-  if(!keys.length) return renderEmpty();
+  const keys=gkeys();
   $('sessLabel').textContent = `${C.session} · ${keys.length}모둠 · ${ago(lastPull)} 확인`;
   $('live').textContent='연결됨';
-
-  const staleMs=C.stale*60000;
-  let stopped=0, totalDone=0, ended=0, waiting=0, needHelp=0;
-  const cards=keys.map(k=>{
-    const g=DATA[k], pr=g.progress||{}, done=pr.missionsDone||0;
-    const idle=Date.now()-(g.updatedAt||0);
-    const isStop=idle>staleMs, isWarn=idle>staleMs/2;
-    const needsOk = pr.view==='conference' && !(g.conference||{}).passed;
-    if(needsOk) waiting++;
-    if(isStop) stopped++;
-    { const hs=helpStat(g); if(hs.deep>=2 || hs.copy || weakStat(g) || rushStat(g) || listenStat(g)>=3) needHelp++; }
-    totalDone+=done;
-    if(pr.view==='end') ended++;
-    const role=ROLE[pr.role];
-    const photos=g.photos||{};
-    const order=g.order||Object.keys(TOPIC);
-    return `<button class="g ${isStop?'stop':isWarn?'warn':''}" onclick="detail('${k}')">
-      <div class="no"><b>${g.groupNo||k}모둠</b>
-        <span class="${isStop?'stale':''}" style="font-size:13px;font-weight:700;color:${isStop?'':'var(--muted)'}">
-          ${g.updatedAt?ago(g.updatedAt):'기록 없음'}</span>
-        <small>${esc(pr.level||'')}</small></div>
-      <div class="bar"><i style="width:${done/4*100}%"></i></div>
-      <div class="where">${pr.topic?TOPIC[pr.topic].e+' '+TOPIC[pr.topic].t+' · ':''}${esc(VIEW[pr.view]||'시작 전')}</div>
-      ${needsOk?`<span class="turn" style="background:var(--gold);color:#2A1D05">👩‍🏫 회의 승인 기다리는 중</span>`:''}
-      ${role?`<span class="turn" style="background:${role.c}">${role.i} ${esc(pr.roleName||'')} 차례</span>`:''}
-      ${helpLabel(g)?`<span class="turn" style="background:${(helpStat(g).copy||weakStat(g)||rushStat(g))?'var(--no,#B8442C)':'rgba(255,255,255,.14)'}">${helpLabel(g)}</span>`:''}
-      <div class="last">${esc(lastInput(g))}</div>
-      <div class="thumbs">${order.map(t=>{
-        const p=photos[t];
-        return `<div class="${p?'has':''}" ${p?`style="background-image:url(${p.thumb})"`:''}>${p?'':TOPIC[t].e}</div>`;
-      }).join('')}</div>
-    </button>`;
-  }).join('');
-
-  $('grid').innerHTML=cards;
-  $('summary').innerHTML=`
-    <div><span>참여 모둠</span><b>${keys.length}</b></div>
-    <div><span>평균 진행</span><b>${(totalDone/keys.length).toFixed(1)} / 4</b></div>
-    <div><span>탐험 마침</span><b>${ended}</b></div>
-    <div><span>승인 기다림</span><b style="color:${waiting?'#F0D79A':'inherit'}">${waiting}</b></div>
-    <div><span>${C.stale}분 넘게 멈춤</span><b style="color:${stopped?'#F0B0A2':'inherit'}">${stopped}</b></div>
-    <div><span>도움 많이 쓴 모둠</span><b style="color:${needHelp?'#F0D79A':'inherit'}">${needHelp}</b></div>
-    <div><span>회의 암호</span><b>${esc(C.password)}</b></div>`;
+  renderAlerts(keys); renderSummary(keys); paintTabs();
+  ({map:renderMap, cards:renderCards, subs:renderSubs, gallery:renderGallery, codes:renderCodes, cast:renderCastSide}[TAB]||renderMap)(keys);
+  if($('detail').classList.contains('show') && detail.cur) detail(detail.cur);
 }
 function renderEmpty(){
   $('grid').innerHTML=`<div class="empty" style="grid-column:1/-1">
     ${ready()?'아직 올라온 모둠이 없습니다. 학생 태블릿에서 세션 코드를 확인해 주세요.'
              :'설정에서 세션 코드와 데이터베이스 주소를 넣어 주세요.'}</div>`;
-  $('summary').innerHTML='';
+  $('summary').innerHTML=''; $('alerts').innerHTML='';
+  paintTabs(); if(TAB==='map') renderMap([]);
+}
+
+/* ══════════ 탭 ══════════ */
+function paintTabs(){
+  const keys=gkeys(), waits=keys.filter(k=>gstate(DATA[k]).waiting).length;
+  document.querySelectorAll('#tabs button').forEach(b=>{
+    b.setAttribute('aria-selected', b.dataset.tab===TAB);
+    $('p-'+b.dataset.tab).hidden = b.dataset.tab!==TAB;
+    if(b.dataset.tab==='codes'){ b.innerHTML='🔑 회의 암호'+(waits?`<span class="n">${waits}</span>`:''); }
+  });
+}
+document.getElementById('tabs').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-tab]'); if(!b) return;
+  TAB=b.dataset.tab; C.tab=TAB; saveC();
+  if(TAB==='gallery' && !REPORTS) loadReports();
+  if(TAB==='cast') initCast();
+  render();
+});
+function saveC(){ const o=Object.assign({},C); delete o.dbUrl; delete o.apiKey; try{ localStorage.setItem(CK, JSON.stringify(o)); }catch(e){} }
+
+/* ══════════ 알림 띠 ══════════ */
+function renderAlerts(keys){
+  const out=[];
+  keys.forEach(k=>{
+    const g=DATA[k], st=gstate(g), code=CODES['g'+g.groupNo];
+    if(st.waiting && (g.conference||{}).text) out.push(`<div class="al"><b class="gn">${g.groupNo}모둠</b>
+      <span class="msg">👩‍🏫 탐정 회의 발표 준비 끝 — 발표를 듣고 통과시켜 주세요
+        <small>「${esc(String(g.conference.text).slice(0,60))}」</small></span>
+      ${code?`<span>암호 <span class="code">${esc(code)}</span></span>`:''}
+      ${(g.approval||{}).approved?'<span class="note">승인 보냄 · 학생 화면 대기</span>':`<button class="sb ok" onclick="approve('${k}',true)">통과 승인</button>`}
+      <button class="sb g" onclick="detail('${k}')">보기</button></div>`);
+    st.stuck.forEach(q=>out.push(`<div class="al stuck"><b class="gn">${g.groupNo}모둠</b>
+      <span class="msg">🔔 ${esc(q.label||q.key)} · <b>${q.n}번</b> 틀림
+        <small>마지막 답: 「${esc(String(q.last||'').slice(0,60))}」 · ${q.at?ago(q.at):''}</small></span>
+      <button class="sb" onclick="unlockQ('${k}','${esc(q.key)}')">문제 열어 주기</button>
+      <button class="sb g" onclick="openNote('${k}','${esc(q.label||'')}','again')">한마디</button></div>`));
+    if(st.stop && !st.waiting && !st.stuck.length) out.push(`<div class="al stop"><b class="gn">${g.groupNo}모둠</b>
+      <span class="msg">⏸ ${mins(st.idle)}분째 입력이 없습니다 <small>${esc(ZONE[zoneOfG(g)].t)} · ${esc(VIEW[st.pr.view]||'')}</small></span>
+      <button class="sb g" onclick="openNote('${k}','','memo')">한마디</button></div>`);
+  });
+  $('alerts').innerHTML=out.join('');
+}
+function renderSummary(keys){
+  let totalDone=0, ended=0, waiting=0, stopped=0, stuck=0;
+  keys.forEach(k=>{ const g=DATA[k], st=gstate(g); totalDone+=(st.pr.missionsDone||0);
+    if(st.ended) ended++; if(st.waiting) waiting++; if(st.stop) stopped++; if(st.stuck.length) stuck++; });
+  const nc=Object.keys(CODES).length;
+  $('summary').innerHTML = keys.length ? `
+    <div><span>참여 모둠</span><b>${keys.length}</b></div>
+    <div><span>평균 진행</span><b>${(totalDone/keys.length).toFixed(1)} / 4</b></div>
+    <div><span>탐험 마침</span><b>${ended}</b></div>
+    <div><span>승인 기다림</span><b style="color:${waiting?'#F0D79A':'inherit'}">${waiting}</b></div>
+    <div><span>막힌 모둠</span><b style="color:${stuck?'#F3A487':'inherit'}">${stuck}</b></div>
+    <div><span>${C.stale}분 넘게 멈춤</span><b style="color:${stopped?'#F0B0A2':'inherit'}">${stopped}</b></div>
+    <div><span>회의 암호</span><b>${nc?`모둠별 ${nc}개`:esc(C.password)}</b></div>` : '';
+}
+
+/* ══════════ 1. 박물관 지도 ══════════ */
+function lay(z){ return Object.assign({}, LAYOUT0[z], (C.layout||{})[z]||{}); }
+function zname(z){ return ((C.names||{})[z]) || ZONE[z].t; }
+function renderMap(keys){
+  if(DRAG) return;
+  keys=keys||gkeys();
+  const by={}; Object.keys(ZONE).forEach(z=>by[z]=[]);
+  keys.forEach(k=>{ const z=zoneOfG(DATA[k]); (by[z]||by.lobby).push(k); });
+  $('museum').classList.toggle('edit', EDIT);
+  $('museum').innerHTML=Object.keys(ZONE).map(z=>{
+    const L=lay(z), list=by[z];
+    const fin=keys.map(k=>((DATA[k].times||{})[z])).filter(t=>t&&t.end&&t.start);
+    const avg=fin.length?mins(fin.reduce((a,t)=>a+(t.end-t.start),0)/fin.length):null;
+    const busy=!MINOR.includes(z) && list.length>=3;
+    return `<div class="zone ${MINOR.includes(z)?'minor':''} ${busy?'busy':''}" data-z="${z}"
+        style="left:${L.x}%;top:${L.y}%;width:${L.w}%;height:${L.h}%">
+      <div class="zh"><b>${ZONE[z].e} ${EDIT?'':esc(zname(z))}</b>
+        ${EDIT?`<input class="zname" data-zn="${z}" value="${esc(zname(z))}">`:''}
+        ${list.length?`<span class="cnt">${list.length}</span>`:''}</div>
+      ${avg!=null?`<small style="color:var(--muted);font-weight:700;font-size:12.5px">평균 ${avg}분 · ${fin.length}모둠 마침</small>`:''}
+      ${busy?'<span class="busytag">🔶 모둠이 몰려 있어요</span>':''}
+      ${EDIT?'':list.map(k=>tokenHTML(k)).join('')}
+      ${EDIT?'<span class="rs" data-rs="1"></span>':''}
+    </div>`;
+  }).join('');
+  $('routes').innerHTML = keys.map(routeHTML).join('') || '';
+}
+function tokenHTML(k){
+  const g=DATA[k], st=gstate(g), pr=st.pr, here=pr.stepAt?mins(Date.now()-pr.stepAt):null;
+  const sub = st.stuck.length ? `🔔 ${esc(st.stuck[0].label||'')} ${st.stuck[0].n}번`
+            : st.waiting ? '승인 기다림' : st.stop ? `⏸ ${mins(st.idle)}분 멈춤` : esc(VIEW[pr.view]||'');
+  return `<button class="tok ${st.key}" onclick="detail('${k}')" title="${esc(Object.values(g.members||{}).join(' '))}">
+    <b>${g.groupNo}모둠</b><span>${sub}${here!=null && !st.stop && !st.ended?` · ${here}분째`:''}</span></button>`;
+}
+function routeSeq(g){
+  const o=g.order||Object.keys(TOPIC), seq=o.slice(0,3);
+  if(g.useConference!==false) seq.push('meet');
+  return seq.concat(o.slice(3), ['final','bonus']);
+}
+function routeHTML(k){
+  const g=DATA[k], z=zoneOfG(g), T=g.times||{}, tp=g.topics||{};
+  const done=x=> (TOPIC[x] ? !!(tp[x]||{}).done : x==='meet' ? !!(g.conference||{}).passed
+    : x==='final' ? !!(g.final||{}).done : x==='bonus' ? !!(g.bonus||{}).done : false);
+  const cells=routeSeq(g).map(x=>{
+    const t=T[x], isNow=x===z, d=done(x);
+    const m = t&&t.start ? (t.end ? `${mins(t.end-t.start)}분` : isNow ? `${mins(Date.now()-t.start)}분째` : '') : '';
+    return `<span class="st ${isNow?'now':d?'done':''}">${d&&!isNow?'✅':isNow?'📍':''}${ZONE[x].e} ${esc(zname(x).replace('남도의 ',''))}${m?' · '+m:''}</span>`;
+  });
+  return `<button class="route" onclick="detail('${k}')"><b>${g.groupNo}모둠</b>${cells.join('<span class="ar">›</span>')}</button>`;
+}
+/* 배치 바꾸기 — 끌어서 옮기고, 오른쪽 아래 모서리로 크기 조절 */
+let DRAG=null;
+function toggleEdit(){
+  EDIT=!EDIT; $('editMap').textContent=EDIT?'배치 저장':'배치 바꾸기'; $('resetMap').hidden=!EDIT;
+  $('mapNote').textContent=EDIT?'상자를 끌어 옮기고, 오른쪽 아래 모서리로 크기를 바꾸세요. 이름도 고칠 수 있습니다.':'전시실 상자를 실제 박물관 배치에 맞게 옮길 수 있습니다.';
+  if(!EDIT){ document.querySelectorAll('[data-zn]').forEach(i=>{ C.names=C.names||{}; const v=i.value.trim(); if(v && v!==ZONE[i.dataset.zn].t) C.names[i.dataset.zn]=v; else delete C.names[i.dataset.zn]; }); saveC(); toast('배치를 저장했습니다'); }
+  renderMap();
+}
+function resetLayout(){ C.layout={}; C.names={}; saveC(); renderMap(); }
+$('museum').addEventListener('pointerdown',e=>{
+  if(!EDIT || e.target.tagName==='INPUT') return;
+  const zEl=e.target.closest('.zone'); if(!zEl) return;
+  const box=$('museum').getBoundingClientRect(), z=zEl.dataset.z, L=lay(z);
+  DRAG={z, el:zEl, rs:!!e.target.dataset.rs, sx:e.clientX, sy:e.clientY, L, bw:box.width, bh:box.height};
+  zEl.setPointerCapture(e.pointerId); e.preventDefault();
+});
+$('museum').addEventListener('pointermove',e=>{
+  if(!DRAG) return;
+  const dx=(e.clientX-DRAG.sx)/DRAG.bw*100, dy=(e.clientY-DRAG.sy)/DRAG.bh*100, L=DRAG.L, n={};
+  if(DRAG.rs){ n.w=Math.max(10,Math.min(100-L.x,L.w+dx)); n.h=Math.max(14,Math.min(100-L.y,L.h+dy)); n.x=L.x; n.y=L.y; }
+  else { n.x=Math.max(0,Math.min(100-L.w,L.x+dx)); n.y=Math.max(0,Math.min(100-L.h,L.y+dy)); n.w=L.w; n.h=L.h; }
+  Object.assign(DRAG.el.style,{left:n.x+'%',top:n.y+'%',width:n.w+'%',height:n.h+'%'}); DRAG.n=n;
+});
+$('museum').addEventListener('pointerup',()=>{
+  if(!DRAG) return;
+  if(DRAG.n){ C.layout=C.layout||{}; C.layout[DRAG.z]=DRAG.n; saveC(); }
+  DRAG=null;
+});
+
+/* ══════════ 모둠 카드 (예전 화면) ══════════ */
+function renderCards(keys){
+  if(!keys.length) return renderEmpty();
+  $('grid').innerHTML=keys.map(k=>{
+    const g=DATA[k], st=gstate(g), pr=st.pr, done=pr.missionsDone||0;
+    const role=ROLE[pr.role], photos=g.photos||{}, order=g.order||Object.keys(TOPIC);
+    return `<button class="g ${st.stop||st.stuck.length?'stop':st.warn?'warn':''}" onclick="detail('${k}')">
+      <div class="no"><b>${g.groupNo||k}모둠</b>
+        <span class="${st.stop?'stale':''}" style="font-size:13px;font-weight:700;color:${st.stop?'':'var(--muted)'}">
+          ${g.updatedAt?ago(g.updatedAt):'기록 없음'}</span>
+        <small>${esc(pr.level||'')}</small></div>
+      <div class="bar"><i style="width:${done/4*100}%"></i></div>
+      <div class="where">${ZONE[zoneOfG(g)].e} ${esc(zname(zoneOfG(g)))} · ${esc(VIEW[pr.view]||'시작 전')}</div>
+      ${st.waiting?`<span class="turn" style="background:var(--gold);color:#2A1D05">👩‍🏫 회의 승인 기다리는 중</span>`:''}
+      ${st.stuck.length?`<span class="turn" style="background:#D4562F">🔔 막힌 문제 ${st.stuck.length}개</span>`:''}
+      ${role?`<span class="turn" style="background:${role.c}">${role.i} ${esc(pr.roleName||'')} 차례</span>`:''}
+      ${helpLabel(g)?`<span class="turn" style="background:${(helpStat(g).copy||weakStat(g)||rushStat(g))?'var(--no,#B8442C)':'rgba(0,0,0,.35)'}">${helpLabel(g)}</span>`:''}
+      <div class="last">${esc(lastInput(g))}</div>
+      <div class="thumbs">${order.map(t=>{ const p=photos[t];
+        return `<div class="${p?'has':''}" ${p?`style="background-image:url(${p.thumb})"`:''}>${p?'':TOPIC[t].e}</div>`; }).join('')}</div>
+    </button>`;
+  }).join('');
+}
+
+/* ══════════ 4. 막힌 문제 열어 주기 ══════════ */
+async function unlockQ(k, key){
+  const g=DATA[k], q=(g.stuck||{})[key]||{};
+  if(!confirm(`${g.groupNo}모둠의 「${q.label||key}」 문제를 열어 줄까요?\n\n모둠과 함께 정답을 확인한 뒤 누르세요.\n학생 화면에서 확인 버튼을 다시 누르면 다음으로 넘어갑니다.`)) return;
+  try{
+    const at=Date.now();
+    await rq(`groups/${k}/teacher/unlock`, 'PATCH', {[key]:at});
+    g.teacher=g.teacher||{}; g.teacher.unlock=Object.assign({}, g.teacher.unlock, {[key]:at});
+    toast(`${g.groupNo}모둠 문제를 열었습니다. 10초 안에 학생 화면에 알림이 뜹니다.`); render();
+  }catch(e){ alert('보내지 못했습니다.\n'+e.message); }
+}
+
+/* ══════════ 3. 한마디 보내기 ══════════ */
+const NOTE_PRE={good:['증거를 정확하게 찾았어요!','문장이 아주 자연스러워요.','모둠이 힘을 모은 게 보여요.'],
+  again:['설명판을 한 번 더 읽어 보세요.','까닭이 무엇인지 다시 생각해 보세요.','전시물 이름을 정확하게 써 보세요.'],
+  memo:['선생님이 곧 갈게요. 그 자리에서 기다려요.','천천히 해도 괜찮아요.','사진을 한 장 더 찍어 보세요.']};
+function openNote(k, ref, kind){
+  NOTE={k, ref:ref||'', kind:kind||'memo'};
+  $('nTitle').textContent=`${DATA[k].groupNo}모둠에게 한마디`;
+  $('nRef').textContent=ref?`관련 활동: ${ref}`:'';
+  $('nText').value='';
+  paintNoteKind(); $('note').classList.add('show'); setTimeout(()=>$('nText').focus(),50);
+}
+function paintNoteKind(){
+  document.querySelectorAll('#nKind .chip').forEach(c=>c.setAttribute('aria-pressed', c.dataset.k===NOTE.kind));
+  $('nPre').innerHTML=NOTE_PRE[NOTE.kind].map(t=>`<button class="chip" data-t="${esc(t)}">${esc(t)}</button>`).join('');
+}
+$('nKind').addEventListener('click',e=>{ const c=e.target.closest('.chip'); if(!c) return; NOTE.kind=c.dataset.k; paintNoteKind(); });
+$('nPre').addEventListener('click',e=>{ const c=e.target.closest('.chip'); if(!c) return; $('nText').value=c.dataset.t; });
+async function sendNote(){
+  const text=$('nText').value.trim(); if(!text) return alert('보낼 말을 적어 주세요.');
+  const g=DATA[NOTE.k], body={text, kind:NOTE.kind, ref:NOTE.ref, at:Date.now()};
+  try{
+    const r=await rq(`groups/${NOTE.k}/teacher/notes`, 'POST', body);
+    g.teacher=g.teacher||{}; g.teacher.notes=Object.assign({}, g.teacher.notes, {[r.name]:body});
+    closeSheet('note'); toast(`${g.groupNo}모둠에 보냈습니다`); render();
+  }catch(e){ alert('보내지 못했습니다.\n'+e.message); }
+}
+function notesOf(g, ref){
+  const N=((g.teacher||{}).notes)||{}, A=g.acks||{};
+  return Object.keys(N).filter(id=>ref==null || N[id].ref===ref).sort((a,b)=>N[a].at-N[b].at)
+    .map(id=>({id, ...N[id], read:!!A['n'+id]}));
+}
+const KIND_IC={good:'👍',again:'🔁',memo:'✎'};
+function sentHTML(list){
+  if(!list.length) return '';
+  return `<div class="sent">${list.map(n=>`${KIND_IC[n.kind]||'✎'} ${esc(n.text)} — ${n.read?'<span class="rd">읽음</span>':'<span class="ur">아직 안 읽음</span>'}`).join('<br>')}</div>`;
+}
+
+/* ══════════ 3. 제출함 — 같은 활동을 모둠끼리 나란히 ══════════ */
+function secRows(g, t, sec){
+  const d=((g.topics||{})[t]||{})[sec]||{}, rows=[];
+  Object.keys(d).forEach(k=>{
+    if(k.endsWith('_list')||k.endsWith('_other')||k==='chainOk'||k==='checks'||k==='riceOk'||k==='riceOpened'||k==='chain') return;
+    const v=val(d[k]); if(v) rows.push(`<dt>${esc(FIELD[k]||k)}</dt><dd>${v}</dd>`);
+  });
+  if(sec==='prep' && d.chain) rows.unshift(`<dt>원인→결과 사슬</dt><dd>${val(d.chain)}</dd>`);
+  return rows.join('');
+}
+function subItems(){
+  const it=[{id:'prior', label:'🧭 첫 추리', html:g=>g.prior&&g.prior.choice?`<dd>${esc(g.prior.choice)} — ${esc(g.prior.reason||'')}</dd>`:''}];
+  Object.keys(TOPIC).forEach(t=>{
+    const nm=TOPIC[t].e+' '+TOPIC[t].t.replace('남도의 ','');
+    [['evidence','증거 수집'],['record','기록'],['prep','발표 준비'],['submit','발표 문장']].forEach(([sec,lb])=>
+      it.push({id:t+'-'+sec, t, sec, label:`${nm} · ${lb}`, html:g=>secRows(g,t,sec)}));
+    it.push({id:t+'-photo', t, label:`${nm} · 증거 사진`, html:g=>{ const p=(g.photos||{})[t]; const pn=((g.topics||{})[t]||{}).photoNote||{};
+      return p?`<img src="${p.thumb}" alt="">${pn.title?`<dd>📰 ${esc(pn.title)}</dd>`:''}`:''; }});
+  });
+  it.push({id:'conf', label:'👩‍🏫 탐정 회의 발표', html:g=>(g.conference||{}).text?`<dd>${esc(g.conference.text)}</dd>`:''});
+  it.push({id:'story', label:'⏰ 동이의 하루 이야기', html:g=>(g.final||{}).story?`<dd>${val(g.final.story)}</dd>`:''});
+  it.push({id:'speech', label:'🎤 동이에게 하는 말', html:g=>(g.final||{}).speech?`<dd>${val(g.final.speech)}</dd>`:''});
+  it.push({id:'compare', label:'⚖ 처음 생각과 지금 생각', html:g=>(g.final||{}).now?`<dt>처음 → 지금</dt><dd>${esc((g.prior||{}).choice||'')} → ${esc(g.final.now)}</dd><dt>달라진 점</dt><dd>${val(g.final.compare)}</dd>`:''});
+  it.push({id:'wonder', label:'❓ 되돌아보기 · 더 알고 싶은 점', html:g=>{ const r=(g.final||{}).reflect||{}; if(!r.wonder) return '';
+    return `<dt>더 알고 싶은 점</dt><dd>${esc(r.wonder)}</dd><dt>기억에 남는 전시</dt><dd>${esc((TOPIC[r.fav]||{}).t||'')} ${esc(r.favWhy||'')}</dd><dt>어려웠던 미션</dt><dd>${esc((TOPIC[r.hard]||{}).t||'')}</dd>`; }});
+  it.push({id:'bonus', label:'🏛 보너스 · 최고의 큐레이터', html:g=>{ const b=g.bonus||{}; if(!b.name) return '';
+    return `<dt>고른 전시물</dt><dd>${esc(b.name)}</dd><dt>선택 이유</dt><dd>${esc(b.why||'')}</dd><dt>광고 문구</dt><dd>${esc(b.ad||'')}</dd>`; }});
+  return it;
+}
+function growHTML(g, it){
+  if(!it.t) return '';
+  const pre = it.sec==='submit' ? [it.t+'-submit', it.t==='farm'?'farm-rice':'~'] : [it.t+'-'+(it.sec||'x')];
+  const G=g.growth||{}, S=g.stuck||{}, U=((g.teacher||{}).unlock)||{};
+  return Object.keys(G).filter(k=>pre.some(p=>k.indexOf(p)===0)).map(k=>{ const x=G[k];
+    return `<div class="grow">${x.right?`🌱 처음 「${esc(x.wrong)}」 → 고쳐서 「${esc(x.right)}」`:`🔎 「${esc(x.wrong)}」에서 막힘${U[k]?' · 선생님이 열어 줌':''}`}${(S[k]||{}).n?` · 틀린 횟수 ${S[k].n}`:''}</div>`; }).join('');
+}
+function renderSubs(keys){
+  keys=keys||gkeys();
+  const items=subItems(); if(!SUBSEL) SUBSEL=items[1].id;
+  const sel=$('subSel');
+  if(!sel.options.length) sel.innerHTML=items.map(i=>`<option value="${i.id}">${esc(i.label)}</option>`).join('');
+  sel.value=SUBSEL;
+  const it=items.find(i=>i.id===SUBSEL)||items[0];
+  if(!keys.length){ $('subs').innerHTML='<div class="empty" style="grid-column:1/-1">아직 올라온 모둠이 없습니다.</div>'; return; }
+  $('subs').innerHTML=keys.map(k=>{
+    const g=DATA[k], body=it.html(g);
+    return `<div class="subc"><h4>${g.groupNo}모둠 <span class="note" style="font-weight:700;font-size:13px">${esc(Object.values(g.members||{}).join(' '))}</span></h4>
+      <dl class="ans">${body||'<dd class="note">아직 제출하지 않았습니다.</dd>'}</dl>
+      ${growHTML(g,it)}
+      ${sentHTML(notesOf(g, it.label))}
+      ${body?`<div class="acts">
+        <button class="sb ok" onclick="openNote('${k}','${esc(it.label)}','good')">👍 칭찬</button>
+        <button class="sb" onclick="openNote('${k}','${esc(it.label)}','again')">🔁 다시 생각</button>
+        <button class="sb g" onclick="openNote('${k}','${esc(it.label)}','memo')">✎ 한마디</button></div>`:''}
+    </div>`;
+  }).join('');
+}
+function subCsv(){
+  const it=subItems().find(i=>i.id===SUBSEL); if(!it) return;
+  const tmp=document.createElement('div');
+  const rows=[['모둠','구성원',it.label]].concat(gkeys().map(k=>{ const g=DATA[k]; tmp.innerHTML=it.html(g).replace(/<\/(dd|dt)>/g,' $& ');
+    return [g.groupNo, Object.values(g.members||{}).join(' '), tmp.textContent.replace(/\s+/g,' ').trim()]; }));
+  const csv='﻿'+rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  dl(new Blob([csv],{type:'text/csv'}), `제출_${it.label.replace(/[^\w가-힣]+/g,'_')}_${C.session}.csv`);
+}
+
+/* ══════════ 3. 보고서 갤러리 ══════════ */
+async function loadReports(manual){
+  if(!ready()) return;
+  $('galNote').textContent='불러오는 중…';
+  try{ REPORTS=(await rq('reports'))||{}; $('galNote').textContent=`${Object.keys(REPORTS).length}개 · ${new Date().toLocaleTimeString('ko-KR')} 불러옴`; renderGallery(); }
+  catch(e){ $('galNote').textContent='불러오지 못했습니다'; if(manual) alert(e.message); }
+}
+function renderGallery(){
+  const R=REPORTS||{}, ks=Object.keys(R).sort((a,b)=>(R[a].groupNo||0)-(R[b].groupNo||0));
+  $('gal').innerHTML = ks.length ? ks.map(k=>{ const r=R[k];
+    return `<figure><img src="${r.img}" alt="${r.groupNo}모둠 보고서" onclick="viewReport('${k}')">
+      <figcaption>${r.groupNo}모둠 <span class="note">${r.at?new Date(r.at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}):''}</span>
+        <button class="sb g" style="color:var(--ink)" onclick="dlReport('${k}')">내려받기</button></figcaption></figure>`; }).join('')
+    : '<div class="empty" style="grid-column:1/-1">아직 제출된 보고서가 없습니다. 모둠이 「📄 보고서 만들기」를 누르면 여기에 모입니다.</div>';
+}
+function viewReport(k){
+  const r=REPORTS[k];
+  $('imgvBody').innerHTML=`<h2>${r.groupNo}모둠 활동 보고서</h2>
+    <p class="note">${esc(Object.values(r.members||{}).join(' · '))}</p>
+    <img class="imgfull" src="${r.img}" alt="">
+    <div class="actions"><button class="b" onclick="dlReport('${k}')">내려받기</button>
+      <button class="b g" style="color:var(--ink);border-color:var(--line)" onclick="closeSheet('imgv')">닫기</button></div>`;
+  $('imgv').classList.add('show'); $('imgv').scrollTop=0;
+}
+async function dlReport(k){ const r=REPORTS[k]; const b=await (await fetch(r.img)).blob(); dl(b, `${C.session}_${r.groupNo}모둠_보고서.jpg`); }
+async function downloadAllReports(){
+  if(!REPORTS) await loadReports(); const ks=Object.keys(REPORTS||{});
+  if(!ks.length) return alert('제출된 보고서가 없습니다.');
+  for(const k of ks){ await dlReport(k); await new Promise(r=>setTimeout(r,400)); }
+}
+
+/* ══════════ 2. 모둠별 회의 암호 ══════════ */
+/* 학생 앱과 똑같은 계산식 — 태블릿에는 이 값만 저장됩니다 */
+function codeHash(sess, g, code){
+  const str=String(sess)+'|'+String(g)+'|'+String(code).replace(/[\s\-·.]/g,'');
+  let h1=0xdeadbeef, h2=0x41c6ce57;
+  for(let i=0;i<str.length;i++){ const ch=str.charCodeAt(i);
+    h1=Math.imul(h1^ch, 2654435761); h2=Math.imul(h2^ch, 1597334677); }
+  h1=Math.imul(h1^(h1>>>16), 2246822507)^Math.imul(h2^(h2>>>13), 3266489909);
+  h2=Math.imul(h2^(h2>>>16), 2246822507)^Math.imul(h1^(h1>>>13), 3266489909);
+  return (h2>>>0).toString(16).padStart(8,'0')+(h1>>>0).toString(16).padStart(8,'0');
+}
+const CODE_WORDS=['호미','마루','온돌','따비','주판','해류','장터','대청','홀태','매통','부엌','명태','무명','목화','사랑방','디딜방아'];
+function newCode(used){
+  const words=new Set([...used].map(c=>c.replace(/\d+$/,'')));
+  for(let i=0;i<80;i++){ const w=CODE_WORDS[Math.floor(Math.random()*CODE_WORDS.length)];
+    if(words.has(w) && i<60) continue;
+    const c=w+(11+Math.floor(Math.random()*88)); if(!used.has(c)) return c; }
+  return '마루'+Date.now()%100;
+}
+async function makeCodes(only){
+  if(!ready()) return alert('먼저 설정에서 세션 코드를 넣어 주세요.');
+  const list = only ? [only] : groupNos();
+  if(!only && Object.keys(CODES).length && !confirm('모든 모둠의 암호를 새로 만들까요?\n이미 알려 준 암호는 더 이상 통하지 않습니다.')) return;
+  const used=new Set(only?Object.values(CODES):[]), upd={}, hs={}, at=Date.now();
+  list.forEach(n=>{ const c=newCode(used); used.add(c); upd['g'+n]=c; hs[`g${n}/teacher/code`]={h:codeHash(C.session,n,c), at}; });
+  try{
+    await rq('teacherCodes','PATCH',upd); await rq('groups','PATCH',hs);
+    Object.assign(CODES, upd); SHOWCODE=true; toast(only?`${only}모둠 암호를 새로 만들었습니다`:'모둠별 암호를 만들었습니다'); pull();
+  }catch(e){ alert('암호를 저장하지 못했습니다.\n'+e.message); }
+}
+function renderCodes(){
+  const rows=groupNos().map(n=>{
+    const k='g'+n, g=DATA[k]||{}, c=CODES[k], pr=g.progress||{}, cf=g.conference||{};
+    const got = ((g.teacher||{}).code||{}).h && pr.codeReady;
+    const state = cf.passed ? '✅ 통과함' : pr.view==='conference' ? '👩‍🏫 발표 대기' : g.groupNo ? (VIEW[pr.view]||'진행 중') : '아직 시작 전';
+    return `<tr><td><b>${n}모둠</b></td>
+      <td class="code">${c ? (SHOWCODE?esc(c):'••••') : '<span class="note">없음</span>'}</td>
+      <td>${c ? (got?'<span style="color:var(--ok);font-weight:800">태블릿 받음</span>':'<span class="note">태블릿 연결되면 전달</span>') : ''}</td>
+      <td>${state}</td>
+      <td style="white-space:nowrap">${g.groupNo && pr.view==='conference' && !cf.passed ? `<button class="sb ok" onclick="approve('${k}',true)">통과 승인</button> `:''}
+        <button class="sb g" style="color:var(--ink)" onclick="makeCodes(${n})">새 암호</button></td></tr>`;
+  }).join('');
+  $('codes').innerHTML=`<table class="ctab"><thead><tr><th>모둠</th><th>암호</th><th>전달</th><th>지금</th><th></th></tr></thead><tbody>${rows}</tbody></table>
+    ${Object.keys(CODES).length?'':'<p class="sub" style="margin-top:12px">아직 모둠별 암호가 없습니다. 「모든 모둠 암호 새로 만들기」를 누르세요. 그 전까지는 공용 예비 암호 <code>'+esc(C.password)+'</code>가 쓰입니다.</p>'}`;
+}
+function printCodes(){
+  if(!Object.keys(CODES).length) return alert('먼저 암호를 만들어 주세요.');
+  const w=window.open('','_blank'); if(!w) return alert('팝업이 막혀 있습니다.');
+  w.document.write(`<!doctype html><meta charset="utf-8"><title>회의 암호 쪽지</title>
+    <style>body{font-family:sans-serif;display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:20px}
+    div{border:2px dashed #888;border-radius:12px;padding:22px;text-align:center}b{display:block;font-size:46px;letter-spacing:.06em;margin-top:8px}</style>
+    ${groupNos().filter(n=>CODES['g'+n]).map(n=>`<div>🕵️ ${n}모둠 탐정 회의 암호<b>${esc(CODES['g'+n])}</b><small>${esc(C.session)}</small></div>`).join('')}`);
+  w.document.close(); w.focus(); setTimeout(()=>w.print(),300);
+}
+
+/* ══════════ 5. 안내 방송 ══════════ */
+const CAST_PRE=['⏰ 10분 남았어요. 지금 하는 미션을 마무리해요.','🏛 지금 하던 것을 저장하고 로비로 모여요.','🚶 전시실에서는 천천히 걸어요.',
+  '🤫 다른 관람객을 위해 목소리를 조금 작게 해요.','📷 사진은 플래시 없이 찍어요.','🍱 점심시간이에요. 로비로 모여요.'];
+let CAST_TO='all';
+function initCast(){
+  $('presets').innerHTML=CAST_PRE.map(t=>`<button class="chip" data-t="${esc(t)}">${esc(t)}</button>`).join('');
+  paintCastTo();
+}
+function paintCastTo(){
+  const all=CAST_TO==='all';
+  $('castTo').innerHTML=`<button class="chip" data-to="all" aria-pressed="${all}">전체 모둠</button>`+
+    groupNos().map(n=>`<button class="chip" data-to="${n}" aria-pressed="${!all && CAST_TO.includes(n)}">${n}모둠</button>`).join('');
+}
+$('presets').addEventListener('click',e=>{ const c=e.target.closest('.chip'); if(c) $('castText').value=c.dataset.t; });
+$('castTo').addEventListener('click',e=>{ const c=e.target.closest('.chip'); if(!c) return;
+  if(c.dataset.to==='all') CAST_TO='all';
+  else { const n=+c.dataset.to; let L=CAST_TO==='all'?[]:CAST_TO.slice(); L=L.includes(n)?L.filter(x=>x!==n):L.concat(n); CAST_TO=L.length?L:'all'; }
+  paintCastTo(); });
+async function sendCast(){
+  const text=$('castText').value.trim(); if(!text) return alert('보낼 말을 적어 주세요.');
+  if(!ready()) return alert('먼저 설정에서 세션 코드를 넣어 주세요.');
+  const body={text, to:CAST_TO, at:Date.now()};
+  try{ const r=await rq('broadcast','POST',body); BC[r.name]=body; $('castText').value='';
+    toast(CAST_TO==='all'?'모든 모둠에 보냈습니다':`${CAST_TO.join(', ')}모둠에 보냈습니다`); renderCastSide(); }
+  catch(e){ alert('보내지 못했습니다.\n'+e.message); }
+}
+function renderCastSide(){
+  if(!$('presets').children.length) initCast();
+  const ids=Object.keys(BC).sort((a,b)=>BC[b].at-BC[a].at), keys=gkeys();
+  $('castHist').innerHTML = ids.length ? ids.map(id=>{
+    const m=BC[id], to=m.to==='all'||m.to==null ? keys.map(k=>+DATA[k].groupNo) : [].concat(m.to).map(Number);
+    const readers=to.filter(n=>((DATA['g'+n]||{}).acks||{})['b'+id]);
+    const notYet=to.filter(n=>!readers.includes(n));
+    return `<div>${esc(m.text)}<small>${new Date(m.at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})} · ${m.to==='all'||m.to==null?'전체':to.join(', ')+'모둠'}
+      · 읽음 ${readers.length}/${to.length}${notYet.length?` · 아직: ${notYet.join(', ')}모둠`:''}</small></div>`; }).join('')
+    : '<p class="note">아직 보낸 안내가 없습니다.</p>';
 }
 
 /* ── 탐정 회의 승인 ─────────────────── */
 async function approve(key, on){
   const g=DATA[key];
   try{
-    const t=await token();
-    const url=`${C.dbUrl}/sessions/${encodeURIComponent(C.session)}/groups/${key}/approval.json?auth=${t}`;
-    const r=await fetch(url,{method:'PATCH',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({approved:!!on, at:Date.now()})});
-    if(!r.ok) throw new Error('쓰기 실패 ('+r.status+')');
+    await rq(`groups/${key}/approval`, 'PATCH', {approved:!!on, at:Date.now()});
     g.approval={approved:!!on, at:Date.now()};
-    alert(on ? `${g.groupNo}모둠을 통과시켰습니다.\n학생 태블릿이 8초 안에 다음 미션으로 넘어갑니다.`
-             : `${g.groupNo}모둠 승인을 취소했습니다.`);
-    detail(key); render();
-  }catch(e){ alert('승인을 보내지 못했습니다.\n'+e.message+'\n\n암호를 알려 주셔도 통과됩니다.'); }
+    toast(on ? `${g.groupNo}모둠을 통과시켰습니다. 8초 안에 다음 미션으로 넘어갑니다.` : `${g.groupNo}모둠 승인을 취소했습니다.`);
+    render();
+  }catch(e){ alert('승인을 보내지 못했습니다.\n'+e.message+'\n\n그 모둠 암호를 알려 주셔도 통과됩니다.'); }
 }
 
 /* ── 모둠 상세 ─────────────────────── */
@@ -389,8 +996,15 @@ function val(v){
   }
   return Object.keys(v).map(k=>`${esc(k)} → ${esc(v[k])}`).join(' · ');
 }
+function reasonText(r){
+  r=String(r||'').trim().replace(/[.!?]+$/,''); if(!r) return '';
+  return /(서|때문에|니까|으니|므로)$/.test(r) ? `우리는 ${r} 그렇게 생각합니다.` : `우리는 ${r} 때문에 그렇게 생각합니다.`;
+}
 function detail(key){
+  detail.cur=key;
   const g=DATA[key], order=g.order||Object.keys(TOPIC), photos=g.photos||{};
+  const st=gstate(g), allStuck=Object.keys(g.stuck||{}).map(k=>Object.assign({key:k},g.stuck[k])).filter(q=>!q.ok && q.n>=1);
+  const U=((g.teacher||{}).unlock)||{};
   const members=g.members||{};
   const blocks=order.map(t=>{
     const d=(g.topics||{})[t]; if(!d) return '';
@@ -402,7 +1016,7 @@ function detail(key){
         rows.push(`<dt>${esc(FIELD[k]||k)}</dt><dd>${v}</dd>`);
       });
     });
-    if(d.prep && d.prep.chainOk===false) rows.push(`<dt>사슬 확인</dt><dd>두 번째에 넘어감 — 까닭과 결과를 한 번 더 물어봐 주세요</dd>`);
+    if(d.prep && d.prep.chainOk===false) rows.push(`<dt>사슬 확인</dt><dd>선생님이 열어 줘서 넘어감 — 까닭과 결과를 한 번 더 물어봐 주세요</dd>`);
     const pn=d.photoNote;
     if(pn){
       const bits=[];
@@ -421,9 +1035,22 @@ function detail(key){
     <h2>${g.groupNo}모둠</h2>
     <p class="note">${Object.keys(members).map(s=>esc(members[s])).join(' · ')}
       · 마지막 입력 ${g.updatedAt?ago(g.updatedAt):'없음'}</p>
+    <div class="actions" style="margin-top:10px">
+      <button class="b" onclick="openNote('${key}','','memo')">✎ 한마디 보내기</button>
+      ${st.waiting?`<button class="b" style="background:var(--ok);color:#fff" onclick="approve('${key}',true)">회의 통과 승인</button>`:''}
+    </div>
+    <div class="block"><h3>📍 지금 위치와 지나온 길</h3>
+      <dl class="rec"><dd>${ZONE[zoneOfG(g)].e} ${esc(zname(zoneOfG(g)))} · ${esc(VIEW[st.pr.view]||'')}${st.pr.stepAt?` · 이 단계 ${mins(Date.now()-st.pr.stepAt)}분째`:''}</dd></dl>
+      <div class="routes" style="margin-top:8px">${routeHTML(key).replace('<button class="route"','<div class="route" style="background:var(--paper-dim);color:var(--text)"').replace(/<\/button>$/,'</div>')}</div>
+    </div>
+    ${allStuck.length?`<div class="block"><h3>🔔 아직 못 푼 문제</h3>
+      <dl class="rec">${allStuck.map(q=>`<dt>${esc(q.label||q.key)} · ${q.n}번 틀림</dt><dd>마지막 답 「${esc(q.last||'')}」
+        ${U[q.key]?'<span class="note">· 열어 줌</span>':`<button class="sb" style="margin-left:6px" onclick="unlockQ('${key}','${esc(q.key)}')">문제 열어 주기</button>`}</dd>`).join('')}</dl>
+      <p class="note" style="margin-top:8px">모둠과 함께 정답을 확인한 뒤 열어 주세요. 학생 스스로는 넘어갈 수 없습니다.</p></div>`:''}
+    ${notesOf(g).length?`<div class="block"><h3>👩‍🏫 보낸 한마디</h3>${sentHTML(notesOf(g))}</div>`:''}
     <div class="block">
       <h3>첫 추리</h3>
-      <dl class="rec"><dd>${esc((g.prior||{}).choice||'')} — 우리는 ${esc((g.prior||{}).reason||'')} 때문에 그렇게 생각합니다.</dd></dl>
+      <dl class="rec"><dd>${esc((g.prior||{}).choice||'')} — ${esc(reasonText((g.prior||{}).reason))}</dd></dl>
     </div>
     ${(()=>{ const nt=fixNotes(g); if(!nt.length) return '';
       return `<div class="block"><h3>🗣 모둠이 남긴 고칠 점</h3>
@@ -451,7 +1078,7 @@ function detail(key){
         <button class="b" onclick="approve('${key}',true)">회의 통과 승인</button>
         ${(g.approval||{}).approved?`<button class="b g" onclick="approve('${key}',false)">승인 취소</button>`:''}
       </div>`}
-      <p class="note" style="margin-top:8px">암호 <code>${esc(C.password)}</code>를 알려 주셔도 통과됩니다.</p>
+      <p class="note" style="margin-top:8px">${CODES['g'+g.groupNo]?`이 모둠 암호 <code>${esc(CODES['g'+g.groupNo])}</code>를 알려 주셔도 통과됩니다.`:`공용 예비 암호 <code>${esc(C.password)}</code>를 알려 주셔도 통과됩니다.`}</p>
       </div>`:''}
     ${g.final?`<div class="block"><h3>⏰ 동이의 하루 ${g.final.done?'· 완성':'· 진행 중'}</h3>
       <dl class="rec">
@@ -507,12 +1134,14 @@ function dl(blob,name){
 }
 
 /* ── 시작 ─────────────────────────── */
-document.addEventListener('keydown',e=>{ if(e.key==='Escape'){closeSheet('cfg');closeSheet('detail');} });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){['cfg','detail','note','imgv'].forEach(closeSheet);} });
+['note','imgv'].forEach(id=>$(id).addEventListener('click',e=>{ if(e.target.id===id) closeSheet(id); }));
 $('cfg').addEventListener('click',e=>{ if(e.target.id==='cfg') closeSheet('cfg'); });
-$('detail').addEventListener('click',e=>{ if(e.target.id==='detail') closeSheet('detail'); });
+$('detail').addEventListener('click',e=>{ if(e.target.id==='detail'){ closeSheet('detail'); detail.cur=null; } });
 
 pull();
-timer=setInterval(()=>{ if(document.visibilityState==='visible') pull(); }, 15000);
+timer=setInterval(()=>{ if(document.visibilityState==='visible' && !DRAG && !$('note').classList.contains('show')) pull(); }, 10000);
+paintTabs(); if(TAB==='map') renderMap([]);
 document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') pull(); });
 if(!ready()) openCfg();
 </script>
